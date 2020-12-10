@@ -6,11 +6,13 @@ import com.example.cartoapp.R;
 import com.example.cartoapp.database.Entities.InvoiceEntity;
 import com.example.cartoapp.database.Repositories.InvoiceRepository;
 import com.example.cartoapp.databinding.ActivityMainBinding;
+import com.example.cartoapp.ui.InvoiceMain.InvoiceListingFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 
 import android.view.View;
 
@@ -26,6 +28,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        navigateTo(new InvoiceListingFragment());
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
     }
@@ -58,5 +63,17 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void navigateTo(Fragment fragment) {
+        navigateTo(fragment, true, fragment.getClass().getSimpleName());
+    }
+
+    public void navigateTo(Fragment fragment, boolean addToBackStack, String fragmentTag) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .addToBackStack((addToBackStack) ? fragmentTag : null)
+                .replace(R.id.mainActivityFragmentContainer, fragment, fragmentTag)
+                .commit();
     }
 }
