@@ -11,16 +11,22 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.cartoapp.database.Entities.ExtendedInvoiceEntity;
+import com.example.cartoapp.database.Entities.InvoiceDetailEntity;
 import com.example.cartoapp.database.Entities.InvoiceEntity;
+import com.example.cartoapp.database.Repositories.InvoiceDetailRepository;
 import com.example.cartoapp.database.Repositories.InvoiceRepository;
 import com.example.cartoapp.databinding.FragmentFirstBinding;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.schedulers.Schedulers;
+
 public class InvoiceListingFragment extends Fragment implements InvoiceAdapter.Listener{
     FragmentFirstBinding binding;
     InvoiceRepository invoiceRepository;
+    InvoiceDetailRepository invoiceDetailRepository;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,27 +39,34 @@ public class InvoiceListingFragment extends Fragment implements InvoiceAdapter.L
 
     private void displayList() {
         invoiceRepository = new InvoiceRepository(getActivity().getApplication());
+        invoiceDetailRepository = new InvoiceDetailRepository(getActivity().getApplication());
+
         //binding.invoiceListing.setAdapter();
 
-        List<InvoiceEntity> testList = new ArrayList<>();
+        /*
         for (int i = 0; i < 10; i++){
-            InvoiceEntity test = new InvoiceEntity();
-            test.setDescription("Second asnd i masidasdnuasj isjdis " + String.valueOf(i));
-            test.setTotalCost(1000 * i);
-            test.setDate(34234234);
-            test.setSeller("Gilsa");
-            testList.add(test);
+            InvoiceDetailEntity test = new InvoiceDetailEntity();
+            test.setTotalCostOfItem(i * 10);
+            test.setInvoiceID(i);
+            test.setProduct("Test " + String.valueOf(i));
+            test.setQuantity(3 * i);
+            invoiceDetailRepository.insert(test);
         }
+         */
 
-        InvoiceAdapter invoiceAdapter = new InvoiceAdapter(testList, this);
+        setAdapterToRecyclerView(invoiceRepository.findAllExtendedInvoiceBy(null).subscribeOn(Schedulers.io()).blockingGet());
+
+        //invoiceRepository.insert(test);
+    }
+
+    private void setAdapterToRecyclerView(List<ExtendedInvoiceEntity> adapterList){
+        InvoiceAdapter invoiceAdapter = new InvoiceAdapter(adapterList, this);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(requireContext());
         binding.invoiceListing.setLayoutManager(layoutManager);
 
         binding.invoiceListing.setAdapter(invoiceAdapter);
         binding.invoiceListing.setHasFixedSize(true);
-
-        //invoiceRepository.insert(test);
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {

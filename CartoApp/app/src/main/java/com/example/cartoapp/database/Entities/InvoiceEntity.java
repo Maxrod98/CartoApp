@@ -8,21 +8,20 @@ import androidx.room.PrimaryKey;
 public class InvoiceEntity {
     @PrimaryKey
     @NonNull
-    private Integer EntityID;
+    private Integer InvoiceID;
     private String Seller;
     private long Date;
     private long Latitude;
     private long Longitude;
     private String Description;
-    private int TotalCost;
 
     @NonNull
-    public Integer getEntityID() {
-        return EntityID;
+    public Integer getInvoiceID() {
+        return InvoiceID;
     }
 
-    public void setEntityID(@NonNull Integer entityID) {
-        EntityID = entityID;
+    public void setInvoiceID(@NonNull Integer invoiceID) {
+        InvoiceID = invoiceID;
     }
 
     public String getDescription() {
@@ -31,14 +30,6 @@ public class InvoiceEntity {
 
     public void setDescription(String description) {
         Description = description;
-    }
-
-    public int getTotalCost() {
-        return TotalCost;
-    }
-
-    public void setTotalCost(int totalCost) {
-        this.TotalCost = totalCost;
     }
 
     public String getSeller() {

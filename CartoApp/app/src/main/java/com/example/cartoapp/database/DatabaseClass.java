@@ -9,18 +9,22 @@ import androidx.room.TypeConverters;
 
 import com.example.cartoapp.R;
 import com.example.cartoapp.database.DAOs.InvoiceDAO;
+import com.example.cartoapp.database.DAOs.InvoiceDetailDAO;
+import com.example.cartoapp.database.Entities.InvoiceDetailEntity;
 import com.example.cartoapp.database.Entities.InvoiceEntity;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Database(entities = {
-        InvoiceEntity.class
+        InvoiceEntity.class,
+        InvoiceDetailEntity.class
 }, version = 1, exportSchema = false)
 
 @TypeConverters({})
 public abstract class DatabaseClass extends RoomDatabase {
     public abstract InvoiceDAO invoiceDAO();
+    public abstract InvoiceDetailDAO invoiceDetailDAO();
 
     private static volatile DatabaseClass INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;

@@ -4,7 +4,12 @@ import android.content.Context;
 
 import com.example.cartoapp.database.DAOs.InvoiceDAO;
 import com.example.cartoapp.database.DatabaseClass;
+import com.example.cartoapp.database.Entities.ExtendedInvoiceEntity;
 import com.example.cartoapp.database.Entities.InvoiceEntity;
+
+import java.util.List;
+
+import io.reactivex.Single;
 
 public class InvoiceRepository {
     private InvoiceDAO invoiceDAO;
@@ -18,6 +23,10 @@ public class InvoiceRepository {
         DatabaseClass.databaseWriteExecutor.execute(()-> {
             invoiceDAO.insert(invoiceEntity);
         });
+    }
+
+    public Single<List<ExtendedInvoiceEntity>> findAllExtendedInvoiceBy(Integer invoiceID){
+        return invoiceDAO.findAllExtendedInvoiceBy(invoiceID);
     }
 
 }

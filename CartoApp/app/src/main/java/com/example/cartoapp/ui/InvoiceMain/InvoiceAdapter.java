@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cartoapp.R;
+import com.example.cartoapp.database.Entities.ExtendedInvoiceEntity;
 import com.example.cartoapp.database.Entities.InvoiceEntity;
 
 
@@ -19,11 +20,11 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceViewHolder> {
-    List<InvoiceEntity> invoiceEntities;
+    List<ExtendedInvoiceEntity> invoiceEntities;
     InvoiceAdapter.Listener listener;
 
 
-    public InvoiceAdapter(List<InvoiceEntity> invoiceEntityList, Fragment context) {
+    public InvoiceAdapter(List<ExtendedInvoiceEntity> invoiceEntityList, Fragment context) {
         invoiceEntities = invoiceEntityList;
         if (context instanceof InvoiceAdapter.Listener) {
             listener = (InvoiceAdapter.Listener) context;

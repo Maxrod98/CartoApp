@@ -6,6 +6,7 @@ import com.example.cartoapp.R;
 import com.example.cartoapp.database.Entities.InvoiceEntity;
 import com.example.cartoapp.database.Repositories.InvoiceRepository;
 import com.example.cartoapp.databinding.ActivityMainBinding;
+import com.example.cartoapp.ui.InvoiceMain.InsertInvoiceEntityDialog;
 import com.example.cartoapp.ui.InvoiceMain.InvoiceListingFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -23,12 +24,14 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
     ActivityMainBinding binding;
+    InvoiceRepository invoiceRepository;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        invoiceRepository = new InvoiceRepository(getApplication());
         navigateTo(new InvoiceListingFragment());
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -43,7 +46,8 @@ public class MainActivity extends AppCompatActivity {
         binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplication(), "Test", Toast.LENGTH_SHORT).show();
+                InsertInvoiceEntityDialog insertInvoiceEntityDialog = new InsertInvoiceEntityDialog();
+                insertInvoiceEntityDialog.show(getSupportFragmentManager(), "InsertInvoiceEntityDialog");
             }
         });
 
