@@ -21,6 +21,4 @@ public interface InvoiceDetailDAO {
             "((:invoiceDetailID is null or InvoiceDetailID = :invoiceDetailID) and" +
             "(:invoiceID is null or InvoiceID = :invoiceID))" )
     Single<List<InvoiceDetailEntity>> findAllInvoiceDetailBy(Integer invoiceDetailID, Integer invoiceID);
-
-
 }

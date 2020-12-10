@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/list_margin"
+    android:background="@drawable/rounded_corner">
+
+
+    <TextView
+        android:id="@+id/lblQuantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/quantity_invoice_detail"
+        app:layout_constraintStart_toStartOf="@+id/lblCost"
+        app:layout_constraintTop_toBottomOf="@+id/txtCost" />
+
+    <TextView
+        android:id="@+id/txtQuantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/ListTextValue"
+        android:text="12"
+        app:layout_constraintStart_toStartOf="@+id/lblQuantity"
+        app:layout_constraintTop_toBottomOf="@+id/lblQuantity" />
+
+    <TextView
+        android:id="@+id/txtTotalCostOfItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:text="@string/TotalCostOfItem_invoice_detail"
+        app:layout_constraintStart_toEndOf="@+id/separator"
+        tools:layout_editor_absoluteY="16dp" />
+
+    <TextView
+        android:id="@+id/lblTotalCostOfItem"
+        style="@style/ListTextValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2313"
+        app:layout_constraintStart_toStartOf="@+id/txtTotalCostOfItem"
+        app:layout_constraintTop_toBottomOf="@+id/txtTotalCostOfItem" />
+
+    <TextView
+        android:id="@+id/lblUnit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="56dp"
+        android:text="@string/unit_invoice_detail"
+        app:layout_constraintStart_toEndOf="@+id/lblProduct"
+        app:layout_constraintTop_toTopOf="@+id/lblProduct" />
+
+    <TextView
+        android:id="@+id/txtUnit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/ListTextValue"
+        android:text="KG"
+        app:layout_constraintStart_toStartOf="@+id/lblUnit"
+        app:layout_constraintTop_toBottomOf="@+id/lblUnit" />
+
+
+    <TextView
+        android:id="@+id/lblCost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="196dp"
+        android:text="@string/cost_invoice_detail"
+        app:layout_constraintStart_toStartOf="@+id/lblProduct"
+        app:layout_constraintTop_toTopOf="@+id/lblUnit" />
+
+    <TextView
+        android:id="@+id/txtCost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/ListTextValue"
+        android:text="124"
+        app:layout_constraintStart_toStartOf="@+id/lblCost"
+        app:layout_constraintTop_toBottomOf="@+id/lblCost" />
+
+    <TextView
+        android:id="@+id/lblProduct"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_horizontal"
+        android:layout_marginTop="@dimen/margin_vertical"
+        android:text="@string/productDescription_detail_item"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtProduct"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Cemento"
+        style="@style/ListTextValue"
+        app:layout_constraintEnd_toStartOf="@+id/lblUnit"
+        app:layout_constraintStart_toStartOf="@+id/lblProduct"
+        app:layout_constraintTop_toBottomOf="@+id/lblProduct" />
+
+    <View
+        android:id="@+id/separator"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="72dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/teal_700"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        app:layout_constraintStart_toStartOf="@+id/txtUnit"
+        app:layout_constraintTop_toBottomOf="@+id/txtUnit"
+        app:srcCompat="@android:drawable/sym_contact_card" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        app:layout_constraintStart_toStartOf="@+id/lblTotalCostOfItem"
+        app:layout_constraintTop_toBottomOf="@+id/lblTotalCostOfItem"
+        app:srcCompat="@android:drawable/ic_menu_delete"
+        app:tint="@color/black"
+        android:background="@drawable/rounded_corner"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

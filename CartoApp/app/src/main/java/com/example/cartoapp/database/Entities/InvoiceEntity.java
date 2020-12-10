@@ -4,11 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
+
 @Entity
-public class InvoiceEntity {
+public class InvoiceEntity implements Serializable {
     @PrimaryKey
     @NonNull
     private Integer InvoiceID;
+    private Integer ProjectID;
     private String Seller;
     private long Date;
     private long Latitude;
@@ -62,5 +65,13 @@ public class InvoiceEntity {
 
     public void setLongitude(long longitude) {
         this.Longitude = longitude;
+    }
+
+    public Integer getProjectID() {
+        return ProjectID;
+    }
+
+    public void setProjectID(Integer projectID) {
+        ProjectID = projectID;
     }
 }

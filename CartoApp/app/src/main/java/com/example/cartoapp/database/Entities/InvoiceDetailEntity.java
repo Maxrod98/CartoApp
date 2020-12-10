@@ -4,10 +4,12 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
+
 import io.reactivex.annotations.NonNull;
 
 @Entity
-public class InvoiceDetailEntity {
+public class InvoiceDetailEntity implements Serializable {
     @PrimaryKey
     @NonNull
     private Integer InvoiceDetailID;

@@ -21,10 +21,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements InsertInvoiceEntityDialog.Listener {
 
     ActivityMainBinding binding;
+    InvoiceListingFragment invoiceListingFragment;
     InvoiceRepository invoiceRepository;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +34,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         invoiceRepository = new InvoiceRepository(getApplication());
-        navigateTo(new InvoiceListingFragment());
+
+        navigateToInvoiceListingFragment();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -46,12 +49,16 @@ public class MainActivity extends AppCompatActivity {
         binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                InsertInvoiceEntityDialog insertInvoiceEntityDialog = new InsertInvoiceEntityDialog();
+                InsertInvoiceEntityDialog insertInvoiceEntityDialog = InsertInvoiceEntityDialog.newInstance(MainActivity.this);
                 insertInvoiceEntityDialog.show(getSupportFragmentManager(), "InsertInvoiceEntityDialog");
             }
         });
 
         return true;
+    }
+
+    public void navigateToInvoiceListingFragment(){
+        navigateTo(new InvoiceListingFragment());
     }
 
     @Override
@@ -79,5 +86,11 @@ public class MainActivity extends AppCompatActivity {
                 .addToBackStack((addToBackStack) ? fragmentTag : null)
                 .replace(R.id.mainActivityFragmentContainer, fragment, fragmentTag)
                 .commit();
+    }
+
+    @Override
+    public void insertInvoiceEntity(InvoiceEntity invoiceEntity) {
+        invoiceRepository.insert(invoiceEntity);
+        navigateToInvoiceListingFragment();
     }
 }

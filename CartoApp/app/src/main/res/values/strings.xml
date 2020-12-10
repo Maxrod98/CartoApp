@@ -12,5 +12,10 @@
     <string name="database_name">carto_db</string>
     <string name="lblDateLabel">Fecha:</string>
     <string name="lblInvoiceDescription">Descripción:</string>
-    <string name="lblSeller">Vendedor:</string>
+    <string name="lblSeller">Proveedor:</string>
+    <string name="quantity_invoice_detail">Cantidad</string>
+    <string name="TotalCostOfItem_invoice_detail">Total</string>
+    <string name="unit_invoice_detail">Unidad</string>
+    <string name="cost_invoice_detail">Costo por unidad</string>
+    <string name="productDescription_detail_item">Producto</string>
 </resources>

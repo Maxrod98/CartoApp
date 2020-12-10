@@ -27,6 +27,4 @@ public interface InvoiceDAO {
             "WHERE (:invoiceID is null or :invoiceID = InvoiceEntity.InvoiceID) " +
             "GROUP BY InvoiceEntity.InvoiceID")
     Single<List<ExtendedInvoiceEntity>> findAllExtendedInvoiceBy (Integer invoiceID);
-
-
 }
