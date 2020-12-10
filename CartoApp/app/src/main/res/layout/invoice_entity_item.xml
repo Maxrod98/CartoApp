@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="3dp"
+    android:background="@drawable/rounded_corner"
+    android:elevation="5dp"
+    android:padding="@dimen/margin_vertical">
+
+    <TextView
+        android:id="@+id/txtDate"
+        style="@style/ListTextValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="12/9"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblDate">
+
+    </TextView>
+
+    <TextView
+        android:id="@+id/txtDescription"
+        style="@style/ListTextValue"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Probando si un texto esta muy largo "
+        app:layout_constraintEnd_toStartOf="@+id/lblSeller"
+        app:layout_constraintStart_toStartOf="@+id/lblDescription"
+        app:layout_constraintTop_toBottomOf="@+id/lblDescription">
+
+    </TextView>
+
+    <View
+        android:id="@+id/separator"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="92dp"
+        android:background="@color/teal_700"
+        android:elevation="7dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.333" />
+
+    <TextView
+        android:id="@+id/txtSeller"
+        style="@style/ListTextValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Gilsa"
+        app:layout_constraintStart_toStartOf="@+id/lblSeller"
+        app:layout_constraintTop_toBottomOf="@+id/lblSeller" />
+
+    <TextView
+        android:id="@+id/txtTotalCost"
+        style="@style/ListTextValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="5dp"
+        android:text="$12300"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/separator"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </TextView>
+
+
+    <TextView
+        android:id="@+id/lblDate"
+        style="@style/ListTextLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fecha:"
+        app:layout_constraintStart_toStartOf="@+id/txtDate"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/lblDescription"
+        style="@style/ListTextLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Descripcion"
+        app:layout_constraintStart_toEndOf="@+id/lblDate"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/lblSeller"
+        style="@style/ListTextLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="70dp"
+        android:text="Vendedor"
+        app:layout_constraintEnd_toStartOf="@+id/separator"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/lblDescription"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imgEditInvoice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_corner"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/txtDescription"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtDate"
+        app:srcCompat="@android:drawable/ic_menu_search"
+        app:tint="@color/black" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
