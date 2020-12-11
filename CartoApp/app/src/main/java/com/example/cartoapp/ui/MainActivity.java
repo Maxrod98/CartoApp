@@ -1,64 +1,91 @@
 package com.example.cartoapp.ui;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.example.cartoapp.R;
+import com.example.cartoapp.database.Entities.InvoiceDetailEntity;
 import com.example.cartoapp.database.Entities.InvoiceEntity;
 import com.example.cartoapp.database.Repositories.InvoiceRepository;
 import com.example.cartoapp.databinding.ActivityMainBinding;
-import com.example.cartoapp.ui.InvoiceMain.InsertInvoiceEntityDialog;
-import com.example.cartoapp.ui.InvoiceMain.InvoiceListingFragment;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
+import com.example.cartoapp.ui.InsertFragments.InsertInvoiceDetailDialog;
+import com.example.cartoapp.ui.InsertFragments.InsertInvoiceEntityDialog;
+import com.example.cartoapp.ui.InvoiceDetail.InvoiceDetailFragment;
+import com.example.cartoapp.ui.InvoiceMain.InvoiceFragment;
+import com.example.cartoapp.utils.NAVIGATION;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
-
-import android.view.View;
 
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity implements InsertInvoiceEntityDialog.Listener {
+import io.reactivex.schedulers.Schedulers;
+
+public class MainActivity extends BaseActivity implements InsertInvoiceEntityDialog.Listener,
+        InvoiceFragment.Listener, InsertInvoiceDetailDialog.Listener, InvoiceDetailFragment.Listener {
+
+
+    //TODO: think about a web copy
 
     ActivityMainBinding binding;
-    InvoiceListingFragment invoiceListingFragment;
+    InvoiceFragment invoiceFragment;
     InvoiceRepository invoiceRepository;
+    public static Integer navigation = NAVIGATION.INVOICE_LISTING;
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        sharedPreferences = getSharedPreferences(getString(R.string.sharedPreferences), MODE_PRIVATE);
 
         invoiceRepository = new InvoiceRepository(getApplication());
-
-        navigateToInvoiceListingFragment();
+        setNavigation();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        setNavigation();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-
-        binding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                InsertInvoiceEntityDialog insertInvoiceEntityDialog = InsertInvoiceEntityDialog.newInstance(MainActivity.this);
-                insertInvoiceEntityDialog.show(getSupportFragmentManager(), "InsertInvoiceEntityDialog");
-            }
-        });
-
         return true;
     }
 
-    public void navigateToInvoiceListingFragment(){
-        navigateTo(new InvoiceListingFragment());
+    public void setNavigation() {
+        switch (navigation) {
+            case (NAVIGATION.INVOICE_LISTING):
+                insertInvoiceDetailClickListener();
+                navigateTo(InvoiceFragment.newInstance(this));
+                break;
+
+
+            case (NAVIGATION.INVOICE_DETAIL_LISTING):
+                insertInvoiceClickListener();
+                navigateTo(InvoiceDetailFragment.newInstance(this));
+
+                break;
+
+            case (NAVIGATION.REFRESH_DETAIL_LISTING_NO_BACKSTACK):
+                insertInvoiceClickListener();
+                getSupportFragmentManager().popBackStack();
+                navigateTo(InvoiceDetailFragment.newInstance(this), false, "Detail");
+                break;
+
+            case (NAVIGATION.INVOICE_WAS_JUST_INSERTED):
+                insertInvoiceClickListener();
+                navigateTo(InvoiceDetailFragment.newInstance(this));
+                InvoiceEntity invoiceEntity = invoiceRepository.findLastInvoiceEntity().subscribeOn(Schedulers.io()).blockingGet();
+                sharedPreferences.edit().putInt(getString(R.string.selectedInvoiceEntityID), invoiceEntity.getInvoiceID()).commit();
+
+        }
     }
 
     @Override
@@ -76,21 +103,36 @@ public class MainActivity extends AppCompatActivity implements InsertInvoiceEnti
         return super.onOptionsItemSelected(item);
     }
 
-    public void navigateTo(Fragment fragment) {
-        navigateTo(fragment, true, fragment.getClass().getSimpleName());
+    public void insertInvoiceClickListener(){
+        binding.fab.setOnClickListener((v) -> {
+            InsertInvoiceDetailDialog insertInvoiceDetailDialog = InsertInvoiceDetailDialog.newInstance(MainActivity.this);
+            insertInvoiceDetailDialog.show(getSupportFragmentManager(), "InsertInvoiceDetailDialog");
+        });
     }
 
-    public void navigateTo(Fragment fragment, boolean addToBackStack, String fragmentTag) {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .addToBackStack((addToBackStack) ? fragmentTag : null)
-                .replace(R.id.mainActivityFragmentContainer, fragment, fragmentTag)
-                .commit();
+    public void insertInvoiceDetailClickListener(){
+        binding.fab.setOnClickListener((v) -> {
+            InsertInvoiceEntityDialog insertInvoiceEntityDialog = InsertInvoiceEntityDialog.newInstance(MainActivity.this);
+            insertInvoiceEntityDialog.show(getSupportFragmentManager(), "InsertInvoiceEntityDialog");
+        });
     }
 
     @Override
-    public void insertInvoiceEntity(InvoiceEntity invoiceEntity) {
-        invoiceRepository.insert(invoiceEntity);
-        navigateToInvoiceListingFragment();
+    public void invoiceEntityWasInserted() {
+        navigation = NAVIGATION.INVOICE_WAS_JUST_INSERTED;
+        setNavigation();
+    }
+
+    @Override
+    public void goToInvoiceDetailFragmentToActivity(InvoiceEntity invoiceEntity) {
+        navigation = NAVIGATION.INVOICE_DETAIL_LISTING;
+        setNavigation();
+    }
+
+    @Override
+    public void insertInvoiceDetail(InvoiceDetailEntity invoiceDetailEntity) {
+        invoiceRepository.insert(invoiceDetailEntity).subscribeOn(Schedulers.io()).blockingGet();
+        navigation = NAVIGATION.REFRESH_DETAIL_LISTING_NO_BACKSTACK;
+        setNavigation();
     }
 }

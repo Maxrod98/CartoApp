@@ -1,9 +1,9 @@
 package com.example.cartoapp.ui.InvoiceMain;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,12 +20,12 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceViewHolder> {
-    List<ExtendedInvoiceEntity> invoiceEntities;
+    List<ExtendedInvoiceEntity> elements;
     InvoiceAdapter.Listener listener;
 
 
     public InvoiceAdapter(List<ExtendedInvoiceEntity> invoiceEntityList, Fragment context) {
-        invoiceEntities = invoiceEntityList;
+        elements = invoiceEntityList;
         if (context instanceof InvoiceAdapter.Listener) {
             listener = (InvoiceAdapter.Listener) context;
         }
@@ -42,15 +42,21 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
 
     @Override
     public void onBindViewHolder(@NonNull InvoiceAdapter.InvoiceViewHolder holder, int position) {
-        holder.txtDate.setText((new SimpleDateFormat("dd/MM")).format(new Date(invoiceEntities.get(position).getDate())));
-        holder.txtDescription.setText(invoiceEntities.get(position).getDescription());
-        holder.txtSeller.setText(invoiceEntities.get(position).getSeller());
-        holder.txtTotalCost.setText( "$" + String.valueOf(invoiceEntities.get(position).getTotalCost()));
+        holder.txtDate.setText((new SimpleDateFormat("dd/MM")).format(new Date(elements.get(position).getDate())));
+        holder.txtDescription.setText(elements.get(position).getDescription());
+        holder.txtSeller.setText(elements.get(position).getSeller());
+        holder.txtTotalCost.setText( "$" + String.valueOf(elements.get(position).getTotalCost()));
+        holder.imgEditInvoice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.goToInvoiceDetail(elements.get(position));
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return invoiceEntities.size();
+        return elements.size();
     }
 
     public static class InvoiceViewHolder extends RecyclerView.ViewHolder {
@@ -58,6 +64,7 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
         public TextView txtDescription;
         public TextView txtSeller;
         public TextView txtTotalCost;
+        public ImageView imgEditInvoice;
 
         public InvoiceViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -65,11 +72,13 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
             txtDescription = itemView.findViewById(R.id.txtDescription);
             txtSeller = itemView.findViewById(R.id.txtSeller);
             txtTotalCost = itemView.findViewById(R.id.txtTotalCost);
+            imgEditInvoice = itemView.findViewById(R.id.imgEditInvoice);
         }
     }
 
     public interface Listener {
-        public void navigateToInvoiceDetail();
+        void navigateToInvoiceDetail();
+        void goToInvoiceDetail(InvoiceEntity invoiceEntity);
     }
 }
 

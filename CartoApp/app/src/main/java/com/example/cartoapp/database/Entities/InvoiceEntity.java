@@ -12,6 +12,7 @@ public class InvoiceEntity implements Serializable {
     @NonNull
     private Integer InvoiceID;
     private Integer ProjectID;
+    private Integer UserID;
     private String Seller;
     private long Date;
     private long Latitude;
@@ -25,6 +26,14 @@ public class InvoiceEntity implements Serializable {
 
     public void setInvoiceID(@NonNull Integer invoiceID) {
         InvoiceID = invoiceID;
+    }
+
+    public Integer getUserID() {
+        return UserID;
+    }
+
+    public void setUserID(Integer userID) {
+        UserID = userID;
     }
 
     public String getDescription() {

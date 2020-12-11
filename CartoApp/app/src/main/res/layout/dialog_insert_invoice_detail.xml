@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/margin_vertical">
+
+    <Button
+        android:id="@+id/btnAddInvoiceDetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/title_insert_detail"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        style="@style/ListTextValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/title_insert_detail"
+        app:layout_constraintBottom_toTopOf="@+id/etQuantity_insert_detail"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- -->
+    <TextView
+        android:id="@+id/txtQuantity_insert_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cantidad"
+        style="@style/ListTextValue"
+        app:layout_constraintBottom_toTopOf="@+id/etProduct_insert_detail"
+        app:layout_constraintEnd_toStartOf="@+id/etQuantity_insert_detail"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/etQuantity_insert_detail" />
+
+    <EditText
+        android:id="@+id/etQuantity_insert_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="numberDecimal"
+        app:layout_constraintBottom_toTopOf="@+id/etProduct_insert_detail"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- -->
+    <TextView
+        android:id="@+id/txtProduct_insert_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/ListTextValue"
+        android:text="Producto"
+        app:layout_constraintBottom_toBottomOf="@+id/etProduct_insert_detail"
+        app:layout_constraintEnd_toStartOf="@+id/etProduct_insert_detail"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etQuantity_insert_detail" />
+
+    <!-- -->
+    <EditText
+        android:id="@+id/etProduct_insert_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/et_txtUnit_insert_detail"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/txtUnit_insert_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Unidad"
+        style="@style/ListTextValue"
+        app:layout_constraintBottom_toBottomOf="@+id/et_txtUnit_insert_detail"
+        app:layout_constraintEnd_toStartOf="@+id/et_txtUnit_insert_detail"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etProduct_insert_detail" />
+
+    <EditText
+        android:id="@+id/et_txtUnit_insert_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/etCost_insert_Detail"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- -->
+    <TextView
+        android:id="@+id/txtCost_insert_detail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Costo por unidad"
+        style="@style/ListTextValue"
+        app:layout_constraintBottom_toBottomOf="@+id/etCost_insert_Detail"
+        app:layout_constraintEnd_toStartOf="@+id/etCost_insert_Detail"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_txtUnit_insert_detail" />
+
+    <EditText
+        android:id="@+id/etCost_insert_Detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="numberDecimal"
+        app:layout_constraintBottom_toTopOf="@+id/btnAddInvoiceDetail"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

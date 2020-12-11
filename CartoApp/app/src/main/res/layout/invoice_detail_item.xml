@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/list_margin"
-    android:background="@drawable/rounded_corner">
+    android:background="@drawable/rounded_corner"
+    android:id="@+id/invoice_detail_item">
 
 
     <TextView
@@ -26,22 +27,22 @@
         app:layout_constraintTop_toBottomOf="@+id/lblQuantity" />
 
     <TextView
-        android:id="@+id/txtTotalCostOfItem"
+        android:id="@+id/lblTotalCostOfItem2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:text="@string/TotalCostOfItem_invoice_detail"
         app:layout_constraintStart_toEndOf="@+id/separator"
-        tools:layout_editor_absoluteY="16dp" />
+        app:layout_constraintTop_toTopOf="@+id/lblCost" />
 
     <TextView
-        android:id="@+id/lblTotalCostOfItem"
+        android:id="@+id/txtTotalCostOfItem"
         style="@style/ListTextValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="2313"
-        app:layout_constraintStart_toStartOf="@+id/txtTotalCostOfItem"
-        app:layout_constraintTop_toBottomOf="@+id/txtTotalCostOfItem" />
+        app:layout_constraintStart_toStartOf="@+id/lblTotalCostOfItem2"
+        app:layout_constraintTop_toBottomOf="@+id/lblTotalCostOfItem2" />
 
     <TextView
         android:id="@+id/lblUnit"
@@ -112,7 +113,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/imgFileAttached"
         android:layout_width="30dp"
         android:layout_height="30dp"
         app:layout_constraintStart_toStartOf="@+id/txtUnit"
@@ -120,11 +121,11 @@
         app:srcCompat="@android:drawable/sym_contact_card" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/imgDeleteInvoiceDetail"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        app:layout_constraintStart_toStartOf="@+id/lblTotalCostOfItem"
-        app:layout_constraintTop_toBottomOf="@+id/lblTotalCostOfItem"
+        app:layout_constraintStart_toStartOf="@+id/txtTotalCostOfItem"
+        app:layout_constraintTop_toBottomOf="@+id/txtTotalCostOfItem"
         app:srcCompat="@android:drawable/ic_menu_delete"
         app:tint="@color/black"
         android:background="@drawable/rounded_corner"/>

@@ -1,5 +1,8 @@
 package com.example.cartoapp.ui.InvoiceMain;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,56 +10,60 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.cartoapp.R;
 import com.example.cartoapp.database.Entities.ExtendedInvoiceEntity;
-import com.example.cartoapp.database.Entities.InvoiceDetailEntity;
 import com.example.cartoapp.database.Entities.InvoiceEntity;
-import com.example.cartoapp.database.Repositories.InvoiceDetailRepository;
 import com.example.cartoapp.database.Repositories.InvoiceRepository;
 import com.example.cartoapp.databinding.FragmentFirstBinding;
+import com.example.cartoapp.ui.MainActivity;
+import com.example.cartoapp.utils.NAVIGATION;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.schedulers.Schedulers;
 
-public class InvoiceListingFragment extends Fragment implements InvoiceAdapter.Listener{
+public class InvoiceFragment extends Fragment implements InvoiceAdapter.Listener{
     FragmentFirstBinding binding;
     InvoiceRepository invoiceRepository;
-    InvoiceDetailRepository invoiceDetailRepository;
+    InvoiceFragment.Listener listener;
+    SharedPreferences sharedPreferences;
+
+    public InvoiceFragment() {
+    }
+
+    public InvoiceFragment(Context context) {
+        if (context instanceof InvoiceFragment.Listener){
+            listener = (InvoiceFragment.Listener) context;
+        }
+    }
+
+    public static InvoiceFragment newInstance(Context context) {
+
+        Bundle args = new Bundle();
+
+        InvoiceFragment fragment = new InvoiceFragment(context);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        MainActivity.navigation = NAVIGATION.INVOICE_LISTING;
         binding = FragmentFirstBinding.inflate(inflater, container, false);
+        sharedPreferences = getActivity().getSharedPreferences(getString(R.string.sharedPreferences), Activity.MODE_PRIVATE);
+
 
         displayList();
-        // Inflate the layout for this fragment
         return binding.getRoot();
     }
 
     private void displayList() {
         invoiceRepository = new InvoiceRepository(getActivity().getApplication());
-        invoiceDetailRepository = new InvoiceDetailRepository(getActivity().getApplication());
-
-        //binding.invoiceListing.setAdapter();
-
-        /*
-        for (int i = 0; i < 10; i++){
-            InvoiceDetailEntity test = new InvoiceDetailEntity();
-            test.setTotalCostOfItem(i * 10);
-            test.setInvoiceID(i);
-            test.setProduct("Test " + String.valueOf(i));
-            test.setQuantity(3 * i);
-            invoiceDetailRepository.insert(test);
-        }
-         */
 
         setAdapterToRecyclerView(invoiceRepository.findAllExtendedInvoiceBy(null).subscribeOn(Schedulers.io()).blockingGet());
-
-        //invoiceRepository.insert(test);
     }
 
     private void setAdapterToRecyclerView(List<ExtendedInvoiceEntity> adapterList){
@@ -78,7 +85,13 @@ public class InvoiceListingFragment extends Fragment implements InvoiceAdapter.L
 
     }
 
-    public interface Listener {
+    @Override
+    public void goToInvoiceDetail(InvoiceEntity invoiceEntity) {
+        sharedPreferences.edit().putInt(getString(R.string.selectedInvoiceEntityID), invoiceEntity.getInvoiceID()).commit();
+        listener.goToInvoiceDetailFragmentToActivity(invoiceEntity);
+    }
 
+    public interface Listener {
+        void goToInvoiceDetailFragmentToActivity(InvoiceEntity invoiceEntity);
     }
 }

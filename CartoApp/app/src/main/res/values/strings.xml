@@ -18,4 +18,7 @@
     <string name="unit_invoice_detail">Unidad</string>
     <string name="cost_invoice_detail">Costo por unidad</string>
     <string name="productDescription_detail_item">Producto</string>
+    <string name="title_insert_detail">Agregue detalle de factura</string>
+    <string name="sharedPreferences">CartoAppSharedPreferences</string>
+    <string name="selectedInvoiceEntityID">selectedInvoiceEntityID</string>
 </resources>

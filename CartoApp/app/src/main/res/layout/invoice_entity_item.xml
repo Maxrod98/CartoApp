@@ -36,20 +36,21 @@
         android:id="@+id/separator"
         android:layout_width="1dp"
         android:layout_height="match_parent"
-        android:layout_marginEnd="92dp"
+        android:layout_marginEnd="104dp"
         android:background="@color/teal_700"
+        android:backgroundTint="@color/teal_700"
         android:elevation="7dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.333" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/txtSeller"
         style="@style/ListTextValue"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Gilsa"
+        app:layout_constraintEnd_toStartOf="@+id/separator"
         app:layout_constraintStart_toStartOf="@+id/lblSeller"
         app:layout_constraintTop_toBottomOf="@+id/lblSeller" />
 
@@ -82,22 +83,20 @@
         style="@style/ListTextLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="12dp"
         android:text="Descripcion"
-        app:layout_constraintStart_toEndOf="@+id/lblDate"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/txtDate"
+        app:layout_constraintTop_toTopOf="@+id/lblDate" />
 
     <TextView
         android:id="@+id/lblSeller"
         style="@style/ListTextLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="70dp"
+        android:layout_marginStart="16dp"
         android:text="Vendedor"
-        app:layout_constraintEnd_toStartOf="@+id/separator"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/lblDescription"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/lblDescription" />
 
     <ImageView
         android:id="@+id/imgEditInvoice"

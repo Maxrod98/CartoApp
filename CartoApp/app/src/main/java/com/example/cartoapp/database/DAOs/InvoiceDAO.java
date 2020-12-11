@@ -1,6 +1,7 @@
 package com.example.cartoapp.database.DAOs;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -15,8 +16,11 @@ import io.reactivex.Single;
 @Dao
 public interface InvoiceDAO {
 
+    @Delete
+    Single<Integer> deleteInvoiceEntity(InvoiceEntity invoiceEntity);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(InvoiceEntity invoiceEntity);
+    Single<Long> insert(InvoiceEntity invoiceEntity);
 
     @Query ("SELECT * FROM InvoiceEntity WHERE " +
             "(:invoiceID is null or InvoiceID = :invoiceID)")
