@@ -15,29 +15,34 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.cartoapp.R;
 import com.example.cartoapp.database.Entities.InvoiceDetailEntity;
-import com.example.cartoapp.database.Entities.InvoiceEntity;
+import com.example.cartoapp.database.Repositories.InvoiceRepository;
 import com.example.cartoapp.databinding.DialogInsertInvoiceDetailBinding;
-import com.example.cartoapp.databinding.DialogInsertInvoiceEntityBinding;
+
+import io.reactivex.schedulers.Schedulers;
 
 public class InsertInvoiceDetailDialog extends DialogFragment {
+    private static final String EDIT_CURRENT = "EDIT_CURRENT";
     DialogInsertInvoiceDetailBinding binding;
     InsertInvoiceDetailDialog.Listener listener;
     SharedPreferences sharedPreferences;
+    InvoiceRepository invoiceRepository;
 
     public static final String CURRENT_INVOICE_ENTITY = "CURRENT_INVOICE_ENTITY";
 
     public InsertInvoiceDetailDialog() {
     }
 
-    public InsertInvoiceDetailDialog(Context context) {
+    public InsertInvoiceDetailDialog(Object context) {
         if (context instanceof InsertInvoiceDetailDialog.Listener) {
             listener = (InsertInvoiceDetailDialog.Listener) context;
         }
     }
 
-    public static InsertInvoiceDetailDialog newInstance(Context context) {
-
+    public static InsertInvoiceDetailDialog newInstance(Object context, InvoiceDetailEntity invoiceDetailEntity) {
         Bundle args = new Bundle();
+        if (invoiceDetailEntity != null){
+            args.putSerializable( EDIT_CURRENT ,invoiceDetailEntity);
+        }
         InsertInvoiceDetailDialog fragment = new InsertInvoiceDetailDialog(context);
         fragment.setArguments(args);
         return fragment;
@@ -51,32 +56,46 @@ public class InsertInvoiceDetailDialog extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sharedPreferences = getActivity().getSharedPreferences(getString(R.string.sharedPreferences), Activity.MODE_PRIVATE);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DialogInsertInvoiceDetailBinding.inflate(inflater, container, false);
+        sharedPreferences = getActivity().getSharedPreferences(getString(R.string.sharedPreferences), Activity.MODE_PRIVATE);
+        invoiceRepository = new InvoiceRepository(getActivity().getApplication());
+        Integer invoiceDetailID = null;
+        if (getArguments() != null){
+            InvoiceDetailEntity invoiceDetailEntity = (InvoiceDetailEntity) getArguments().getSerializable(EDIT_CURRENT);
+            if (invoiceDetailEntity != null){
+                binding.lblTitle.setText("Editar detalle de factura");
+                binding.btnAddInvoiceDetail.setText("Editar");
+                binding.etQuantityInsertDetail.setText(String.valueOf(invoiceDetailEntity.getQuantity()));
+                binding.etProductInsertDetail.setText(invoiceDetailEntity.getProduct());
+                invoiceDetailID = invoiceDetailEntity.getInvoiceDetailID();
+            }
 
+        }
+
+        final Integer finalInvoiceDetailID = invoiceDetailID; //temp variable
         binding.btnAddInvoiceDetail.setOnClickListener((p) -> {
             Integer invoiceEntityID = Integer.valueOf(sharedPreferences.getInt(getString(R.string.selectedInvoiceEntityID), 0));
 
             if (invoiceEntityID != 0) {
                 InvoiceDetailEntity invoiceDetailEntity = new InvoiceDetailEntity();
                 invoiceDetailEntity.setInvoiceID(invoiceEntityID);
-                invoiceDetailEntity.setQuantity(Integer.valueOf(binding.etQuantityInsertDetail.getText().toString()));
+                invoiceDetailEntity.setQuantity(Double.valueOf(binding.etQuantityInsertDetail.getText().toString()));
                 invoiceDetailEntity.setProduct(binding.etProductInsertDetail.getText().toString());
-                invoiceDetailEntity.setUnit(binding.etTxtUnitInsertDetail.getText().toString());
-                invoiceDetailEntity.setCost(Double.valueOf(binding.etCostInsertDetail.getText().toString()));
-                invoiceDetailEntity.setTotalCostOfItem(invoiceDetailEntity.getCost() * invoiceDetailEntity.getQuantity());
+                invoiceDetailEntity.setInvoiceDetailID(finalInvoiceDetailID);
+                invoiceRepository.insert(invoiceDetailEntity).subscribeOn(Schedulers.io()).blockingGet();
 
-                listener.insertInvoiceDetail(invoiceDetailEntity);
+                listener.invoiceDetailWasJustAdded();
                 dismiss();
             } else {
                 Toast.makeText(getActivity().getApplication(), "Error", Toast.LENGTH_SHORT).show();
-            }
-
+            } });
+        binding.imgClose.setOnClickListener((p) -> {
+            dismiss();
         });
 
         return binding.getRoot();
@@ -88,6 +107,6 @@ public class InsertInvoiceDetailDialog extends DialogFragment {
     }
 
     public interface Listener {
-        void insertInvoiceDetail(InvoiceDetailEntity invoiceDetailEntity);
+        void invoiceDetailWasJustAdded();
     }
 }

@@ -94,7 +94,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="Vendedor"
+        android:text="@string/productDescription_detail_item"
         app:layout_constraintStart_toEndOf="@+id/lblDescription"
         app:layout_constraintTop_toTopOf="@+id/lblDescription" />
 
@@ -109,5 +109,15 @@
         app:layout_constraintTop_toBottomOf="@+id/txtDate"
         app:srcCompat="@android:drawable/ic_menu_search"
         app:tint="@color/black" />
+
+    <ImageView
+        android:id="@+id/imgDeleteInvoice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/txtDescription"
+        app:layout_constraintTop_toBottomOf="@+id/txtSeller"
+        app:srcCompat="@android:drawable/ic_menu_delete"
+        app:tint="@color/black"
+        android:background="@drawable/rounded_corner"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

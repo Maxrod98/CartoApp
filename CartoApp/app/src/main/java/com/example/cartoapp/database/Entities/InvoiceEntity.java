@@ -2,6 +2,7 @@ package com.example.cartoapp.database.Entities;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
@@ -11,13 +12,23 @@ public class InvoiceEntity implements Serializable {
     @PrimaryKey
     @NonNull
     private Integer InvoiceID;
-    private Integer ProjectID;
-    private Integer UserID;
+    private Integer ProjectID; //foreign key
+    private Integer UserID; //foreign
     private String Seller;
     private long Date;
     private long Latitude;
     private long Longitude;
     private String Description;
+
+    public Integer getInvoiceStatus() {
+        return InvoiceStatus;
+    }
+
+    public void setInvoiceStatus(Integer invoiceStatus) {
+        InvoiceStatus = invoiceStatus;
+    }
+
+    private Integer InvoiceStatus;
 
     @NonNull
     public Integer getInvoiceID() {

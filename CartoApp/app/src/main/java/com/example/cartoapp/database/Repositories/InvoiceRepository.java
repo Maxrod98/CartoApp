@@ -5,6 +5,7 @@ import android.content.Context;
 import com.example.cartoapp.database.DAOs.InvoiceDAO;
 import com.example.cartoapp.database.DAOs.InvoiceDetailDAO;
 import com.example.cartoapp.database.DatabaseClass;
+import com.example.cartoapp.database.Entities.ExtendedInvoiceDetailEntity;
 import com.example.cartoapp.database.Entities.ExtendedInvoiceEntity;
 import com.example.cartoapp.database.Entities.InvoiceDetailEntity;
 import com.example.cartoapp.database.Entities.InvoiceEntity;
@@ -51,7 +52,12 @@ public class InvoiceRepository {
         return invoiceDetailDAO.findAllInvoiceDetailBy(invoiceDetailID, invoiceID);
     }
 
+    public Single<List<ExtendedInvoiceDetailEntity>> findAllExtendedInvoiceDetailBy(Integer invoiceDetailID, Integer invoiceID) {
+        return invoiceDetailDAO.findAllExtendedInvoiceDetailBy(invoiceDetailID, invoiceID);
+    }
+    //YOU ALWAYS FORGET THAT THIS IS A SINGLE
     public Single<Integer> deleteInvoiceDetailEntity(InvoiceDetailEntity invoiceDetailEntity) {
+        //TODO: del
         return invoiceDetailDAO.deleteInvoiceDetail(invoiceDetailEntity);
     }
 

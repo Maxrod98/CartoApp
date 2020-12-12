@@ -24,7 +24,7 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
     InvoiceAdapter.Listener listener;
 
 
-    public InvoiceAdapter(List<ExtendedInvoiceEntity> invoiceEntityList, Fragment context) {
+    public InvoiceAdapter(List<ExtendedInvoiceEntity> invoiceEntityList, Object context) {
         elements = invoiceEntityList;
         if (context instanceof InvoiceAdapter.Listener) {
             listener = (InvoiceAdapter.Listener) context;
@@ -46,12 +46,12 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
         holder.txtDescription.setText(elements.get(position).getDescription());
         holder.txtSeller.setText(elements.get(position).getSeller());
         holder.txtTotalCost.setText( "$" + String.valueOf(elements.get(position).getTotalCost()));
-        holder.imgEditInvoice.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.goToInvoiceDetail(elements.get(position));
-            }
+        holder.imgEditInvoice.setOnClickListener((v) ->{
+            listener.goToInvoiceDetail(elements.get(position));
         });
+        holder.imgDeleteInvoice.setOnClickListener((v -> {
+            listener.deleteInvoice(elements.get(position));
+        }));
     }
 
     @Override
@@ -65,6 +65,7 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
         public TextView txtSeller;
         public TextView txtTotalCost;
         public ImageView imgEditInvoice;
+        public ImageView imgDeleteInvoice;
 
         public InvoiceViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -73,12 +74,13 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
             txtSeller = itemView.findViewById(R.id.txtSeller);
             txtTotalCost = itemView.findViewById(R.id.txtTotalCost);
             imgEditInvoice = itemView.findViewById(R.id.imgEditInvoice);
+            imgDeleteInvoice = itemView.findViewById(R.id.imgDeleteInvoice);
         }
     }
 
     public interface Listener {
-        void navigateToInvoiceDetail();
         void goToInvoiceDetail(InvoiceEntity invoiceEntity);
+        void deleteInvoice(InvoiceEntity invoiceEntity);
     }
 }
 

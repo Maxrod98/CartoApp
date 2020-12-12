@@ -10,6 +10,7 @@ import androidx.room.TypeConverters;
 import com.example.cartoapp.R;
 import com.example.cartoapp.database.DAOs.InvoiceDAO;
 import com.example.cartoapp.database.DAOs.InvoiceDetailDAO;
+import com.example.cartoapp.database.Entities.FileEntity;
 import com.example.cartoapp.database.Entities.InvoiceDetailEntity;
 import com.example.cartoapp.database.Entities.InvoiceEntity;
 
@@ -18,7 +19,9 @@ import java.util.concurrent.Executors;
 
 @Database(entities = {
         InvoiceEntity.class,
-        InvoiceDetailEntity.class
+        InvoiceDetailEntity.class,
+        FileEntity.class
+
 }, version = 1, exportSchema = false)
 
 @TypeConverters({})

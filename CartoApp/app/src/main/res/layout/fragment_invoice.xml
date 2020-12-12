@@ -3,18 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".ui.InvoiceMain.InvoiceFragment">
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/invoiceDetailRecyclerView"
+        android:id="@+id/invoiceListing"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+
         app:layout_constraintBottom_toTopOf="@+id/tb_add_invoice"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/invoice_detail_item" />
+        tools:listitem="@layout/invoice_entity_item" />
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/tb_add_invoice"
@@ -31,13 +33,14 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             app:srcCompat="@drawable/ic_add"
-            app:tint="@color/white" />
+            app:tint="@color/white"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/invoice_fragment_add_invoice_detail"
+            android:text="@string/invoice_fragment_add_invoice"
             android:textColor="@color/white"></TextView>
 
     </androidx.appcompat.widget.Toolbar>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

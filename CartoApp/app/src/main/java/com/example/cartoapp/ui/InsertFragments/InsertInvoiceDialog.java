@@ -1,7 +1,6 @@
 package com.example.cartoapp.ui.InsertFragments;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,16 +18,15 @@ import com.example.cartoapp.databinding.DialogInsertInvoiceEntityBinding;
 
 import io.reactivex.schedulers.Schedulers;
 
-public class InsertInvoiceEntityDialog extends DialogFragment {
+public class InsertInvoiceDialog extends DialogFragment {
     DialogInsertInvoiceEntityBinding binding;
-    InsertInvoiceEntityDialog.Listener listener;
+    InsertInvoiceDialog.Listener listener;
     SharedPreferences sharedPreferences;
     InvoiceRepository invoiceRepository;
 
-
-    public InsertInvoiceEntityDialog(Context context) {
-        if (context instanceof InsertInvoiceEntityDialog.Listener){
-            listener = (InsertInvoiceEntityDialog.Listener) context;
+    public InsertInvoiceDialog(Object context) {
+        if (context instanceof InsertInvoiceDialog.Listener) {
+            listener = (InsertInvoiceDialog.Listener) context;
         }
     }
 
@@ -37,12 +35,10 @@ public class InsertInvoiceEntityDialog extends DialogFragment {
         super.onCreate(savedInstanceState);
     }
 
-
-
-    public static InsertInvoiceEntityDialog newInstance(Context context) {
+    public static InsertInvoiceDialog newInstance(Object context) {
         Bundle args = new Bundle();
 
-        InsertInvoiceEntityDialog fragment = new InsertInvoiceEntityDialog(context);
+        InsertInvoiceDialog fragment = new InsertInvoiceDialog(context);
         fragment.setArguments(args);
         return fragment;
     }
@@ -62,20 +58,21 @@ public class InsertInvoiceEntityDialog extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DialogInsertInvoiceEntityBinding.inflate(inflater, container, false);
 
-        sharedPreferences =  this.getActivity().getSharedPreferences(getString(R.string.sharedPreferences), Activity.MODE_PRIVATE);
-        binding.btnAddInvoice.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createAndSendEntity();
-            }
+        sharedPreferences = this.getActivity().getSharedPreferences(getString(R.string.sharedPreferences), Activity.MODE_PRIVATE);
+        binding.btnAddInvoice.setOnClickListener((p) -> {
+            createAndSendEntity();
         });
+        binding.imgClose.setOnClickListener((v) -> {
+            dismiss();
+        });
+
         invoiceRepository = new InvoiceRepository(getActivity().getApplication());
         //binding.calDate.setDate();
 
         return binding.getRoot();
     }
 
-    public void createAndSendEntity(){
+    public void createAndSendEntity() {
         InvoiceEntity invoiceEntity = new InvoiceEntity();
         invoiceEntity.setDate(binding.calDate.getDate());
         invoiceEntity.setSeller(binding.etSeller.getText().toString());
@@ -87,7 +84,7 @@ public class InsertInvoiceEntityDialog extends DialogFragment {
     }
 
 
-    public interface Listener{
+    public interface Listener {
         void invoiceEntityWasInserted();
     }
 }

@@ -6,6 +6,7 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
+import com.example.cartoapp.database.Entities.ExtendedInvoiceDetailEntity;
 import com.example.cartoapp.database.Entities.InvoiceDetailEntity;
 import com.example.cartoapp.database.Entities.InvoiceEntity;
 
@@ -29,6 +30,15 @@ public interface InvoiceDetailDAO {
             "((:invoiceDetailID is null or InvoiceDetailID = :invoiceDetailID) and" +
             "(:invoiceID is null or InvoiceID = :invoiceID))" )
     Single<List<InvoiceDetailEntity>> findAllInvoiceDetailBy(Integer invoiceDetailID, Integer invoiceID);
+
+    //TODO: finish this query, agregar NumFiles with count()
+    @Query("SELECT InvoiceDetailEntity.*, COUNT(FileEntity.FileID) as NumFiles FROM InvoiceDetailEntity " +
+            "LEFT JOIN FileEntity ON FileEntity.InvoiceDetailID = InvoiceDetailEntity.InvoiceDetailID " +
+            "WHERE" +
+            "((:invoiceDetailID is null or InvoiceDetailEntity.InvoiceDetailID = :invoiceDetailID) and" +
+            "(:invoiceID is null or InvoiceID = :invoiceID)) " +
+            "GROUP BY InvoiceDetailEntity.InvoiceDetailID" )
+    Single<List<ExtendedInvoiceDetailEntity>> findAllExtendedInvoiceDetailBy(Integer invoiceDetailID, Integer invoiceID);
 
     @Query("SELECT * FROM InvoiceEntity " +
             "ORDER BY InvoiceID DESC " +

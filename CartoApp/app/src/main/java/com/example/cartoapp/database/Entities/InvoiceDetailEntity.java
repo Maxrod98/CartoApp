@@ -8,19 +8,23 @@ import java.io.Serializable;
 
 import io.reactivex.annotations.NonNull;
 
-@Entity
+import static androidx.room.ForeignKey.CASCADE;
+
+@Entity(foreignKeys = @ForeignKey
+        (entity = InvoiceEntity.class,
+                parentColumns = "InvoiceID",
+                childColumns = "InvoiceID",
+                onDelete = CASCADE))
+
 public class InvoiceDetailEntity implements Serializable {
     @PrimaryKey
     @NonNull
     private Integer InvoiceDetailID;
-    private Integer InvoiceID;
-    private Integer Quantity;
-    private String Unit;
+    private Integer InvoiceID; //foreign key
+    private Double Quantity;
     private String Product;
-    private double cost;
-    private double totalCostOfItem;
-    private String typeOfFile;
-    private String pathToFile;
+    private String Note;
+
 
     @NonNull
     public Integer getInvoiceDetailID() {
@@ -39,22 +43,6 @@ public class InvoiceDetailEntity implements Serializable {
         InvoiceID = invoiceID;
     }
 
-    public Integer getQuantity() {
-        return Quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        Quantity = quantity;
-    }
-
-    public String getUnit() {
-        return Unit;
-    }
-
-    public void setUnit(String unit) {
-        Unit = unit;
-    }
-
     public String getProduct() {
         return Product;
     }
@@ -63,35 +51,20 @@ public class InvoiceDetailEntity implements Serializable {
         Product = product;
     }
 
-    public double getCost() {
-        return cost;
+    public Double getQuantity() {
+        return Quantity;
     }
 
-    public void setCost(double cost) {
-        this.cost = cost;
+    public void setQuantity(Double quantity) {
+        Quantity = quantity;
     }
 
-    public double getTotalCostOfItem() {
-        return totalCostOfItem;
+    public String getNote() {
+        return Note;
     }
 
-    public void setTotalCostOfItem(double totalCostOfItem) {
-        this.totalCostOfItem = totalCostOfItem;
+    public void setNote(String note) {
+        Note = note;
     }
 
-    public String getTypeOfFile() {
-        return typeOfFile;
-    }
-
-    public void setTypeOfFile(String typeOfFile) {
-        this.typeOfFile = typeOfFile;
-    }
-
-    public String getPathToFile() {
-        return pathToFile;
-    }
-
-    public void setPathToFile(String pathToFile) {
-        this.pathToFile = pathToFile;
-    }
 }
