@@ -8,6 +8,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
 import com.example.cartoapp.R;
+import com.example.cartoapp.database.DAOs.FileDAO;
 import com.example.cartoapp.database.DAOs.InvoiceDAO;
 import com.example.cartoapp.database.DAOs.InvoiceDetailDAO;
 import com.example.cartoapp.database.Entities.FileEntity;
@@ -22,12 +23,13 @@ import java.util.concurrent.Executors;
         InvoiceDetailEntity.class,
         FileEntity.class
 
-}, version = 1, exportSchema = false)
+}, version = 2, exportSchema = false)
 
 @TypeConverters({})
 public abstract class DatabaseClass extends RoomDatabase {
     public abstract InvoiceDAO invoiceDAO();
     public abstract InvoiceDetailDAO invoiceDetailDAO();
+    public abstract FileDAO fileDAO();
 
     private static volatile DatabaseClass INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;

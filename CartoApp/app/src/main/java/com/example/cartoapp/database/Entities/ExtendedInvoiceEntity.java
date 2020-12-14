@@ -1,13 +1,13 @@
 package com.example.cartoapp.database.Entities;
 
 public class ExtendedInvoiceEntity extends InvoiceEntity {
-    private double totalCost;
+    private Integer totalCost;
 
-    public double getTotalCost() {
+    public Integer getTotalCost() {
         return totalCost;
     }
 
-    public void setTotalCost(double totalCost) {
+    public void setTotalCost(Integer totalCost) {
         this.totalCost = totalCost;
     }
 }

@@ -6,16 +6,16 @@
     android:layout_height="wrap_content"
     android:layout_marginVertical="3dp"
     android:background="@drawable/rounded_corner"
-    android:elevation="5dp"
-    android:padding="@dimen/margin_vertical">
+    android:elevation="5dp">
 
     <TextView
         android:id="@+id/txtDate"
         style="@style/ListTextValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:text="12/9"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/vSelectorBar"
         app:layout_constraintTop_toBottomOf="@+id/lblDate">
 
     </TextView>
@@ -35,11 +35,10 @@
     <View
         android:id="@+id/separator"
         android:layout_width="1dp"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_marginEnd="104dp"
         android:background="@color/teal_700"
-        android:backgroundTint="@color/teal_700"
-        android:elevation="7dp"
+        android:elevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -68,12 +67,12 @@
 
     </TextView>
 
-
     <TextView
         android:id="@+id/lblDate"
         style="@style/ListTextLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_vertical"
         android:text="Fecha:"
         app:layout_constraintStart_toStartOf="@+id/txtDate"
         app:layout_constraintTop_toTopOf="parent" />
@@ -94,21 +93,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="@string/productDescription_detail_item"
+        android:text="Proveedor"
         app:layout_constraintStart_toEndOf="@+id/lblDescription"
         app:layout_constraintTop_toTopOf="@+id/lblDescription" />
 
     <ImageView
         android:id="@+id/imgEditInvoice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:background="@drawable/rounded_corner"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/txtDescription"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtDate"
-        app:srcCompat="@android:drawable/ic_menu_search"
-        app:tint="@color/black" />
+        app:srcCompat="@drawable/ic_add"
+        app:tint="@color/teal_700" />
 
     <ImageView
         android:id="@+id/imgDeleteInvoice"
@@ -119,5 +118,26 @@
         app:srcCompat="@android:drawable/ic_menu_delete"
         app:tint="@color/black"
         android:background="@drawable/rounded_corner"/>
+
+
+    <View
+        android:id="@+id/vSelectorBar"
+        android:layout_width="@dimen/margin_horizontal"
+        android:layout_height="0dp"
+        android:background="@color/teal_700"
+        android:elevation="0dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total"
+        app:layout_constraintBottom_toTopOf="@+id/txtTotalCost"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/separator" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

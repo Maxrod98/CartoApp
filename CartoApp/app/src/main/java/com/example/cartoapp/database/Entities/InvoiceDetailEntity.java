@@ -21,10 +21,17 @@ public class InvoiceDetailEntity implements Serializable {
     @NonNull
     private Integer InvoiceDetailID;
     private Integer InvoiceID; //foreign key
-    private Double Quantity;
-    private String Product;
-    private String Note;
+    private Integer CostOfItem;
+    private String ConceptDescription;
+    private String Notes;
 
+    public String getNotes() {
+        return Notes;
+    }
+
+    public void setNotes(String notes) {
+        Notes = notes;
+    }
 
     @NonNull
     public Integer getInvoiceDetailID() {
@@ -32,7 +39,7 @@ public class InvoiceDetailEntity implements Serializable {
     }
 
     public void setInvoiceDetailID(@NonNull Integer invoiceDetailID) {
-        InvoiceDetailID = invoiceDetailID;
+        this.InvoiceDetailID = invoiceDetailID;
     }
 
     public Integer getInvoiceID() {
@@ -43,28 +50,20 @@ public class InvoiceDetailEntity implements Serializable {
         InvoiceID = invoiceID;
     }
 
-    public String getProduct() {
-        return Product;
+    public String getConceptDescription() {
+        return ConceptDescription;
     }
 
-    public void setProduct(String product) {
-        Product = product;
+    public void setConceptDescription(String conceptDescription) {
+        ConceptDescription = conceptDescription;
     }
 
-    public Double getQuantity() {
-        return Quantity;
+    public Integer getCostOfItem() {
+        return CostOfItem;
     }
 
-    public void setQuantity(Double quantity) {
-        Quantity = quantity;
-    }
-
-    public String getNote() {
-        return Note;
-    }
-
-    public void setNote(String note) {
-        Note = note;
+    public void setCostOfItem(Integer costOfItem) {
+        CostOfItem = costOfItem;
     }
 
 }

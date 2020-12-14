@@ -21,7 +21,7 @@ public class ProjectEntity  implements Serializable {
     }
 
     public void setProjectID(@NonNull Integer projectID) {
-        ProjectID = projectID;
+        this.ProjectID = projectID;
     }
 
     public String getName() {

@@ -1,7 +1,6 @@
 package com.example.cartoapp.ui.InvoiceDetail;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,12 +17,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cartoapp.R;
 import com.example.cartoapp.database.Entities.ExtendedInvoiceDetailEntity;
+import com.example.cartoapp.database.Entities.ExtendedInvoiceEntity;
 import com.example.cartoapp.database.Entities.InvoiceDetailEntity;
 import com.example.cartoapp.database.Repositories.InvoiceRepository;
 import com.example.cartoapp.databinding.InvoiceDetailFragmentBinding;
 import com.example.cartoapp.ui.InsertFragments.InsertInvoiceDetailDialog;
+import com.example.cartoapp.ui.Invoice.InvoiceAdapter;
 import com.example.cartoapp.ui.MainActivity;
 import com.example.cartoapp.utils.NAVIGATION;
+import com.example.cartoapp.utils.Selector;
 
 import java.util.List;
 
@@ -35,6 +37,8 @@ public class InvoiceDetailFragment extends Fragment implements InvoiceDetailAdap
     private InvoiceDetailFragment.Listener listener;
     private InvoiceRepository invoiceRepository;
     SharedPreferences sharedPreferences;
+    Integer invoiceEntityID;
+    static Integer CURRENT_SELECTION = Selector.NONE_SELECTED;
 
     public InvoiceDetailFragment(Object context) {
         if (context instanceof InvoiceDetailFragment.Listener) {
@@ -78,7 +82,7 @@ public class InvoiceDetailFragment extends Fragment implements InvoiceDetailAdap
 
 
     private void getDatabaseData(){
-        Integer invoiceEntityID = sharedPreferences.getInt(getString(R.string.selectedInvoiceEntityID), 0);
+        invoiceEntityID = sharedPreferences.getInt(getString(R.string.selectedInvoiceEntityID), 0);
 
         if (invoiceEntityID != 0){
             List<ExtendedInvoiceDetailEntity> invoiceDetailEntityList = invoiceRepository.findAllExtendedInvoiceDetailBy(null, invoiceEntityID).subscribeOn(Schedulers.io()).blockingGet();
@@ -90,13 +94,22 @@ public class InvoiceDetailFragment extends Fragment implements InvoiceDetailAdap
 
 
     private void setAdapterToRecyclerView(List<ExtendedInvoiceDetailEntity> adapterList) {
+        List<ExtendedInvoiceEntity> invoiceHeaderList = invoiceRepository.findAllExtendedInvoiceBy(invoiceEntityID).subscribeOn(Schedulers.io()).blockingGet();
+
+        InvoiceAdapter invoiceAdapterHeader = new InvoiceAdapter(invoiceHeaderList, this);
         InvoiceDetailAdapter invoiceAdapter = new InvoiceDetailAdapter(adapterList, this);
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(requireContext());
-        binding.invoiceDetailRecyclerView.setLayoutManager(layoutManager);
+        if (adapterList.isEmpty()){
+            binding.txtNoInvoicesDetail.setVisibility(View.VISIBLE);
+        } else {
+            binding.txtNoInvoicesDetail.setVisibility(View.INVISIBLE);
+        }
 
         binding.invoiceDetailRecyclerView.setAdapter(invoiceAdapter);
         binding.invoiceDetailRecyclerView.setHasFixedSize(true);
+
+        binding.invoiceHeader.setAdapter(invoiceAdapterHeader);
+        binding.invoiceHeader.setHasFixedSize(true);
     }
 
     @Override
@@ -104,7 +117,7 @@ public class InvoiceDetailFragment extends Fragment implements InvoiceDetailAdap
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         builder.setCancelable(true);
-        builder.setTitle("Borrar detalle de factura de " + invoiceDetailEntity.getProduct() );
+        builder.setTitle("Borrar detalle de factura de " + invoiceDetailEntity.getConceptDescription() );
         builder.setMessage("¿Seguro que desea borrar el detalle de la factura?");
         builder.setPositiveButton("Borrar", (dialog, which) -> {
             deleteDetailEntity(invoiceDetailEntity);
@@ -137,6 +150,16 @@ public class InvoiceDetailFragment extends Fragment implements InvoiceDetailAdap
     public void editInvoiceDetail(InvoiceDetailEntity invoiceDetailEntity) {
         InsertInvoiceDetailDialog insertInvoiceDetailDialog = InsertInvoiceDetailDialog.newInstance(this, invoiceDetailEntity);
         insertInvoiceDetailDialog.show(getActivity().getSupportFragmentManager(), "InsertInvoiceDetailDialog");
+    }
+
+    @Override
+    public Integer getCurrentSelection() {
+        return CURRENT_SELECTION;
+    }
+
+    @Override
+    public void setCurrentSelection(Integer position) {
+        CURRENT_SELECTION = position;
     }
 
     public interface Listener {

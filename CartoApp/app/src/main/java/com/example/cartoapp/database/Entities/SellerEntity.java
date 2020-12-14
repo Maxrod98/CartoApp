@@ -22,7 +22,7 @@ public class SellerEntity  implements Serializable {
     }
 
     public void setSellerID(@NonNull Integer sellerID) {
-        SellerID = sellerID;
+        this.SellerID = sellerID;
     }
 
     public String getName() {

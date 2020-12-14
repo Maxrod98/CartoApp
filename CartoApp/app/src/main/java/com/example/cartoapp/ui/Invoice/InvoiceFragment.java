@@ -1,4 +1,4 @@
-package com.example.cartoapp.ui.InvoiceMain;
+package com.example.cartoapp.ui.Invoice;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
@@ -15,13 +15,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cartoapp.R;
 import com.example.cartoapp.database.Entities.ExtendedInvoiceEntity;
-import com.example.cartoapp.database.Entities.InvoiceDetailEntity;
 import com.example.cartoapp.database.Entities.InvoiceEntity;
 import com.example.cartoapp.database.Repositories.InvoiceRepository;
 import com.example.cartoapp.databinding.FragmentInvoiceBinding;
 import com.example.cartoapp.ui.InsertFragments.InsertInvoiceDialog;
 import com.example.cartoapp.ui.MainActivity;
 import com.example.cartoapp.utils.NAVIGATION;
+import com.example.cartoapp.utils.Selector;
 
 import java.util.List;
 
@@ -32,6 +32,9 @@ public class InvoiceFragment extends Fragment implements InvoiceAdapter.Listener
     InvoiceRepository invoiceRepository;
     InvoiceFragment.Listener listener;
     SharedPreferences sharedPreferences;
+    InvoiceAdapter invoiceAdapter;
+    static Integer CURRENT_SELECTION = Selector.NONE_SELECTED;
+
 
     public InvoiceFragment() {
     }
@@ -77,10 +80,13 @@ public class InvoiceFragment extends Fragment implements InvoiceAdapter.Listener
     }
 
     private void setAdapterToRecyclerView(List<ExtendedInvoiceEntity> adapterList) {
-        InvoiceAdapter invoiceAdapter = new InvoiceAdapter(adapterList, this);
+        invoiceAdapter = new InvoiceAdapter(adapterList, this);
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(requireContext());
-        binding.invoiceListing.setLayoutManager(layoutManager);
+        if (adapterList.isEmpty()){
+            binding.txtNoInvoices.setVisibility(View.VISIBLE);
+        } else {
+            binding.txtNoInvoices.setVisibility(View.INVISIBLE);
+        }
 
         binding.invoiceListing.setAdapter(invoiceAdapter);
         binding.invoiceListing.setHasFixedSize(true);
@@ -114,7 +120,17 @@ public class InvoiceFragment extends Fragment implements InvoiceAdapter.Listener
         dialog.show();
     }
 
-    public void deleteInvoiceEntityAndRelatedInvoiceDetail(InvoiceEntity invoiceEntity){
+    @Override
+    public Integer getCurrentSelection() {
+        return CURRENT_SELECTION;
+    }
+
+    @Override
+    public void setCurrentSelection(Integer position) {
+        CURRENT_SELECTION = position;
+    }
+
+    public void deleteInvoiceEntityAndRelatedInvoiceDetail(InvoiceEntity invoiceEntity) {
         invoiceRepository.deleteInvoiceEntity(invoiceEntity).subscribeOn(Schedulers.io()).blockingGet();
     }
 
@@ -122,6 +138,7 @@ public class InvoiceFragment extends Fragment implements InvoiceAdapter.Listener
     public void invoiceEntityWasInserted() {
         InvoiceEntity invoiceEntity = invoiceRepository.findLastInvoiceEntity().subscribeOn(Schedulers.io()).blockingGet();
         sharedPreferences.edit().putInt(getString(R.string.selectedInvoiceEntityID), invoiceEntity.getInvoiceID()).commit();
+        CURRENT_SELECTION = Selector.LAST_SELECTED;
         listener.goToInvoiceDetails();
     }
 

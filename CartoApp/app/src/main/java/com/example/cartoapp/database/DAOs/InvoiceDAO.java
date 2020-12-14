@@ -15,7 +15,6 @@ import io.reactivex.Single;
 
 @Dao
 public interface InvoiceDAO {
-
     @Delete
     Single<Integer> deleteInvoiceEntity(InvoiceEntity invoiceEntity);
 
@@ -26,7 +25,7 @@ public interface InvoiceDAO {
             "(:invoiceID is null or InvoiceID = :invoiceID)")
     Single<InvoiceEntity> findAllInvoiceBy(Integer invoiceID);
 
-    @Query("SELECT InvoiceEntity.*, SUM(invoiceDetail.Quantity) as totalCost FROM InvoiceEntity " +
+    @Query("SELECT InvoiceEntity.*, SUM(invoiceDetail.CostOfItem) as totalCost FROM InvoiceEntity " +
             "LEFT JOIN InvoiceDetailEntity invoiceDetail ON InvoiceEntity.InvoiceID = invoiceDetail.InvoiceID " +
             "WHERE (:invoiceID is null or :invoiceID = InvoiceEntity.InvoiceID) " +
             "GROUP BY InvoiceEntity.InvoiceID")

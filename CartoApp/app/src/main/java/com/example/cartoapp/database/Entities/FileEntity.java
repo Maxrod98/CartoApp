@@ -1,5 +1,6 @@
 package com.example.cartoapp.database.Entities;
 
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
@@ -23,6 +24,18 @@ public class FileEntity implements Serializable {
     private Integer InvoiceDetailID; //foreign key
     private String PathToFile;
     private String TypeOfFile;
+    private String OriginalName;
+
+    public String getOriginalName() {
+        return OriginalName;
+    }
+
+    public void setOriginalName(String originalName) {
+        OriginalName = originalName;
+    }
+
+
+
 
     @NonNull
     public Integer getFileID() {
@@ -30,7 +43,7 @@ public class FileEntity implements Serializable {
     }
 
     public void setFileID(@NonNull Integer fileID) {
-        FileID = fileID;
+        this.FileID = fileID;
     }
 
 

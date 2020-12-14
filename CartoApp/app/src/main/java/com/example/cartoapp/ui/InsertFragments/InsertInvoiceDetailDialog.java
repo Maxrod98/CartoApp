@@ -70,8 +70,8 @@ public class InsertInvoiceDetailDialog extends DialogFragment {
             if (invoiceDetailEntity != null){
                 binding.lblTitle.setText("Editar detalle de factura");
                 binding.btnAddInvoiceDetail.setText("Editar");
-                binding.etQuantityInsertDetail.setText(String.valueOf(invoiceDetailEntity.getQuantity()));
-                binding.etProductInsertDetail.setText(invoiceDetailEntity.getProduct());
+                binding.etQuantityInsertDetail.setText(String.valueOf(invoiceDetailEntity.getCostOfItem()));
+                binding.etProductInsertDetail.setText(invoiceDetailEntity.getConceptDescription());
                 invoiceDetailID = invoiceDetailEntity.getInvoiceDetailID();
             }
 
@@ -84,8 +84,8 @@ public class InsertInvoiceDetailDialog extends DialogFragment {
             if (invoiceEntityID != 0) {
                 InvoiceDetailEntity invoiceDetailEntity = new InvoiceDetailEntity();
                 invoiceDetailEntity.setInvoiceID(invoiceEntityID);
-                invoiceDetailEntity.setQuantity(Double.valueOf(binding.etQuantityInsertDetail.getText().toString()));
-                invoiceDetailEntity.setProduct(binding.etProductInsertDetail.getText().toString());
+                invoiceDetailEntity.setCostOfItem(Integer.valueOf(binding.etQuantityInsertDetail.getText().toString()));
+                invoiceDetailEntity.setConceptDescription(binding.etProductInsertDetail.getText().toString());
                 invoiceDetailEntity.setInvoiceDetailID(finalInvoiceDetailID);
                 invoiceRepository.insert(invoiceDetailEntity).subscribeOn(Schedulers.io()).blockingGet();
 

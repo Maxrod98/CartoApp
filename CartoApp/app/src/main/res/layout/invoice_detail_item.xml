@@ -6,18 +6,17 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/list_margin"
-    android:background="@drawable/rounded_corner"
-    android:padding="12dp">
+    android:background="@drawable/rounded_corner">
 
 
     <TextView
         android:id="@+id/lblQuantity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_vertical"
         android:text="@string/quantity_invoice_detail"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/separator"
-        app:layout_constraintTop_toTopOf="@+id/lblProduct" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/txtQuantity"
@@ -25,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="12"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/separator"
         app:layout_constraintTop_toBottomOf="@+id/lblQuantity" />
 
 
@@ -33,6 +32,9 @@
         android:id="@+id/lblProduct"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_horizontal"
+        android:layout_marginTop="@dimen/margin_vertical"
+        android:elevation="3dp"
         android:text="@string/productDescription_detail_item"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -42,6 +44,7 @@
         style="@style/ListTextValue"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:elevation="3dp"
         android:text="Cemento"
         app:layout_constraintEnd_toStartOf="@+id/imgFileAttached"
         app:layout_constraintStart_toStartOf="@+id/lblProduct"
@@ -50,12 +53,13 @@
     <View
         android:id="@+id/separator"
         android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:layout_marginEnd="104dp"
+        android:layout_height="61dp"
+        android:layout_marginEnd="88dp"
         android:background="@color/teal_700"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
     <ImageView
         android:id="@+id/imgFileAttached"
@@ -82,12 +86,23 @@
         android:layout_width="30dp"
         android:layout_height="0dp"
         android:layout_marginStart="24dp"
+        android:background="@drawable/rounded_corner"
+        android:padding="2dp"
         app:layout_constraintBottom_toBottomOf="@+id/imgFileAttached"
         app:layout_constraintStart_toEndOf="@+id/imgFileAttached"
         app:layout_constraintTop_toTopOf="@+id/imgFileAttached"
-        android:background="@drawable/rounded_corner"
-        android:padding="2dp"
         app:srcCompat="@mipmap/ic_wrench" />
 
+    <View
+        android:id="@+id/invoice_detail_item_selector"
+        android:layout_width="@dimen/margin_horizontal"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/teal_700"
+        android:visibility="invisible">
+
+    </View>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
