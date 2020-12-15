@@ -8,7 +8,10 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import com.example.cartoapp.R;
 import com.example.cartoapp.database.Entities.FileEntity;
 import com.example.cartoapp.database.Repositories.FileRepository;
 import com.example.cartoapp.databinding.FragmentAddFilesBinding;
@@ -55,13 +58,20 @@ public class AddFileFragment extends Fragment implements  AddFileAdapter.Listene
         AddFileAdapter addFileAdapter = new AddFileAdapter(fileEntityList, this);
         binding.addFileRecyclerView.setAdapter(addFileAdapter);
 
-        binding.btnAddFileToInvoiceDetail.setOnClickListener((v)-> {
+        binding.fafAddFileToInvoiceDetail.setOnClickListener((v)-> {
             if (fileEntityList != null){
                 if (!fileEntityList.isEmpty()){
                     listener.addFilesToInvoiceDetail(fileEntityList);
                 }
             }
         });
+
+        binding.fafClose.setOnClickListener((v -> {
+            FragmentManager manager = getActivity().getSupportFragmentManager();
+            FragmentTransaction trans = manager.beginTransaction().setCustomAnimations(R.anim.slide_in, R.anim.slide_out);
+            trans.remove(this);
+            trans.commit();
+        }));
 
         return binding.getRoot();
     }

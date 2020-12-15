@@ -23,7 +23,9 @@ import com.example.cartoapp.database.Repositories.InvoiceRepository;
 import com.example.cartoapp.databinding.InvoiceDetailFragmentBinding;
 import com.example.cartoapp.ui.InsertFragments.InsertInvoiceDetailDialog;
 import com.example.cartoapp.ui.Invoice.InvoiceAdapter;
+import com.example.cartoapp.ui.Invoice.InvoiceDetailOptionsDialog;
 import com.example.cartoapp.ui.MainActivity;
+import com.example.cartoapp.ui.ShowNotes.ShowNotesDialog;
 import com.example.cartoapp.utils.NAVIGATION;
 import com.example.cartoapp.utils.Selector;
 
@@ -94,9 +96,6 @@ public class InvoiceDetailFragment extends Fragment implements InvoiceDetailAdap
 
 
     private void setAdapterToRecyclerView(List<ExtendedInvoiceDetailEntity> adapterList) {
-        List<ExtendedInvoiceEntity> invoiceHeaderList = invoiceRepository.findAllExtendedInvoiceBy(invoiceEntityID).subscribeOn(Schedulers.io()).blockingGet();
-
-        InvoiceAdapter invoiceAdapterHeader = new InvoiceAdapter(invoiceHeaderList, this);
         InvoiceDetailAdapter invoiceAdapter = new InvoiceDetailAdapter(adapterList, this);
 
         if (adapterList.isEmpty()){
@@ -108,49 +107,15 @@ public class InvoiceDetailFragment extends Fragment implements InvoiceDetailAdap
         binding.invoiceDetailRecyclerView.setAdapter(invoiceAdapter);
         binding.invoiceDetailRecyclerView.setHasFixedSize(true);
 
-        binding.invoiceHeader.setAdapter(invoiceAdapterHeader);
-        binding.invoiceHeader.setHasFixedSize(true);
     }
 
-    @Override
-    public void deleteInvoiceDetail(InvoiceDetailEntity invoiceDetailEntity) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-        builder.setCancelable(true);
-        builder.setTitle("Borrar detalle de factura de " + invoiceDetailEntity.getConceptDescription() );
-        builder.setMessage("¿Seguro que desea borrar el detalle de la factura?");
-        builder.setPositiveButton("Borrar", (dialog, which) -> {
-            deleteDetailEntity(invoiceDetailEntity);
-        });
-        builder.setNegativeButton("Cancelar", ((dialog, which) -> { }));
-
-        AlertDialog dialog = builder.create();
-        dialog.show();
-
-    }
-
-
-
-    public void deleteDetailEntity(InvoiceDetailEntity invoiceDetailEntity) {
-        invoiceRepository.deleteInvoiceDetailEntity(invoiceDetailEntity).subscribeOn(Schedulers.io()).blockingGet();
-        getDatabaseData();
-    }
 
     @Override
     public void invoiceDetailWasJustAdded() {
         getDatabaseData();
     }
 
-    @Override
-    public void checkFileList(InvoiceDetailEntity invoiceDetailEntity) {
-        //TODO: hacer esto
-    }
 
-    @Override
-    public void editInvoiceDetail(InvoiceDetailEntity invoiceDetailEntity) {
-        InsertInvoiceDetailDialog insertInvoiceDetailDialog = InsertInvoiceDetailDialog.newInstance(this, invoiceDetailEntity);
-        insertInvoiceDetailDialog.show(getActivity().getSupportFragmentManager(), "InsertInvoiceDetailDialog");
-    }
 
     @Override
     public Integer getCurrentSelection() {
@@ -161,6 +126,14 @@ public class InvoiceDetailFragment extends Fragment implements InvoiceDetailAdap
     public void setCurrentSelection(Integer position) {
         CURRENT_SELECTION = position;
     }
+
+    @Override
+    public void goToInvoiceDetailOptionsDialog(InvoiceDetailEntity invoiceDetailEntity) {
+        sharedPreferences.edit().putInt(getString(R.string.selectedInvoiceDetailID), invoiceDetailEntity.getInvoiceDetailID()).commit();
+        InvoiceDetailOptionsDialog invoiceDetailOptionsDialog = InvoiceDetailOptionsDialog.newInstance(this);
+        invoiceDetailOptionsDialog.show(getActivity().getSupportFragmentManager(), "OptionsDetailDialog");
+    }
+
 
     public interface Listener {
 

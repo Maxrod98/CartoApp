@@ -21,6 +21,7 @@ import com.example.cartoapp.databinding.FragmentInvoiceBinding;
 import com.example.cartoapp.ui.InsertFragments.InsertInvoiceDialog;
 import com.example.cartoapp.ui.MainActivity;
 import com.example.cartoapp.utils.NAVIGATION;
+import com.example.cartoapp.utils.RecyclerTouchListener;
 import com.example.cartoapp.utils.Selector;
 
 import java.util.List;
@@ -34,7 +35,6 @@ public class InvoiceFragment extends Fragment implements InvoiceAdapter.Listener
     SharedPreferences sharedPreferences;
     InvoiceAdapter invoiceAdapter;
     static Integer CURRENT_SELECTION = Selector.NONE_SELECTED;
-
 
     public InvoiceFragment() {
     }
@@ -63,6 +63,7 @@ public class InvoiceFragment extends Fragment implements InvoiceAdapter.Listener
             InsertInvoiceDialog insertInvoiceEntityDialog = InsertInvoiceDialog.newInstance(this);
             insertInvoiceEntityDialog.show(getActivity().getSupportFragmentManager(), "InsertInvoiceEntityDialog");
         });
+
 
         getDatabaseData();
         return binding.getRoot();

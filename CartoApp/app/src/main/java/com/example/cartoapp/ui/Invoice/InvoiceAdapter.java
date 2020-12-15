@@ -19,7 +19,7 @@ import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceViewHolder> implements  Selector.Listener {
+public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceViewHolder> implements Selector.Listener {
     List<ExtendedInvoiceEntity> elements;
     InvoiceAdapter.Listener listener;
     //TODO : add option to edit invoice
@@ -31,7 +31,7 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
         elements = invoiceEntityList;
         if (context instanceof InvoiceAdapter.Listener) {
             listener = (InvoiceAdapter.Listener) context;
-            selector = new Selector( this);
+            selector = new Selector(this);
         } else {
 
         }
@@ -52,22 +52,15 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
         holder.txtDate.setText((new SimpleDateFormat("dd/MM")).format(new Date(elements.get(position).getDate())));
         holder.txtDescription.setText(elements.get(position).getDescription());
         holder.txtSeller.setText(elements.get(position).getSeller());
-        holder.txtTotalCost.setText("$" + String.valueOf(elements.get(position).getTotalCost() == null? 0 : elements.get(position).getTotalCost()));
+        holder.txtTotalCost.setText("$" + String.valueOf(elements.get(position).getTotalCost() == null ? 0 : elements.get(position).getTotalCost()));
 
-        if (selector != null){
-            holder.imgEditInvoice.setOnClickListener((v) -> {
-                selector.onItemClickSelection(position);
-                notifyDataSetChanged();
-                listener.goToInvoiceDetail(elements.get(position));
-            });
-            holder.vSelectionBar.setVisibility(selector.isSelected(position) ? View.VISIBLE : View.INVISIBLE);
-            holder.imgDeleteInvoice.setVisibility(View.VISIBLE);
-            holder.imgEditInvoice.setVisibility(View.VISIBLE);
-        }
-        else{ // for header
-            holder.imgDeleteInvoice.setVisibility(View.INVISIBLE);
-            holder.imgEditInvoice.setVisibility(View.INVISIBLE);
-        }
+        holder.txtSeller.getRootView().setOnClickListener((v) -> {
+            selector.onItemClickSelection(position);
+            notifyDataSetChanged();
+            listener.goToInvoiceDetail(elements.get(position));
+        });
+        holder.vSelectionBar.setVisibility(selector.isSelected(position) ? View.VISIBLE : View.INVISIBLE);
+        holder.imgDeleteInvoice.setVisibility(View.VISIBLE);
 
         holder.imgDeleteInvoice.setOnClickListener((v -> {
             listener.deleteInvoice(elements.get(position));
@@ -100,7 +93,6 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
         public TextView txtDescription;
         public TextView txtSeller;
         public TextView txtTotalCost;
-        public ImageView imgEditInvoice;
         public ImageView imgDeleteInvoice;
         public View vSelectionBar;
 
@@ -110,7 +102,6 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
             txtDescription = itemView.findViewById(R.id.txtDescription);
             txtSeller = itemView.findViewById(R.id.txtSeller);
             txtTotalCost = itemView.findViewById(R.id.txtTotalCost);
-            imgEditInvoice = itemView.findViewById(R.id.imgEditInvoice);
             imgDeleteInvoice = itemView.findViewById(R.id.imgDeleteInvoice);
             vSelectionBar = itemView.findViewById(R.id.vSelectorBar);
         }

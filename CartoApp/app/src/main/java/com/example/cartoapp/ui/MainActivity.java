@@ -18,8 +18,6 @@ import com.example.cartoapp.utils.NAVIGATION;
 
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -60,11 +58,9 @@ public class MainActivity extends BaseActivity implements
 
         //receiving data from share button
         handleShareIntent();
-
-
         setSupportActionBar(binding.toolbar);
 
-        setNavigation(true);
+        setNavigation(false);
     }
 
     @Override
@@ -135,6 +131,7 @@ public class MainActivity extends BaseActivity implements
     }
 
     private void popUpFileFragment() {
+        navigation = NAVIGATION.INVOICE_LISTING;
         navigateToLowerFragment(AddFileFragment.newInstance(this), false, "Test");
     }
 
@@ -207,13 +204,7 @@ public class MainActivity extends BaseActivity implements
     }
 
 
-    public void navigateToLowerFragment(Fragment fragment, boolean addToBackStack, String fragmentTag) {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .addToBackStack((addToBackStack) ? fragmentTag : null)
-                .replace(R.id.insertFileContainer, fragment, fragmentTag)
-                .commit();
-    }
+
 
     @Override
     public void addFilesToInvoiceDetail(List<FileEntity> fileEntities) {

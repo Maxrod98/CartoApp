@@ -55,21 +55,36 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <CalendarView
-        android:id="@+id/calDate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/add_invoice_lblDescription"
-        tools:layout_editor_absoluteX="12dp" />
-
     <ImageView
         android:id="@+id/imgClose"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/calDate"
+        app:layout_constraintBottom_toTopOf="@+id/etDateInvoice"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@android:drawable/ic_menu_close_clear_cancel"
         app:tint="@color/black" />
+
+    <EditText
+        android:id="@+id/etDateInvoice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:textAlignment="center"
+        android:inputType="date"
+        app:layout_constraintBottom_toTopOf="@+id/add_invoice_lblDescription"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/txtDateInvoice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="Fecha:"
+        style="@style/ListTextValue"
+        app:layout_constraintBottom_toTopOf="@+id/etDateInvoice"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

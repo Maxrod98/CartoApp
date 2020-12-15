@@ -23,4 +23,5 @@
     <string name="selectedInvoiceEntityID">selectedInvoiceEntityID</string>
     <string name="invoice_fragment_add_invoice">Agregar factura nueva</string>
     <string name="invoice_fragment_add_invoice_detail">Agregar otro articulo</string>
+    <string name="selectedInvoiceDetailID">selectedInvoiceDetailID</string>
 </resources>

@@ -65,33 +65,11 @@
         android:id="@+id/imgFileAttached"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginStart="128dp"
+        android:layout_marginStart="268dp"
+        android:layout_marginTop="4dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/lblProduct"
         app:srcCompat="@drawable/ic_yellow_folder" />
-
-    <ImageView
-        android:id="@+id/imgDeleteInvoiceDetail"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="20dp"
-        android:background="@drawable/rounded_corner"
-        app:layout_constraintStart_toEndOf="@+id/imgEditInvoiceDetail"
-        app:layout_constraintTop_toTopOf="@+id/imgEditInvoiceDetail"
-        app:srcCompat="@android:drawable/ic_menu_delete"
-        app:tint="@color/black" />
-
-    <ImageView
-        android:id="@+id/imgEditInvoiceDetail"
-        android:layout_width="30dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="24dp"
-        android:background="@drawable/rounded_corner"
-        android:padding="2dp"
-        app:layout_constraintBottom_toBottomOf="@+id/imgFileAttached"
-        app:layout_constraintStart_toEndOf="@+id/imgFileAttached"
-        app:layout_constraintTop_toTopOf="@+id/imgFileAttached"
-        app:srcCompat="@mipmap/ic_wrench" />
 
     <View
         android:id="@+id/invoice_detail_item_selector"

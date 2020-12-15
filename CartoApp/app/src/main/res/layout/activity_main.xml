@@ -29,13 +29,13 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="56dp"
-        app:layout_constraintBottom_toTopOf="@id/insertFileContainer"
+        app:layout_constraintBottom_toTopOf="@id/lowerFragment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/toolbar_holder"></FrameLayout>
 
     <FrameLayout
-        android:id="@+id/insertFileContainer"
+        android:id="@+id/lowerFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"

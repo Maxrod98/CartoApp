@@ -26,7 +26,6 @@ public class FileUtils {
 
     }
 
-    @Deprecated
     public static void copyFile(String sourcepath, String targetpath) {
         File sourceLocation = new File(sourcepath);
         File targetLocation = new File(targetpath);
@@ -89,6 +88,11 @@ public class FileUtils {
             }
         }
         createFolderIfNecessary(path);
+    }
+
+    public static void deleteFile(String path){
+        File file = new File(path);
+        file.delete();
     }
 
     public static String getFileDetailFromUri(final Context context, final Uri uri) {

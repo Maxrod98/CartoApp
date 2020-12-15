@@ -45,25 +45,18 @@ public class InvoiceDetailAdapter extends RecyclerView.Adapter<InvoiceDetailAdap
     public void onBindViewHolder(@NonNull InvoiceDetailViewHolder holder, int position) {
         holder.txtProduct.setText(elements.get(position).getConceptDescription());
         holder.txtQuantity.setText( "$" + String.valueOf(elements.get(position).getCostOfItem()));
-        holder.imgDeleteInvoiceDetail.setOnClickListener((v) -> {
-                listener.deleteInvoiceDetail(elements.get(position));
-            });
 
-
-        //TODO: en vez de no mostrar mejor setEnabled
         boolean hasFiles = elements.get(position).getNumFiles() > 0;
         if (!hasFiles){
             holder.imgFileAttached.setAlpha(0.3f);
         }
         holder.invoiceDetailItem.setOnClickListener((v) -> {
             selector.onItemClickSelection(position);
+            listener.goToInvoiceDetailOptionsDialog(elements.get(position));
             notifyDataSetChanged();
         });
-        holder.invoiceDetailItemSelector.setVisibility(selector.isSelected(position)? View.VISIBLE: View.INVISIBLE);
 
-        holder.imgEditInvoiceDetail.setOnClickListener((v) -> {
-            listener.editInvoiceDetail(elements.get(position));
-        });
+        holder.invoiceDetailItemSelector.setVisibility(selector.isSelected(position)? View.VISIBLE: View.INVISIBLE);
     }
 
     @Override
@@ -90,8 +83,6 @@ public class InvoiceDetailAdapter extends RecyclerView.Adapter<InvoiceDetailAdap
         public TextView txtProduct;
         public TextView txtQuantity;
         public ImageView imgFileAttached;
-        public ImageView imgDeleteInvoiceDetail;
-        public ImageView imgEditInvoiceDetail;
         public ConstraintLayout invoiceDetailItem;
         public View invoiceDetailItemSelector;
 
@@ -100,18 +91,14 @@ public class InvoiceDetailAdapter extends RecyclerView.Adapter<InvoiceDetailAdap
             txtProduct = itemView.findViewById(R.id.txtProduct);
             txtQuantity = itemView.findViewById(R.id.txtQuantity);
             imgFileAttached = itemView.findViewById(R.id.imgFileAttached);
-            imgDeleteInvoiceDetail = itemView.findViewById(R.id.imgDeleteInvoiceDetail);
-            imgEditInvoiceDetail = itemView.findViewById(R.id.imgEditInvoiceDetail);
             invoiceDetailItem = itemView.findViewById(R.id.invoice_detail_item);
             invoiceDetailItemSelector = itemView.findViewById(R.id.invoice_detail_item_selector);
         }
     }
 
     public interface Listener{
-        void deleteInvoiceDetail(InvoiceDetailEntity invoiceDetailEntity);
-        void checkFileList(InvoiceDetailEntity invoiceDetailEntity);
-        void editInvoiceDetail(InvoiceDetailEntity invoiceDetailEntity);
         Integer getCurrentSelection();
         void setCurrentSelection(Integer integer);
+        void goToInvoiceDetailOptionsDialog(InvoiceDetailEntity invoiceDetailEntity);
     }
 }
