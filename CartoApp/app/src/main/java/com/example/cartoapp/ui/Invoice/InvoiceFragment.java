@@ -18,6 +18,7 @@ import com.example.cartoapp.database.Entities.ExtendedInvoiceEntity;
 import com.example.cartoapp.database.Entities.InvoiceEntity;
 import com.example.cartoapp.database.Repositories.InvoiceRepository;
 import com.example.cartoapp.databinding.FragmentInvoiceBinding;
+import com.example.cartoapp.ui.InsertFragments.InsertInvoiceDetailDialog;
 import com.example.cartoapp.ui.InsertFragments.InsertInvoiceDialog;
 import com.example.cartoapp.ui.MainActivity;
 import com.example.cartoapp.utils.NAVIGATION;
@@ -28,7 +29,7 @@ import java.util.List;
 
 import io.reactivex.schedulers.Schedulers;
 
-public class InvoiceFragment extends Fragment implements InvoiceAdapter.Listener, InsertInvoiceDialog.Listener {
+public class InvoiceFragment extends Fragment implements InvoiceAdapter.Listener, InsertInvoiceDialog.Listener, InvoiceOptionsDialog.Listener {
     FragmentInvoiceBinding binding;
     InvoiceRepository invoiceRepository;
     InvoiceFragment.Listener listener;
@@ -129,6 +130,12 @@ public class InvoiceFragment extends Fragment implements InvoiceAdapter.Listener
     @Override
     public void setCurrentSelection(Integer position) {
         CURRENT_SELECTION = position;
+    }
+
+    @Override
+    public void goToInvoiceOptions(InvoiceEntity invoiceEntity) {
+        InvoiceOptionsDialog invoiceOptionsDialog = InvoiceOptionsDialog.newInstance(this, invoiceEntity);
+        invoiceOptionsDialog.show(getActivity().getSupportFragmentManager(), "InvoiceOptions");
     }
 
     public void deleteInvoiceEntityAndRelatedInvoiceDetail(InvoiceEntity invoiceEntity) {

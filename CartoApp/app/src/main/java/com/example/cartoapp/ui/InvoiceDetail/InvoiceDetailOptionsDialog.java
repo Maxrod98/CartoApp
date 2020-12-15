@@ -1,4 +1,4 @@
-package com.example.cartoapp.ui.Invoice;
+package com.example.cartoapp.ui.InvoiceDetail;
 
 import android.app.Dialog;
 import android.content.Context;

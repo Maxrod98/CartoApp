@@ -11,21 +11,19 @@ public class Selector {
     public Integer getSelectedItem() {
         return selectedItem;
     }
-
     public void setSelectedItem(Integer selectedItem) {
         this.selectedItem = selectedItem;
     }
 
-    Integer selectedItem = -1;
+    Integer selectedItem = NONE_SELECTED;
     Selector.Listener listener = null;
 
-    public Selector( Object context) {
-        if (context instanceof Selector.Listener)
-        {
+    public Selector(Object context) {
+        if (context instanceof Selector.Listener) {
             listener = (Selector.Listener) context;
             selectedItem = listener.getSelectedPosition();
 
-            if( selectedItem != null){
+            if (selectedItem != null) {
                 if (selectedItem == LAST_SELECTED) {
                     makeSelected(listener.getNumElems() - 1);
                 }
@@ -41,11 +39,7 @@ public class Selector {
             makeSelected(position);
         } else if (selectedItem == LAST_SELECTED) {
             makeSelected(listener.getNumElems());
-        }
-        else if (selectedItem == position) {
-            makeDeselected(position);
-        }
-        else {
+        } else {
             makeSelected(position);
         }
     }
@@ -64,9 +58,11 @@ public class Selector {
         return selectedItem == position;
     }
 
-    public interface Listener{
+    public interface Listener {
         void setSelectedPosition(Integer position);
+
         Integer getSelectedPosition();
+
         Integer getNumElems();
     }
 }

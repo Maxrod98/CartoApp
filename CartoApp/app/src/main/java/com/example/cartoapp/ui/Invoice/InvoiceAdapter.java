@@ -35,7 +35,6 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
         } else {
 
         }
-
     }
 
     @NonNull
@@ -49,18 +48,26 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
 
     @Override
     public void onBindViewHolder(@NonNull InvoiceAdapter.InvoiceViewHolder holder, int position) {
+
+        //setting data
         holder.txtDate.setText((new SimpleDateFormat("dd/MM")).format(new Date(elements.get(position).getDate())));
         holder.txtDescription.setText(elements.get(position).getDescription());
         holder.txtSeller.setText(elements.get(position).getSeller());
-        holder.txtTotalCost.setText("$" + String.valueOf(elements.get(position).getTotalCost() == null ? 0 : elements.get(position).getTotalCost()));
+        holder.txtTotalCost.setText("$" + (elements.get(position).getTotalCost() == null ? 0 : elements.get(position).getTotalCost()));
+        holder.vSelectionBar.setVisibility(selector.isSelected(position) ? View.VISIBLE : View.INVISIBLE);
 
         holder.txtSeller.getRootView().setOnClickListener((v) -> {
             selector.onItemClickSelection(position);
             notifyDataSetChanged();
             listener.goToInvoiceDetail(elements.get(position));
         });
-        holder.vSelectionBar.setVisibility(selector.isSelected(position) ? View.VISIBLE : View.INVISIBLE);
-        holder.imgDeleteInvoice.setVisibility(View.VISIBLE);
+
+        holder.txtSeller.getRootView().setOnLongClickListener((v -> {
+            selector.onItemClickSelection(position);
+            notifyDataSetChanged();
+            listener.goToInvoiceOptions(elements.get(position));
+            return false;
+        }));
 
         holder.imgDeleteInvoice.setOnClickListener((v -> {
             listener.deleteInvoice(elements.get(position));
@@ -115,6 +122,9 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
         Integer getCurrentSelection();
 
         void setCurrentSelection(Integer position);
+
+        void goToInvoiceOptions(InvoiceEntity invoiceEntity);
+
     }
 }
 

@@ -10,22 +10,15 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cartoapp.R;
 import com.example.cartoapp.database.Entities.ExtendedInvoiceDetailEntity;
-import com.example.cartoapp.database.Entities.ExtendedInvoiceEntity;
 import com.example.cartoapp.database.Entities.InvoiceDetailEntity;
 import com.example.cartoapp.database.Repositories.InvoiceRepository;
 import com.example.cartoapp.databinding.InvoiceDetailFragmentBinding;
 import com.example.cartoapp.ui.InsertFragments.InsertInvoiceDetailDialog;
-import com.example.cartoapp.ui.Invoice.InvoiceAdapter;
-import com.example.cartoapp.ui.Invoice.InvoiceDetailOptionsDialog;
 import com.example.cartoapp.ui.MainActivity;
-import com.example.cartoapp.ui.ShowNotes.ShowNotesDialog;
 import com.example.cartoapp.utils.NAVIGATION;
 import com.example.cartoapp.utils.Selector;
 
