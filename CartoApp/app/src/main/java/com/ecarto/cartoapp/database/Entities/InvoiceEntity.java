@@ -93,4 +93,12 @@ public class InvoiceEntity implements Serializable {
     public void setProjectID(Integer projectID) {
         ProjectID = projectID;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "'" + Seller + '\'' +
+                ",='" + Description + '\'' +
+                '}';
+    }
 }

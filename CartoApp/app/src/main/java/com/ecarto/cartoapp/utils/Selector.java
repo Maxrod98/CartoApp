@@ -40,7 +40,6 @@ public class Selector {
         }
     }
 
-
     public void makeSelected(Integer position) {
         selectedItem = position;
         listener.setSelectedPosition(position);

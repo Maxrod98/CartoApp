@@ -18,8 +18,8 @@ import com.ecarto.cartoapp.R;
 import com.ecarto.cartoapp.database.Entities.InvoiceDetailEntity;
 import com.ecarto.cartoapp.database.Repositories.InvoiceRepository;
 import com.ecarto.cartoapp.databinding.DialogInvoiceDetailOptionsBinding;
-import com.ecarto.cartoapp.ui.InsertFragments.InsertInvoiceDetailDialog;
-import com.ecarto.cartoapp.ui.ShowNotes.ShowNotesDialog;
+import com.ecarto.cartoapp.utils.ActivityUtils;
+import com.ecarto.cartoapp.utils.NAVIGATION;
 
 import io.reactivex.schedulers.Schedulers;
 
@@ -32,14 +32,31 @@ public class InvoiceDetailOptionsDialog extends DialogFragment {
     SharedPreferences sharedPreferences;
     Listener listener = null;
 
+    public InvoiceDetailOptionsDialog() {
+    }
+
+    public static InvoiceDetailOptionsDialog newInstance(String tagParent) {
+        Bundle args = new Bundle();
+        args.putString(NAVIGATION.TAG_PARENT, tagParent);
+
+        InvoiceDetailOptionsDialog fragment = new InvoiceDetailOptionsDialog();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DialogInvoiceDetailOptionsBinding.inflate(inflater, container, false);
-        initElems();
-        initListeners();
-
         return binding.getRoot();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        initElems();
+        getDatabaseData();
+        initListeners();
     }
 
     @NonNull
@@ -50,24 +67,13 @@ public class InvoiceDetailOptionsDialog extends DialogFragment {
         return dialog;
     }
 
-    public static InvoiceDetailOptionsDialog newInstance(Object context) {
-        Bundle args = new Bundle();
-
-        InvoiceDetailOptionsDialog fragment = new InvoiceDetailOptionsDialog(context);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    public InvoiceDetailOptionsDialog(Object context) {
-        if (context instanceof Listener) {
-            listener = (Listener) context;
-        }
-    }
-
     private void initElems() {
         invoiceRepository = new InvoiceRepository(getActivity().getApplication());
         sharedPreferences = getActivity().getSharedPreferences(getString(R.string.sharedPreferences), Context.MODE_PRIVATE);
+        listener = ActivityUtils.getListener(this);
+    }
 
+    public void getDatabaseData(){
         Integer selectedInvoiceDetailID = sharedPreferences.getInt(getString(R.string.selectedInvoiceDetailID), 0);
 
         invoiceDetailEntity = invoiceRepository.findAllInvoiceDetailBy(selectedInvoiceDetailID, null)
@@ -77,7 +83,6 @@ public class InvoiceDetailOptionsDialog extends DialogFragment {
 
     private void initListeners() {
         if (invoiceDetailEntity != null) {
-
             binding.didoEdit.setOnClickListener(v -> {
                 InsertInvoiceDetailDialog insertInvoiceDetailDialog = InsertInvoiceDetailDialog.newInstance(InvoiceDetailFragment.TAG, invoiceDetailEntity);
                 insertInvoiceDetailDialog.show(getActivity().getSupportFragmentManager(), InsertInvoiceDetailDialog.TAG);
@@ -89,25 +94,28 @@ public class InvoiceDetailOptionsDialog extends DialogFragment {
             });
 
             binding.didoDelete.setOnClickListener(v -> {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-                builder.setCancelable(true)
-                        .setTitle("Borrar detalle de factura de " + invoiceDetailEntity.getConceptDescription())
-                        .setMessage("¿Seguro que desea borrar el detalle de la factura?")
-                        .setPositiveButton("Borrar", (dialog, which) -> {
-                            invoiceRepository.deleteInvoiceDetailEntity(invoiceDetailEntity).subscribeOn(Schedulers.io()).blockingGet();
-                            listener.refreshInvoiceDetailList();
-                            dismiss();
-                        })
-                        .setNegativeButton("Cancelar", ((dialog, which) -> {
-                        }));
-
-                AlertDialog dialog = builder.create();
-                dialog.show();
+                deleteInvoiceDetailEntity();
             });
         } else {
-            Toast.makeText(getActivity(), "Hubo un error", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Hubo un error, no se pudo cargar el detalle de factura", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void deleteInvoiceDetailEntity(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setCancelable(true)
+                .setTitle("Borrar detalle de factura de " + invoiceDetailEntity.getConceptDescription())
+                .setMessage("¿Seguro que desea borrar el detalle de la factura?")
+                .setPositiveButton("Borrar", (dialog, which) -> {
+                    invoiceRepository.deleteInvoiceDetailEntity(invoiceDetailEntity).subscribeOn(Schedulers.io()).blockingGet();
+                    listener.refreshInvoiceDetailList();
+                    dismiss();
+                })
+                .setNegativeButton("Cancelar", ((dialog, which) -> {
+                }));
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     public interface Listener {

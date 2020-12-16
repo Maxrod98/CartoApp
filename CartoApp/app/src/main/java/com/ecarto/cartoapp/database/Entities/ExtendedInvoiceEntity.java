@@ -10,4 +10,5 @@ public class ExtendedInvoiceEntity extends InvoiceEntity {
     public void setTotalCost(Integer totalCost) {
         this.totalCost = totalCost;
     }
+
 }

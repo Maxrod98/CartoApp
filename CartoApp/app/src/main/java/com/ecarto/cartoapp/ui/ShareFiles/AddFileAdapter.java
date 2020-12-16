@@ -1,4 +1,4 @@
-package com.ecarto.cartoapp.ui.FileList;
+package com.ecarto.cartoapp.ui.ShareFiles;
 
 import android.view.LayoutInflater;
 import android.view.View;

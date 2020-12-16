@@ -51,11 +51,11 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
     public void onBindViewHolder(@NonNull InvoiceAdapter.InvoiceViewHolder holder, int position) {
         //setting data
         holder.vSelectionBar.setVisibility(selector.isSelected(position) ? View.VISIBLE : View.INVISIBLE);
-        holder.txtDate.setText((new SimpleDateFormat("dd/MM")).format(new Date(elements.get(position).getDate())));
+        holder.txtDate.setText(StringUtils.formatDateFromLong(elements.get(position).getDate()));
         holder.txtDescription.setText(StringUtils.validateLength(elements.get(position).getDescription(), MAX_SIZE_DESCRIPTION));
         holder.txtSeller.setText(StringUtils.validateLength(elements.get(position).getSeller(), MAX_SIZE_SELLER));
 
-        holder.txtTotalCost.setText("$" + (elements.get(position).getTotalCost() == null ? 0 : StringUtils.formatMoney(elements.get(position).getTotalCost())));
+        holder.txtTotalCost.setText(StringUtils.formatMoney(elements.get(position).getTotalCost()));
 
         holder.txtSeller.getRootView().setOnClickListener((v) -> {
             selector.onItemClickSelection(position);
@@ -113,7 +113,7 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
         void goToInvoiceDetail(InvoiceEntity invoiceEntity);
         Integer getCurrentSelection();
         void setCurrentSelection(Integer position);
-        void goToInvoiceOptions(InvoiceEntity invoiceEntity);
+        void goToInvoiceOptions(ExtendedInvoiceEntity invoiceEntity);
     }
 }
 

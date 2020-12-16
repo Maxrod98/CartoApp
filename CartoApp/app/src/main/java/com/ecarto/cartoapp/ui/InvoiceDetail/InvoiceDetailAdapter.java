@@ -43,7 +43,7 @@ public class InvoiceDetailAdapter extends RecyclerView.Adapter<InvoiceDetailAdap
     @Override
     public void onBindViewHolder(@NonNull InvoiceDetailViewHolder holder, int position) {
         holder.txtProduct.setText(elements.get(position).getConceptDescription());
-        holder.txtQuantity.setText( "$" + StringUtils.formatMoney(elements.get(position).getCostOfItem()));
+        holder.txtQuantity.setText(StringUtils.formatMoney(elements.get(position).getCostOfItem()));
 
         boolean hasFiles = elements.get(position).getNumFiles() > 0;
         if (!hasFiles){

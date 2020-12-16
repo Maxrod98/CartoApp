@@ -10,7 +10,7 @@ import com.ecarto.cartoapp.database.Entities.FileEntity;
 import com.ecarto.cartoapp.database.Repositories.FileRepository;
 import com.ecarto.cartoapp.database.Repositories.InvoiceRepository;
 import com.ecarto.cartoapp.databinding.ActivityMainBinding;
-import com.ecarto.cartoapp.ui.FileList.AddFileFragment;
+import com.ecarto.cartoapp.ui.ShareFiles.AddFileFragment;
 import com.ecarto.cartoapp.ui.InvoiceDetail.InvoiceDetailFragment;
 import com.ecarto.cartoapp.ui.Invoice.InvoiceFragment;
 import com.ecarto.cartoapp.utils.FileUtils;
@@ -121,19 +121,19 @@ public class MainActivity extends BaseActivity implements
 
     private void popUpFileFragment() {
         navigation = NAVIGATION.INVOICE_LISTING;
-        navigateToLowerFragment(AddFileFragment.newInstance(""), false, "Test");
+        navigateToLowerFragment(AddFileFragment.newInstance(null), false, "Test");
     }
 
     public void setNavigation(boolean addToBackstack) {
         switch (navigation) {
             case (NAVIGATION.INVOICE_LISTING):
                 getSupportActionBar().setTitle("Listado de Facturas");
-                navigateTo(InvoiceFragment.newInstance(this), addToBackstack, InvoiceFragment.TAG);
+                navigateTo(InvoiceFragment.newInstance(null), addToBackstack, InvoiceFragment.TAG);
                 break;
 
             case (NAVIGATION.INVOICE_DETAIL_LISTING):
                 getSupportActionBar().setTitle("Detalle");
-                navigateTo(InvoiceDetailFragment.newInstance(this), addToBackstack, InvoiceDetailFragment.TAG);
+                navigateTo(InvoiceDetailFragment.newInstance(null), addToBackstack, InvoiceDetailFragment.TAG);
                 break;
         }
     }

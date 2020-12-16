@@ -1,4 +1,4 @@
-package com.ecarto.cartoapp.ui.FileList;
+package com.ecarto.cartoapp.ui.ShareFiles;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,6 +15,7 @@ import com.ecarto.cartoapp.R;
 import com.ecarto.cartoapp.database.Entities.FileEntity;
 import com.ecarto.cartoapp.database.Repositories.FileRepository;
 import com.ecarto.cartoapp.databinding.FragmentAddFilesBinding;
+import com.ecarto.cartoapp.utils.ActivityUtils;
 import com.ecarto.cartoapp.utils.NAVIGATION;
 
 import java.util.List;
@@ -50,20 +51,33 @@ public class AddFileFragment extends Fragment implements  AddFileAdapter.Listene
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentAddFilesBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
 
-        String parentTag = getArguments().getString(NAVIGATION.TAG_PARENT, "");
-        if (parentTag.isEmpty()){
-            listener = (Listener) getActivity();
-        } else {
-            listener = (Listener) getActivity().getSupportFragmentManager().findFragmentByTag(parentTag);
-        }
+    @Override
+    public void onStart() {
+        super.onStart();
+        initElems();
+        getDatabaseData();
+        initListeners();
+    }
 
+    private void initElems() {
+        listener = ActivityUtils.getListener(this);
         fileRepository = new FileRepository(getActivity().getApplicationContext());
-        List<FileEntity> fileEntityList = fileRepository.findAllFreedFileEntitiesBy().subscribeOn(Schedulers.io()).blockingGet();
+    }
 
-        AddFileAdapter addFileAdapter = new AddFileAdapter(fileEntityList, this);
+    private void getDatabaseData() {
+        fileEntityList = fileRepository.findAllFreedFileEntitiesBy().subscribeOn(Schedulers.io()).blockingGet();
+        setRecyclerView(fileEntityList);
+    }
+
+    public void setRecyclerView(List<FileEntity> fileEntities){
+        AddFileAdapter addFileAdapter = new AddFileAdapter(fileEntities, this);
         binding.addFileRecyclerView.setAdapter(addFileAdapter);
+    }
 
+    private void initListeners() {
         binding.fafAddFileToInvoiceDetail.setOnClickListener((v)-> {
             if (fileEntityList != null){
                 if (!fileEntityList.isEmpty()){
@@ -72,14 +86,13 @@ public class AddFileFragment extends Fragment implements  AddFileAdapter.Listene
             }
         });
 
-        binding.fafClose.setOnClickListener((v -> {
+        binding.fafClose.setOnClickListener((v) -> {
             FragmentManager manager = getActivity().getSupportFragmentManager();
-            FragmentTransaction trans = manager.beginTransaction().setCustomAnimations(R.anim.slide_in, R.anim.slide_out);
-            trans.remove(this);
+            FragmentTransaction trans = manager.beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in, R.anim.slide_out)
+                    .remove(this);
             trans.commit();
-        }));
-
-        return binding.getRoot();
+        });
     }
 
     @Override

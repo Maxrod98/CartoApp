@@ -1,4 +1,4 @@
-package com.ecarto.cartoapp.ui.ShowNotes;
+package com.ecarto.cartoapp.ui.InvoiceDetail;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

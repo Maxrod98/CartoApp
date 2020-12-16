@@ -33,7 +33,7 @@
     </dialog>
     <dialog
         android:id="@+id/showNotesDialog"
-        android:name="com.ecarto.cartoapp.ui.ShowNotes.ShowNotesDialog"
+        android:name="com.ecarto.cartoapp.ui.InvoiceDetail.ShowNotesDialog"
         android:label="ShowNotesDialog" >
         <action
             android:id="@+id/action_showNotesDialog_to_invoiceDetailFragment4"
