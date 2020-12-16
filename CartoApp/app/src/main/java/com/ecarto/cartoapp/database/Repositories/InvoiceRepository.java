@@ -56,7 +56,6 @@ public class InvoiceRepository {
     }
     //YOU ALWAYS FORGET THAT THIS IS A SINGLE
     public Single<Integer> deleteInvoiceDetailEntity(InvoiceDetailEntity invoiceDetailEntity) {
-        //TODO: del
         return invoiceDetailDAO.deleteInvoiceDetail(invoiceDetailEntity);
     }
 

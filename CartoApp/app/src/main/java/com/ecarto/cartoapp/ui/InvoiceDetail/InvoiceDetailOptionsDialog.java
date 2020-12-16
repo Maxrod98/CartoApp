@@ -86,15 +86,18 @@ public class InvoiceDetailOptionsDialog extends DialogFragment {
             binding.didoEdit.setOnClickListener(v -> {
                 InsertInvoiceDetailDialog insertInvoiceDetailDialog = InsertInvoiceDetailDialog.newInstance(InvoiceDetailFragment.TAG, invoiceDetailEntity);
                 insertInvoiceDetailDialog.show(getActivity().getSupportFragmentManager(), InsertInvoiceDetailDialog.TAG);
+                dismiss();
             });
 
             binding.didoNotes.setOnClickListener(v -> {
                 ShowNotesDialog showNotesDialog = ShowNotesDialog.newInstance(invoiceDetailEntity);
                 showNotesDialog.show(getActivity().getSupportFragmentManager(), ShowNotesDialog.TAG);
+                dismiss();
             });
 
             binding.didoDelete.setOnClickListener(v -> {
                 deleteInvoiceDetailEntity();
+
             });
         } else {
             Toast.makeText(getActivity(), "Hubo un error, no se pudo cargar el detalle de factura", Toast.LENGTH_SHORT).show();

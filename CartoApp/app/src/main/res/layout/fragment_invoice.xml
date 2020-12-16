@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/lblTotal"
+            android:id="@+id/lblDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -55,8 +55,8 @@
             android:textColor="@color/teal_700"
             android:textSize="30sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/lblTotal"
-            app:layout_constraintTop_toTopOf="@+id/lblTotal" />
+            app:layout_constraintStart_toEndOf="@+id/lblDate"
+            app:layout_constraintTop_toTopOf="@+id/lblDate" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

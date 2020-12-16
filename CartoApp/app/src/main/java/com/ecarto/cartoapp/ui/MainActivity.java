@@ -42,11 +42,9 @@ public class MainActivity extends BaseActivity implements
 
     //Tod: think about a web copy where everything is saved daily so that we dont have to worry about migrations
     //TODO: add file view fragment
-    //TODO: add header for detail of the invoice
     //TODO: use bigdecimals instead of doubles for latitude and longitude
     //TODO: make list of folders
     //TODO: communication between files fragment
-
     //TODO: SafeArgs plugin
 
     //ACTIVITY DEFAULT METHODS

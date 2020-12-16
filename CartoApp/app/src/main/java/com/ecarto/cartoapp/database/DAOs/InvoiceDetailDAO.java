@@ -31,7 +31,6 @@ public interface InvoiceDetailDAO {
             "(:invoiceID is null or InvoiceID = :invoiceID))" )
     Single<List<InvoiceDetailEntity>> findAllInvoiceDetailBy(Integer invoiceDetailID, Integer invoiceID);
 
-    //TODO: finish this query, agregar NumFiles with count()
     @Query("SELECT InvoiceDetailEntity.*, COUNT(FileEntity.FileID) as NumFiles FROM InvoiceDetailEntity " +
             "LEFT JOIN FileEntity ON FileEntity.InvoiceDetailID = InvoiceDetailEntity.InvoiceDetailID " +
             "WHERE" +

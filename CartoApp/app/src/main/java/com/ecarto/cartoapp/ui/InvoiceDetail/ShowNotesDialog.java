@@ -1,9 +1,11 @@
 package com.ecarto.cartoapp.ui.InvoiceDetail;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,6 +24,7 @@ public class ShowNotesDialog extends DialogFragment {
     DialogShowNotesBinding binding;
     InvoiceRepository invoiceRepository;
     InvoiceDetailEntity notesDetailEntity;
+    //TODO: agregar boton de guardado
 
     public static ShowNotesDialog newInstance(InvoiceDetailEntity invoiceDetailEntity) {
 
@@ -37,32 +40,60 @@ public class ShowNotesDialog extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DialogShowNotesBinding.inflate(inflater, container, false);
 
-        invoiceRepository = new InvoiceRepository(getActivity().getApplication());
-
-        if (getArguments() != null){
-            notesDetailEntity = (InvoiceDetailEntity) getArguments().getSerializable(NOTES);
-            binding.etShowNotes.setText(notesDetailEntity.getNotes());
-        }
-
-        binding.imgCloseNotes.setOnClickListener((v)->{
-            saveNotes();
-        });
-
+        initElems();
+        initListeners();
 
         return binding.getRoot();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     public void saveNotes(){
         if (notesDetailEntity != null) {
             notesDetailEntity.setNotes(binding.etShowNotes.getText().toString());
             invoiceRepository.insert(notesDetailEntity).subscribeOn(Schedulers.io()).blockingGet();
+        } else {
+            Toast.makeText(getContext(), "Hubo un error al guardar las notas", Toast.LENGTH_SHORT).show();
         }
         dismiss();
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+
+
+    }
+
+    private void initListeners(){
+        binding.imgCloseNotes.setOnClickListener((v)->{
+            saveNotes();
+        });
+    }
+
+    private void initElems() {
+        invoiceRepository = new InvoiceRepository(getActivity().getApplication());
+
+        if (getArguments() != null){
+            notesDetailEntity = (InvoiceDetailEntity) getArguments().getSerializable(NOTES);
+            binding.etShowNotes.setText(notesDetailEntity.getNotes());
+        } else {
+            Toast.makeText(getContext(), "Hubo un error al guardar las notas", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
     public void onDestroy() {
-        saveNotes();
         super.onDestroy();
+        saveNotes();
     }
 }
