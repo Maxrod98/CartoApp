@@ -11,24 +11,13 @@
 
 
     <TextView
-        android:id="@+id/txtDate"
-        style="@style/ListTextValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="12/9"
-        app:layout_constraintStart_toStartOf="@+id/lblDate"
-        app:layout_constraintTop_toBottomOf="@+id/lblDate">
-
-    </TextView>
-
-    <TextView
         android:id="@+id/txtDescription"
         style="@style/ListTextValue"
         android:layout_width="0dp"
+        android:layout_marginRight="@dimen/margin_vertical"
         android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
         android:text="Probando si un texto esta muy largo "
-        app:layout_constraintEnd_toEndOf="@+id/txtSeller"
+        app:layout_constraintEnd_toStartOf="@+id/txtTotalCost"
         app:layout_constraintStart_toStartOf="@+id/lblDescription"
         app:layout_constraintTop_toBottomOf="@+id/lblDescription">
 
@@ -39,79 +28,61 @@
         style="@style/ListTextLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="33dp"
         android:text="Descripcion"
-        app:layout_constraintStart_toStartOf="@+id/lblDate"
-        app:layout_constraintTop_toBottomOf="@+id/txtDate" />
+        app:layout_constraintStart_toStartOf="@+id/vSelectorBar"
+        app:layout_constraintTop_toTopOf="@+id/txtSeller" />
 
-    <View
-        android:id="@+id/separator"
-        android:layout_width="1dp"
-        android:layout_height="0dp"
-        android:layout_marginEnd="104dp"
-
-        android:background="@color/teal_700"
-        android:elevation="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/txtSeller"
+        style="@style/ListTextValue"
+        android:layout_width="0dp"
+        android:layout_marginRight="@dimen/margin_vertical"
+        android:layout_height="wrap_content"
+        android:maxLength="20"
+        android:text="Gilsa"
+        app:layout_constraintEnd_toStartOf="@+id/txtDate"
+        app:layout_constraintStart_toStartOf="@+id/lblSeller"
+        app:layout_constraintTop_toBottomOf="@+id/lblSeller" />
 
     <TextView
         android:id="@+id/lblSeller"
         style="@style/ListTextLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginTop="@dimen/margin_vertical"
         android:text="Proveedor"
-        app:layout_constraintStart_toEndOf="@+id/txtDate"
-        app:layout_constraintTop_toTopOf="@+id/lblDate" />
-
-    <TextView
-        android:id="@+id/txtSeller"
-        style="@style/ListTextValue"
-        android:layout_width="141dp"
-        android:layout_height="wrap_content"
-        android:maxLength="20"
-        android:text="Gilsa"
-        app:layout_constraintStart_toStartOf="@+id/lblSeller"
-        app:layout_constraintTop_toBottomOf="@+id/lblSeller" />
+        app:layout_constraintStart_toEndOf="@+id/vSelectorBar"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/txtTotalCost"
-        style="@style/ListTextValue"
+        android:textColor="@color/black"
+        android:textSize="23sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/margin_vertical"
+        android:layout_marginBottom="@dimen/margin_vertical"
         android:elevation="5dp"
+
         android:text="$12300"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/separator"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintEnd_toEndOf="parent">
 
     </TextView>
 
 
     <TextView
-        android:id="@+id/lblDate"
+        android:id="@+id/txtDate"
         style="@style/ListTextLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Fecha:"
-        app:layout_constraintStart_toEndOf="@+id/vSelectorBar"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text="12/9"
+        app:layout_constraintEnd_toEndOf="@+id/txtTotalCost"
+        app:layout_constraintTop_toTopOf="@+id/lblSeller">
 
-    <ImageView
-        android:id="@+id/imgDeleteInvoice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/rounded_corner"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/separator"
-        app:layout_constraintStart_toEndOf="@+id/txtSeller"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_delete"
-        app:tint="@color/black" />
+    </TextView>
 
     <View
         android:id="@+id/vSelectorBar"
@@ -123,14 +94,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Total"
-        app:layout_constraintBottom_toTopOf="@+id/txtTotalCost"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/separator" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

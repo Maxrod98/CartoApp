@@ -10,22 +10,15 @@
 
 
     <TextView
-        android:id="@+id/lblQuantity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_vertical"
-        android:text="@string/quantity_invoice_detail"
-        app:layout_constraintStart_toEndOf="@+id/separator"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
         android:id="@+id/txtQuantity"
         style="@style/ListTextValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/margin_vertical"
+        android:layout_marginBottom="@dimen/margin_vertical"
         android:text="12"
-        app:layout_constraintStart_toEndOf="@+id/separator"
-        app:layout_constraintTop_toBottomOf="@+id/lblQuantity" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 
     <TextView
@@ -50,36 +43,26 @@
         app:layout_constraintStart_toStartOf="@+id/lblProduct"
         app:layout_constraintTop_toBottomOf="@+id/lblProduct" />
 
-    <View
-        android:id="@+id/separator"
-        android:layout_width="1dp"
-        android:layout_height="61dp"
-        android:layout_marginEnd="88dp"
-        android:background="@color/teal_700"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
-
     <ImageView
         android:id="@+id/imgFileAttached"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginStart="268dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginStart="248dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/lblProduct"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5"
         app:srcCompat="@drawable/ic_yellow_folder" />
 
     <View
         android:id="@+id/invoice_detail_item_selector"
         android:layout_width="@dimen/margin_horizontal"
         android:layout_height="0dp"
+        android:background="@color/teal_700"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/teal_700"
-        android:visibility="invisible">
+        app:layout_constraintTop_toTopOf="parent">
 
     </View>
 

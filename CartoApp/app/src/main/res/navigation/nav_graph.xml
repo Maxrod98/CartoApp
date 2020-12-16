@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/invoiceFragment2">
+    <fragment
+        android:id="@+id/invoiceFragment2"
+        android:name="com.ecarto.cartoapp.ui.Invoice.InvoiceFragment"
+        android:label="fragment_invoice"
+        tools:layout="@layout/fragment_invoice" >
+        <action
+            android:id="@+id/action_invoiceFragment2_to_invoiceDetailFragment4"
+            app:destination="@id/invoiceDetailFragment4" />
+    </fragment>
+    <fragment
+        android:id="@+id/invoiceDetailFragment4"
+        android:name="com.ecarto.cartoapp.ui.InvoiceDetail.InvoiceDetailFragment"
+        android:label="invoice_detail_fragment"
+        tools:layout="@layout/invoice_detail_fragment" >
+        <action
+            android:id="@+id/action_invoiceDetailFragment4_to_invoiceDetailOptionsDialog"
+            app:destination="@id/invoiceDetailOptionsDialog" />
+    </fragment>
+    <dialog
+        android:id="@+id/invoiceDetailOptionsDialog"
+        android:name="com.ecarto.cartoapp.ui.InvoiceDetail.InvoiceDetailOptionsDialog"
+        android:label="dialog_invoice_detail_options"
+        tools:layout="@layout/dialog_invoice_detail_options" >
+        <action
+            android:id="@+id/action_invoiceDetailOptionsDialog_to_showNotesDialog"
+            app:destination="@id/showNotesDialog" />
+    </dialog>
+    <dialog
+        android:id="@+id/showNotesDialog"
+        android:name="com.ecarto.cartoapp.ui.ShowNotes.ShowNotesDialog"
+        android:label="ShowNotesDialog" >
+        <action
+            android:id="@+id/action_showNotesDialog_to_invoiceDetailFragment4"
+            app:destination="@id/invoiceDetailFragment4" />
+    </dialog>
+</navigation>
