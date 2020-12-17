@@ -18,15 +18,15 @@ import com.ecarto.cartoapp.utils.StringUtils;
 
 import java.util.List;
 
-public class InvoiceDetailAdapter extends RecyclerView.Adapter<InvoiceDetailAdapter.InvoiceDetailViewHolder> implements Selector.Listener{
+public class InvoiceDetailA extends RecyclerView.Adapter<InvoiceDetailA.InvoiceDetailViewHolder> implements Selector.Listener{
     private List<ExtendedInvoiceDetailEntity> elements;
     private Listener listener;
     Selector selector;
 
-    public InvoiceDetailAdapter(List<ExtendedInvoiceDetailEntity> elements, Object context) {
+    public InvoiceDetailA(List<ExtendedInvoiceDetailEntity> elements, Object context) {
         this.elements = elements;
-        if (context instanceof InvoiceDetailAdapter.Listener){
-            this.listener = (InvoiceDetailAdapter.Listener) context;
+        if (context instanceof InvoiceDetailA.Listener){
+            this.listener = (InvoiceDetailA.Listener) context;
         }
         selector = new Selector(this);
     }

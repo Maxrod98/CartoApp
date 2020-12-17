@@ -11,6 +11,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.ecarto.cartoapp.R;
 import com.ecarto.cartoapp.database.Entities.ExtendedInvoiceDetailEntity;
@@ -26,27 +29,19 @@ import java.util.List;
 
 import io.reactivex.schedulers.Schedulers;
 
-public class InvoiceDetailFragment extends Fragment
-        implements InvoiceDetailAdapter.Listener, InsertInvoiceDetailDialog.Listener, InvoiceDetailOptionsDialog.Listener {
+public class InvoiceDetailF extends Fragment
+        implements InvoiceDetailA.Listener, InsertInvoiceDetailF.Listener, InvoiceDetailOptionsF.Listener {
 
     public static final String TAG = "INVOICE_DETAIL_FRAGMENT_TAG";
+    private static final String SELECTED_INVOICE_ID = "SelectedInvoiceID";
     static Integer CURRENT_SELECTION = Selector.NONE_SELECTED;
 
     InvoiceDetailFragmentBinding binding;
-    private InvoiceDetailFragment.Listener listener;
     private InvoiceRepository invoiceRepository;
     SharedPreferences sharedPreferences;
     Integer invoiceEntityID;
 
-    public InvoiceDetailFragment() {
-    }
-
-    public static InvoiceDetailFragment newInstance(String tagParent) {
-        Bundle args = new Bundle();
-        args.putString(NAVIGATION.TAG_PARENT, tagParent);
-        InvoiceDetailFragment fragment = new InvoiceDetailFragment();
-        fragment.setArguments(args);
-        return fragment;
+    public InvoiceDetailF() {
     }
 
     @Nullable
@@ -67,13 +62,12 @@ public class InvoiceDetailFragment extends Fragment
 
     private void initElems() {
         MainActivity.navigation = NAVIGATION.INVOICE_DETAIL_LISTING;
-        listener = ActivityUtils.getListener(this);
         sharedPreferences =  getActivity().getSharedPreferences(getString(R.string.sharedPreferences), Activity.MODE_PRIVATE);
         invoiceRepository = new InvoiceRepository(getActivity().getApplication());
     }
 
     private void getDatabaseData(){
-        invoiceEntityID = sharedPreferences.getInt(getString(R.string.selectedInvoiceEntityID), 0);
+        invoiceEntityID = getArguments().getInt(SELECTED_INVOICE_ID);
 
         if (invoiceEntityID != 0){
             List<ExtendedInvoiceDetailEntity> invoiceDetailEntityList = invoiceRepository
@@ -87,7 +81,7 @@ public class InvoiceDetailFragment extends Fragment
     }
 
     private void setRecyclerView(List<ExtendedInvoiceDetailEntity> adapterList) {
-        InvoiceDetailAdapter invoiceAdapter = new InvoiceDetailAdapter(adapterList, this);
+        InvoiceDetailA invoiceAdapter = new InvoiceDetailA(adapterList, this);
 
         if (adapterList.isEmpty()){
             binding.txtNoInvoicesDetail.setVisibility(View.VISIBLE);
@@ -101,8 +95,9 @@ public class InvoiceDetailFragment extends Fragment
 
     private void initListeners() {
         binding.tbAddInvoice.setOnClickListener((v) -> {
-            InsertInvoiceDetailDialog insertInvoiceDetailDialog = InsertInvoiceDetailDialog.newInstance(TAG, null);
-            insertInvoiceDetailDialog.show(getActivity().getSupportFragmentManager(), InsertInvoiceDetailDialog.TAG);
+            NavController navCo = NavHostFragment.findNavController(this);
+            NavDirections action = InvoiceDetailFDirections.actionInvoiceDetailFragmentToInsertInvoiceDetailDialog(0, invoiceEntityID);
+            navCo.navigate(action);
         });
     }
 
@@ -124,9 +119,8 @@ public class InvoiceDetailFragment extends Fragment
 
     @Override
     public void goToInvoiceDetailOptionsDialog(InvoiceDetailEntity invoiceDetailEntity) {
-        sharedPreferences.edit().putInt(getString(R.string.selectedInvoiceDetailID), invoiceDetailEntity.getInvoiceDetailID()).commit();
-        InvoiceDetailOptionsDialog invoiceDetailOptionsDialog = InvoiceDetailOptionsDialog.newInstance(TAG);
-        invoiceDetailOptionsDialog.show(getActivity().getSupportFragmentManager(), InvoiceDetailOptionsDialog.TAG);
+        NavHostFragment.findNavController(this)
+                .navigate(InvoiceDetailFDirections.actionInvoiceDetailFragmentToInvoiceDetailOptionsDialog(invoiceDetailEntity.getInvoiceDetailID()));
     }
 
     @Override

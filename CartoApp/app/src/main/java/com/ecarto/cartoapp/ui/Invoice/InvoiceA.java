@@ -7,31 +7,29 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ecarto.cartoapp.R;
 import com.ecarto.cartoapp.database.Entities.ExtendedInvoiceEntity;
-import com.ecarto.cartoapp.database.Entities.InvoiceEntity;
 import com.ecarto.cartoapp.utils.Selector;
 import com.ecarto.cartoapp.utils.StringUtils;
 
-
-import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
-public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceViewHolder> implements Selector.Listener {
+public class InvoiceA extends RecyclerView.Adapter<InvoiceA.InvoiceViewHolder> implements Selector.Listener {
     public static final Integer MAX_SIZE_SELLER = 20;
     public static final Integer MAX_SIZE_DESCRIPTION = 20;
 
     List<ExtendedInvoiceEntity> elements;
-    InvoiceAdapter.Listener listener;
+    InvoiceA.Listener listener;
     Selector selector;
 
-    public InvoiceAdapter(List<ExtendedInvoiceEntity> invoiceEntityList, Object context) {
+    public InvoiceA(List<ExtendedInvoiceEntity> invoiceEntityList, Object context) {
         elements = invoiceEntityList;
-        if (context instanceof InvoiceAdapter.Listener) {
-            listener = (InvoiceAdapter.Listener) context;
+        if (context instanceof InvoiceA.Listener) {
+            listener = (InvoiceA.Listener) context;
             selector = new Selector(this);
         } else {
             throw new RuntimeException("Necesitas implementar el listener del Selector");
@@ -40,7 +38,7 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
 
     @NonNull
     @Override
-    public InvoiceAdapter.InvoiceViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public InvoiceA.InvoiceViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.invoice_item, parent, false);
 
@@ -48,7 +46,7 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
     }
 
     @Override
-    public void onBindViewHolder(@NonNull InvoiceAdapter.InvoiceViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull InvoiceA.InvoiceViewHolder holder, int position) {
         //setting data
         holder.vSelectionBar.setVisibility(selector.isSelected(position) ? View.VISIBLE : View.INVISIBLE);
         holder.txtDate.setText(StringUtils.formatDateFromLong(elements.get(position).getDate()));
@@ -60,13 +58,18 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
         holder.txtSeller.getRootView().setOnClickListener((v) -> {
             selector.onItemClickSelection(position);
             notifyDataSetChanged();
-            listener.goToInvoiceDetail(elements.get(position));
+
+            NavHostFragment.findNavController((Fragment) listener)
+                    .navigate(InvoiceFDirections.actionInvoiceFragmentToInvoiceDetailFragment(elements.get(position).getInvoiceID()));
         });
 
         holder.txtSeller.getRootView().setOnLongClickListener((v -> {
             selector.onItemClickSelection(position);
             notifyDataSetChanged();
-            listener.goToInvoiceOptions(elements.get(position));
+
+            NavHostFragment.findNavController((Fragment) listener)
+                    .navigate(InvoiceFDirections.actionInvoiceFragmentToInvoiceOptionsDialog(elements.get(position).getInvoiceID()));
+
             return false;
         }));
     }
@@ -110,10 +113,8 @@ public class InvoiceAdapter extends RecyclerView.Adapter<InvoiceAdapter.InvoiceV
     }
 
     public interface Listener {
-        void goToInvoiceDetail(InvoiceEntity invoiceEntity);
         Integer getCurrentSelection();
         void setCurrentSelection(Integer position);
-        void goToInvoiceOptions(ExtendedInvoiceEntity invoiceEntity);
     }
 }
 

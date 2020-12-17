@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/margin_vertical"
-    tools:context=".ui.InvoiceDetail.InvoiceDetailOptionsDialog">
+    tools:context=".ui.InvoiceDetail.InvoiceDetailOptionsF">
 
     <LinearLayout
         android:layout_width="match_parent"

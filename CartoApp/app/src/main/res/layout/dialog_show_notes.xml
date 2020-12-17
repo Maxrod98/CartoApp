@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="400dp"
-    tools:context=".ui.InvoiceDetail.ShowNotesDialog">
+    tools:context=".ui.InvoiceDetail.ShowNotesF">
 
     <EditText
         android:id="@+id/etShowNotes"

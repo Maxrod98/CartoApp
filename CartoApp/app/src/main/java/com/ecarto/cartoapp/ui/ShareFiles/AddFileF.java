@@ -22,12 +22,12 @@ import java.util.List;
 
 import io.reactivex.schedulers.Schedulers;
 
-public class AddFileFragment extends Fragment implements  AddFileAdapter.Listener{
+public class AddFileF extends Fragment implements  AddFileA.Listener{
     public static final String TAG = "ADD_FILE_FRAGMENT_TAG";
 
     FragmentAddFilesBinding binding;
     FileRepository fileRepository;
-    AddFileFragment.Listener listener;
+    AddFileF.Listener listener;
     List<FileEntity> fileEntityList;
 
     @Override
@@ -35,14 +35,14 @@ public class AddFileFragment extends Fragment implements  AddFileAdapter.Listene
         super.onCreate(savedInstanceState);
     }
 
-    public AddFileFragment(){
+    public AddFileF(){
 
     }
 
-    public static AddFileFragment newInstance(String tagParent) {
+    public static AddFileF newInstance(String tagParent) {
         Bundle args = new Bundle();
         args.putString(NAVIGATION.TAG_PARENT, tagParent);
-        AddFileFragment fragment = new AddFileFragment();
+        AddFileF fragment = new AddFileF();
         fragment.setArguments(args);
         return fragment;
     }
@@ -73,7 +73,7 @@ public class AddFileFragment extends Fragment implements  AddFileAdapter.Listene
     }
 
     public void setRecyclerView(List<FileEntity> fileEntities){
-        AddFileAdapter addFileAdapter = new AddFileAdapter(fileEntities, this);
+        AddFileA addFileAdapter = new AddFileA(fileEntities, this);
         binding.addFileRecyclerView.setAdapter(addFileAdapter);
     }
 

@@ -1,6 +1,5 @@
 package com.ecarto.cartoapp.ui.Invoice;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.ecarto.cartoapp.database.Entities.ExtendedInvoiceEntity;
 import com.ecarto.cartoapp.database.Entities.InvoiceEntity;
@@ -22,31 +23,24 @@ import com.ecarto.cartoapp.utils.StringUtils;
 
 import io.reactivex.schedulers.Schedulers;
 
-public class InvoiceOptionsDialog extends DialogFragment {
+public class InvoiceOptionsF extends Fragment {
     public static final String TAG = "INVOICE_OPTIONS_DIALOG_TAG";
-    static String SELECTED_INVOICE = "SELECTED_INVOICE";
+    static String SELECTED_INVOICE = "SelectedInvoiceID";
 
     DialogInvoiceOptionsBinding binding;
     Listener listener = null;
-    ExtendedInvoiceEntity invoiceEntity;
+    Integer invoiceID;
     InvoiceRepository invoiceRepository;
+    ExtendedInvoiceEntity invoiceEntity;
 
-    public InvoiceOptionsDialog(){
-    }
-
-    public static InvoiceOptionsDialog newInstance(String tagParent, ExtendedInvoiceEntity invoiceEntity) {
-        Bundle args = new Bundle();
-        args.putSerializable(SELECTED_INVOICE, invoiceEntity);
-        args.putString(NAVIGATION.TAG_PARENT,tagParent);
-        InvoiceOptionsDialog fragment = new InvoiceOptionsDialog();
-        fragment.setArguments(args);
-        return fragment;
+    public InvoiceOptionsF(){
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DialogInvoiceOptionsBinding.inflate(inflater, container, false);
+
         return binding.getRoot();
     }
 
@@ -59,11 +53,15 @@ public class InvoiceOptionsDialog extends DialogFragment {
     }
 
     public void initElems(){
-        listener = (Listener) ActivityUtils.getListener(this);
+        //listener = (Listener) ActivityUtils.getListener(this);
         invoiceRepository = new InvoiceRepository(getActivity().getApplication());
 
         if (getArguments() != null ){
-            invoiceEntity = (ExtendedInvoiceEntity) getArguments().getSerializable(SELECTED_INVOICE);
+            invoiceID = getArguments().getInt(SELECTED_INVOICE);
+
+            invoiceEntity = invoiceRepository.findAllExtendedInvoiceBy(invoiceID)
+                    .subscribeOn(Schedulers.io()).blockingGet().stream().findFirst().orElse(null);
+
             binding.txtDescription.setText(invoiceEntity.getDescription());
             binding.txtDate.setText(StringUtils.formatDateFromLong(invoiceEntity.getDate()));
             binding.txtSeller.setText(invoiceEntity.getSeller());
@@ -81,9 +79,7 @@ public class InvoiceOptionsDialog extends DialogFragment {
         }));
 
         binding.dioEdit.setOnClickListener((v) -> {
-            InsertInvoiceDialog insertInvoiceEntityDialog = InsertInvoiceDialog.newInstance(InvoiceFragment.TAG, invoiceEntity);
-            insertInvoiceEntityDialog.show(getActivity().getSupportFragmentManager(), InsertInvoiceDialog.TAG);
-            dismiss();
+            NavHostFragment.findNavController(this).navigate(InvoiceOptionsFDirections.actionInvoiceOptionsDialogToInsertInvoiceDialog2(invoiceID));
         });
     }
 
@@ -95,8 +91,7 @@ public class InvoiceOptionsDialog extends DialogFragment {
         builder.setMessage("¿Seguro que desea borrar la factura?");
         builder.setPositiveButton("Borrar", (dialog, which) -> {
             invoiceRepository.deleteInvoiceEntity(invoiceEntity).subscribeOn(Schedulers.io()).blockingGet();
-            listener.updateList();
-            dismiss();
+            NavHostFragment.findNavController(this).popBackStack();
         });
         builder.setNegativeButton("Cancelar", ((dialog, which) -> {
         }));

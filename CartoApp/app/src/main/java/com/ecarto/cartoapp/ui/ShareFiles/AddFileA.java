@@ -17,30 +17,30 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class AddFileAdapter extends RecyclerView.Adapter<AddFileAdapter.AddFileViewHolder> {
+public class AddFileA extends RecyclerView.Adapter<AddFileA.AddFileViewHolder> {
     List<FileEntity> elements;
-    AddFileAdapter.Listener listener;
+    AddFileA.Listener listener;
     Set<FileEntity> fileEntitySet;
 
 
-    public AddFileAdapter(List<FileEntity> elements, Object context) {
+    public AddFileA(List<FileEntity> elements, Object context) {
         this.elements = elements;
-        if (context instanceof AddFileAdapter.Listener){
-            listener = (AddFileAdapter.Listener) context;
+        if (context instanceof AddFileA.Listener){
+            listener = (AddFileA.Listener) context;
         }
         fileEntitySet = new HashSet<>();
     }
 
     @NonNull
     @Override
-    public AddFileAdapter.AddFileViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AddFileA.AddFileViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.add_file_item, parent, false);
         return new AddFileViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AddFileAdapter.AddFileViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull AddFileA.AddFileViewHolder holder, int position) {
         holder.fileName.setText(elements.get(position).getOriginalName());
 
         holder.checkBox.setOnCheckedChangeListener((v, v2) -> {

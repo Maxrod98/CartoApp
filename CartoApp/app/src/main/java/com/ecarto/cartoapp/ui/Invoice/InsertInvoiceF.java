@@ -7,53 +7,39 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.ecarto.cartoapp.R;
-import com.ecarto.cartoapp.database.Entities.InvoiceDetailEntity;
 import com.ecarto.cartoapp.database.Entities.InvoiceEntity;
 import com.ecarto.cartoapp.database.Repositories.InvoiceRepository;
 import com.ecarto.cartoapp.databinding.DialogInsertInvoiceEntityBinding;
-import com.ecarto.cartoapp.utils.ActivityUtils;
-import com.ecarto.cartoapp.utils.NAVIGATION;
 import com.ecarto.cartoapp.utils.StringUtils;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
+
 
 import io.reactivex.schedulers.Schedulers;
 
-public class InsertInvoiceDialog extends DialogFragment {
+public class InsertInvoiceF extends Fragment {
     public static final String TAG = "INSERT_INVOICE_DIALOG_TAG";
-    public static final String EDITED_INVOICE = "EDITED_INVOICE";
+    public static final String EDITED_INVOICE = "SelectedInvoiceID";
 
     DialogInsertInvoiceEntityBinding binding;
-    InsertInvoiceDialog.Listener listener;
+    InsertInvoiceF.Listener listener;
     SharedPreferences sharedPreferences;
     InvoiceRepository invoiceRepository;
-    InvoiceEntity invoiceEntity;
+    Integer invoiceID;
 
     Integer day;
     Integer month;
     Integer year_;
 
-    public InsertInvoiceDialog() {
-    }
-
-    public static InsertInvoiceDialog newInstance(String tagParent, InvoiceEntity invoiceEntity) {
-        Bundle args = new Bundle();
-        args.putString(NAVIGATION.TAG_PARENT, tagParent);
-        args.putSerializable(EDITED_INVOICE, invoiceEntity);
-        InsertInvoiceDialog fragment = new InsertInvoiceDialog();
-        fragment.setArguments(args);
-        return fragment;
+    public InsertInvoiceF() {
     }
 
 
@@ -74,7 +60,7 @@ public class InsertInvoiceDialog extends DialogFragment {
             createAndSendEntity();
         });
         binding.imgClose.setOnClickListener((v) -> {
-            dismiss();
+            //TODO: remove
         });
 
         binding.etDateInvoice.setOnFocusChangeListener((v, hasFocus) -> {
@@ -94,8 +80,8 @@ public class InsertInvoiceDialog extends DialogFragment {
     private void initElems() {
         invoiceRepository = new InvoiceRepository(getActivity().getApplication());
         sharedPreferences = this.getActivity().getSharedPreferences(getString(R.string.sharedPreferences), Activity.MODE_PRIVATE);
-        invoiceEntity = (InvoiceEntity) getArguments().getSerializable(EDITED_INVOICE);
-        listener = ActivityUtils.getListener(this);
+        invoiceID = getArguments().getInt(EDITED_INVOICE);
+        //listener = ActivityUtils.getListener(this);
 
         final Calendar calendar = Calendar.getInstance();
         day = calendar.get(Calendar.DAY_OF_MONTH);
@@ -103,9 +89,18 @@ public class InsertInvoiceDialog extends DialogFragment {
         year_ = calendar.get(Calendar.YEAR);
 
 
-        if (invoiceEntity == null) {
+        if (invoiceID == 0) {
             binding.etDateInvoice.setText(day + "/" + (month + 1) + "/" + year_);
         } else {
+            InvoiceEntity invoiceEntity = invoiceRepository.findAllExtendedInvoiceBy(invoiceID)
+                    .subscribeOn(Schedulers.io()).blockingGet()
+                    .stream().findFirst().orElse(null);
+
+            if (invoiceEntity == null) {
+                Toast.makeText(getContext(), "Hubo un error all tratar de cargar la factura", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             binding.etDateInvoice.setText(StringUtils.formatDateFromLong(invoiceEntity.getDate()));
             binding.etDescription.setText(invoiceEntity.getDescription());
             binding.etSeller.setText(invoiceEntity.getSeller());
@@ -116,28 +111,23 @@ public class InsertInvoiceDialog extends DialogFragment {
 
 
     public void createAndSendEntity() {
-        InvoiceEntity entity = (invoiceEntity == null ? new InvoiceEntity() : invoiceEntity);
+        InvoiceEntity entity = new InvoiceEntity();
+
+        if (invoiceID == 0) invoiceID = null;
 
         entity.setDate(StringUtils.formatDateFromString(binding.etDateInvoice.getText().toString()));
         entity.setSeller(binding.etSeller.getText().toString());
         entity.setDescription(binding.etDescription.getText().toString());
         entity.setProjectID(1);
-        entity.setInvoiceID(entity.getInvoiceID());
+        entity.setInvoiceID(invoiceID);
         invoiceRepository.insert(entity).subscribeOn(Schedulers.io()).blockingGet();
 
-        if (entity.getInvoiceID() == null) {
-            listener.invoiceEntityWasInserted();
-
-        } else {
-            listener.invoiceEntityWasEdited();
-        }
-
-        dismiss();
+        NavHostFragment.findNavController(this).popBackStack();
     }
 
 
     public interface Listener {
-        void invoiceEntityWasInserted();
+
 
         void invoiceEntityWasEdited();
     }

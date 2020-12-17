@@ -10,9 +10,9 @@ import com.ecarto.cartoapp.database.Entities.FileEntity;
 import com.ecarto.cartoapp.database.Repositories.FileRepository;
 import com.ecarto.cartoapp.database.Repositories.InvoiceRepository;
 import com.ecarto.cartoapp.databinding.ActivityMainBinding;
-import com.ecarto.cartoapp.ui.ShareFiles.AddFileFragment;
-import com.ecarto.cartoapp.ui.InvoiceDetail.InvoiceDetailFragment;
-import com.ecarto.cartoapp.ui.Invoice.InvoiceFragment;
+import com.ecarto.cartoapp.ui.ShareFiles.AddFileF;
+import com.ecarto.cartoapp.ui.InvoiceDetail.InvoiceDetailF;
+import com.ecarto.cartoapp.ui.Invoice.InvoiceF;
 import com.ecarto.cartoapp.utils.FileUtils;
 import com.ecarto.cartoapp.utils.NAVIGATION;
 
@@ -27,7 +27,7 @@ import java.util.List;
 import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends BaseActivity implements
-        InvoiceFragment.Listener, InvoiceDetailFragment.Listener, AddFileFragment.Listener {
+        InvoiceF.Listener, InvoiceDetailF.Listener, AddFileF.Listener {
 
     public static String TAG = "MAIN_ACTIVITY";
     public static Integer navigation = NAVIGATION.INVOICE_LISTING;
@@ -62,7 +62,7 @@ public class MainActivity extends BaseActivity implements
         handleShareIntent();
         setSupportActionBar(binding.toolbar);
 
-        setNavigation(false);
+        //setNavigation(false);
     }
 
     @Override
@@ -119,19 +119,19 @@ public class MainActivity extends BaseActivity implements
 
     private void popUpFileFragment() {
         navigation = NAVIGATION.INVOICE_LISTING;
-        navigateToLowerFragment(AddFileFragment.newInstance(null), false, "Test");
+        navigateToLowerFragment(AddFileF.newInstance(null), false, "Test");
     }
 
     public void setNavigation(boolean addToBackstack) {
         switch (navigation) {
             case (NAVIGATION.INVOICE_LISTING):
                 getSupportActionBar().setTitle("Listado de Facturas");
-                navigateTo(InvoiceFragment.newInstance(null), addToBackstack, InvoiceFragment.TAG);
+                //navigateTo(InvoiceFragment.newInstance(null), addToBackstack, InvoiceFragment.TAG);
                 break;
 
             case (NAVIGATION.INVOICE_DETAIL_LISTING):
                 getSupportActionBar().setTitle("Detalle");
-                navigateTo(InvoiceDetailFragment.newInstance(null), addToBackstack, InvoiceDetailFragment.TAG);
+                //navigateTo(InvoiceDetailFragment.newInstance(null), addToBackstack, InvoiceDetailFragment.TAG);
                 break;
         }
     }
@@ -188,6 +188,10 @@ public class MainActivity extends BaseActivity implements
     public void goToInvoiceDetails() {
         navigation = NAVIGATION.INVOICE_DETAIL_LISTING;
         setNavigation(true);
+
+
+
+
     }
 
     @Override

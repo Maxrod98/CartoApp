@@ -9,16 +9,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.ecarto.cartoapp.R;
 import com.ecarto.cartoapp.database.Entities.ExtendedInvoiceEntity;
-import com.ecarto.cartoapp.database.Entities.InvoiceEntity;
 import com.ecarto.cartoapp.database.Repositories.InvoiceRepository;
 import com.ecarto.cartoapp.databinding.FragmentInvoiceBinding;
 import com.ecarto.cartoapp.ui.MainActivity;
-import com.ecarto.cartoapp.utils.ActivityUtils;
 import com.ecarto.cartoapp.utils.NAVIGATION;
 import com.ecarto.cartoapp.utils.Selector;
 import com.ecarto.cartoapp.utils.StringUtils;
@@ -28,27 +28,19 @@ import java.util.List;
 
 import io.reactivex.schedulers.Schedulers;
 
-public class InvoiceFragment extends Fragment
-        implements InvoiceAdapter.Listener, InsertInvoiceDialog.Listener, InvoiceOptionsDialog.Listener {
+public class InvoiceF extends Fragment
+        implements InvoiceA.Listener, InsertInvoiceF.Listener, InvoiceOptionsF.Listener {
     public static final String TAG = "INVOICE_FRAGMENT_TAG";
     static Integer CURRENT_SELECTION = Selector.NONE_SELECTED;
 
     FragmentInvoiceBinding binding;
     InvoiceRepository invoiceRepository;
-    InvoiceFragment.Listener listener;
+    InvoiceF.Listener listener;
     SharedPreferences sharedPreferences;
-    InvoiceAdapter invoiceAdapter;
+    InvoiceA invoiceAdapter;
     List<ExtendedInvoiceEntity> invoiceEntities;
 
-    public InvoiceFragment() {
-    }
-
-    public static InvoiceFragment newInstance(String tagParent) {
-        Bundle args = new Bundle();
-        args.putString(NAVIGATION.TAG_PARENT, tagParent);
-        InvoiceFragment fragment = new InvoiceFragment();
-        fragment.setArguments(args);
-        return fragment;
+    public InvoiceF() {
     }
 
     @Override
@@ -75,7 +67,7 @@ public class InvoiceFragment extends Fragment
     private void initElems() {
         invoiceRepository = new InvoiceRepository(getActivity().getApplication());
         sharedPreferences = getActivity().getSharedPreferences(getString(R.string.sharedPreferences), Activity.MODE_PRIVATE);
-        listener = ActivityUtils.getListener(this);
+        //listener = ActivityUtils.getListener(this);
         MainActivity.navigation = NAVIGATION.INVOICE_LISTING;
     }
 
@@ -90,7 +82,7 @@ public class InvoiceFragment extends Fragment
     }
 
     private void setRecyclerView(List<ExtendedInvoiceEntity> adapterList) {
-        invoiceAdapter = new InvoiceAdapter(adapterList, this);
+        invoiceAdapter = new InvoiceA(adapterList, this);
 
         binding.txtTotal.setText(StringUtils.formatMoney(sumAllInvoices(adapterList)));
 
@@ -106,8 +98,9 @@ public class InvoiceFragment extends Fragment
 
     private void initListeners() {
         binding.tbAddInvoice.setOnClickListener((v) -> {
-            InsertInvoiceDialog insertInvoiceEntityDialog = InsertInvoiceDialog.newInstance(TAG, null);
-            insertInvoiceEntityDialog.show(getActivity().getSupportFragmentManager(), InsertInvoiceDialog.TAG);
+            NavController navCo = NavHostFragment.findNavController(this);
+            NavDirections action = InvoiceFDirections.actionInvoiceFragmentToInsertInvoiceDialog2(0);
+            navCo.navigate(action);
         });
 
         binding.etSearchBar.addTextChangedListener(new TextWatcher() {
@@ -163,25 +156,6 @@ public class InvoiceFragment extends Fragment
         CURRENT_SELECTION = position;
     }
 
-    @Override
-    public void goToInvoiceDetail(InvoiceEntity invoiceEntity) {
-        sharedPreferences.edit().putInt(getString(R.string.selectedInvoiceEntityID), invoiceEntity.getInvoiceID()).commit();
-        listener.goToInvoiceDetails();
-    }
-
-    @Override
-    public void goToInvoiceOptions(ExtendedInvoiceEntity invoiceEntity) {
-        InvoiceOptionsDialog invoiceOptionsDialog = InvoiceOptionsDialog.newInstance(TAG, invoiceEntity);
-        invoiceOptionsDialog.show(getActivity().getSupportFragmentManager(), InvoiceOptionsDialog.TAG);
-    }
-
-    @Override
-    public void invoiceEntityWasInserted() {
-        InvoiceEntity invoiceEntity = invoiceRepository.findLastInvoiceEntity().subscribeOn(Schedulers.io()).blockingGet();
-        sharedPreferences.edit().putInt(getString(R.string.selectedInvoiceEntityID), invoiceEntity.getInvoiceID()).commit();
-        CURRENT_SELECTION = Selector.LAST_SELECTED;
-        listener.goToInvoiceDetails();
-    }
 
     @Override
     public void invoiceEntityWasEdited() {

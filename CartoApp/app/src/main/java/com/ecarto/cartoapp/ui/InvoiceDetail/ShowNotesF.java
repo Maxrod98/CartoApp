@@ -9,7 +9,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.ecarto.cartoapp.database.Entities.InvoiceDetailEntity;
 import com.ecarto.cartoapp.database.Repositories.InvoiceRepository;
@@ -17,23 +18,16 @@ import com.ecarto.cartoapp.databinding.DialogShowNotesBinding;
 
 import io.reactivex.schedulers.Schedulers;
 
-public class ShowNotesDialog extends DialogFragment {
-    public static String NOTES = "NOTES";
+public class ShowNotesF extends Fragment {
+    public static String NOTES = "SelectedInvoiceDetailID";
     public static String TAG = "DIALOG_FRAGMENT_TAG";
 
     DialogShowNotesBinding binding;
     InvoiceRepository invoiceRepository;
     InvoiceDetailEntity notesDetailEntity;
+    Integer invoiceDetailID;
     //TODO: agregar boton de guardado
 
-    public static ShowNotesDialog newInstance(InvoiceDetailEntity invoiceDetailEntity) {
-
-        Bundle args = new Bundle();
-        args.putSerializable(NOTES, invoiceDetailEntity);
-        ShowNotesDialog fragment = new ShowNotesDialog();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Nullable
     @Override
@@ -47,6 +41,11 @@ public class ShowNotesDialog extends DialogFragment {
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+    }
+
+    @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
 
@@ -57,20 +56,11 @@ public class ShowNotesDialog extends DialogFragment {
         super.onResume();
     }
 
-    public void saveNotes(){
-        if (notesDetailEntity != null) {
-            notesDetailEntity.setNotes(binding.etShowNotes.getText().toString());
-            invoiceRepository.insert(notesDetailEntity).subscribeOn(Schedulers.io()).blockingGet();
-        } else {
-            Toast.makeText(getContext(), "Hubo un error al guardar las notas", Toast.LENGTH_SHORT).show();
-        }
-        dismiss();
-    }
+
 
     @Override
     public void onStart() {
         super.onStart();
-
 
     }
 
@@ -84,8 +74,22 @@ public class ShowNotesDialog extends DialogFragment {
         invoiceRepository = new InvoiceRepository(getActivity().getApplication());
 
         if (getArguments() != null){
-            notesDetailEntity = (InvoiceDetailEntity) getArguments().getSerializable(NOTES);
+            invoiceDetailID = getArguments().getInt(NOTES);
+
+            notesDetailEntity = invoiceRepository.findAllInvoiceDetailBy(invoiceDetailID, null)
+                    .subscribeOn(Schedulers.io()).blockingGet()
+                    .stream().findFirst().orElse(null);
+
             binding.etShowNotes.setText(notesDetailEntity.getNotes());
+        } else {
+            Toast.makeText(getContext(), "Hubo un error al guardar las notas", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void saveNotes(){
+        if (notesDetailEntity != null) {
+            notesDetailEntity.setNotes(binding.etShowNotes.getText().toString());
+            invoiceRepository.insert(notesDetailEntity).subscribeOn(Schedulers.io()).blockingGet();
         } else {
             Toast.makeText(getContext(), "Hubo un error al guardar las notas", Toast.LENGTH_SHORT).show();
         }

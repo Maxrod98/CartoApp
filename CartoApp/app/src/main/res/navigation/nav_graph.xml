@@ -3,40 +3,106 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/invoiceFragment2">
+    app:startDestination="@id/invoiceFragment">
+
     <fragment
-        android:id="@+id/invoiceFragment2"
-        android:name="com.ecarto.cartoapp.ui.Invoice.InvoiceFragment"
+        android:id="@+id/invoiceFragment"
+        android:name="com.ecarto.cartoapp.ui.Invoice.InvoiceF"
         android:label="fragment_invoice"
         tools:layout="@layout/fragment_invoice" >
         <action
-            android:id="@+id/action_invoiceFragment2_to_invoiceDetailFragment4"
-            app:destination="@id/invoiceDetailFragment4" />
+            android:id="@+id/action_invoiceFragment_to_invoiceDetailFragment"
+            app:destination="@id/invoiceDetailFragment"
+            app:enterAnim="@anim/slide_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out" />
+        <action
+            android:id="@+id/action_invoiceFragment_to_invoiceOptionsDialog"
+            app:destination="@id/invoiceOptionsDialog"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@android:anim/slide_out_right" />
+        <action
+            android:id="@+id/action_invoiceFragment_to_insertInvoiceDialog2"
+            app:destination="@id/insertInvoiceDialog2" />
     </fragment>
     <fragment
-        android:id="@+id/invoiceDetailFragment4"
-        android:name="com.ecarto.cartoapp.ui.InvoiceDetail.InvoiceDetailFragment"
+        android:id="@+id/invoiceDetailFragment"
+        android:name="com.ecarto.cartoapp.ui.InvoiceDetail.InvoiceDetailF"
         android:label="invoice_detail_fragment"
         tools:layout="@layout/invoice_detail_fragment" >
+        <argument
+            android:name="SelectedInvoiceID"
+            app:argType="integer" />
         <action
-            android:id="@+id/action_invoiceDetailFragment4_to_invoiceDetailOptionsDialog"
+            android:id="@+id/action_invoiceDetailFragment_to_insertInvoiceDetailDialog"
+            app:destination="@id/insertInvoiceDetailDialog" />
+        <action
+            android:id="@+id/action_invoiceDetailFragment_to_invoiceDetailOptionsDialog"
             app:destination="@id/invoiceDetailOptionsDialog" />
     </fragment>
-    <dialog
+    <fragment
+        android:id="@+id/invoiceOptionsDialog"
+        android:name="com.ecarto.cartoapp.ui.Invoice.InvoiceOptionsF"
+        android:label="InvoiceOptionsDialog"
+        tools:layout="@layout/dialog_invoice_options">
+        <argument
+            android:name="SelectedInvoiceID"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_invoiceOptionsDialog_to_insertInvoiceDialog2"
+            app:destination="@id/insertInvoiceDialog2"
+            app:popUpTo="@id/invoiceFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/insertInvoiceDialog2"
+        android:name="com.ecarto.cartoapp.ui.Invoice.InsertInvoiceF"
+        android:label="InsertInvoiceDialog"
+        tools:layout="@layout/dialog_insert_invoice_entity">
+        <argument
+            android:name="SelectedInvoiceID"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/insertInvoiceDetailDialog"
+        android:name="com.ecarto.cartoapp.ui.InvoiceDetail.InsertInvoiceDetailF"
+        android:label="InsertInvoiceDetailDialog"
+        tools:layout="@layout/dialog_insert_invoice_detail">
+        <argument
+            android:name="SelectedInvoiceDetailID"
+            app:argType="integer" />
+        <argument
+            android:name="SelectedInvoiceID"
+            app:argType="integer" />
+    </fragment>
+    <fragment
         android:id="@+id/invoiceDetailOptionsDialog"
-        android:name="com.ecarto.cartoapp.ui.InvoiceDetail.InvoiceDetailOptionsDialog"
+        android:name="com.ecarto.cartoapp.ui.InvoiceDetail.InvoiceDetailOptionsF"
         android:label="dialog_invoice_detail_options"
         tools:layout="@layout/dialog_invoice_detail_options" >
         <action
             android:id="@+id/action_invoiceDetailOptionsDialog_to_showNotesDialog"
-            app:destination="@id/showNotesDialog" />
-    </dialog>
-    <dialog
-        android:id="@+id/showNotesDialog"
-        android:name="com.ecarto.cartoapp.ui.InvoiceDetail.ShowNotesDialog"
-        android:label="ShowNotesDialog" >
+            app:destination="@id/showNotesDialog"
+            app:popUpTo="@id/invoiceDetailFragment"
+            app:popUpToInclusive="false" />
         <action
-            android:id="@+id/action_showNotesDialog_to_invoiceDetailFragment4"
-            app:destination="@id/invoiceDetailFragment4" />
-    </dialog>
+            android:id="@+id/action_invoiceDetailOptionsDialog_to_insertInvoiceDetailDialog"
+            app:destination="@id/insertInvoiceDetailDialog"
+            app:popUpTo="@id/invoiceDetailFragment" />
+        <argument android:name="SelectedInvoiceDetailID"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/showNotesDialog"
+        android:name="com.ecarto.cartoapp.ui.InvoiceDetail.ShowNotesF"
+        android:label="dialog_show_notes"
+        tools:layout="@layout/dialog_show_notes" >
+        <argument
+            android:name="SelectedInvoiceDetailID"
+            app:argType="integer" />
+    </fragment>
+
+
 </navigation>

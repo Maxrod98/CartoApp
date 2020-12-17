@@ -13,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.ecarto.cartoapp.R;
 import com.ecarto.cartoapp.database.Entities.InvoiceDetailEntity;
@@ -23,25 +25,18 @@ import com.ecarto.cartoapp.utils.NAVIGATION;
 
 import io.reactivex.schedulers.Schedulers;
 
-public class InvoiceDetailOptionsDialog extends DialogFragment {
+public class InvoiceDetailOptionsF extends Fragment {
     public static final String TAG = "INVOICE_DETAIL_OPTIONS_DIALOG";
+    public static final String SELECTED_INVOICE_DETAIL = "SelectedInvoiceDetailID";
 
     DialogInvoiceDetailOptionsBinding binding;
     InvoiceDetailEntity invoiceDetailEntity;
     InvoiceRepository invoiceRepository;
     SharedPreferences sharedPreferences;
     Listener listener = null;
+    Integer invoiceDetailID;
 
-    public InvoiceDetailOptionsDialog() {
-    }
-
-    public static InvoiceDetailOptionsDialog newInstance(String tagParent) {
-        Bundle args = new Bundle();
-        args.putString(NAVIGATION.TAG_PARENT, tagParent);
-
-        InvoiceDetailOptionsDialog fragment = new InvoiceDetailOptionsDialog();
-        fragment.setArguments(args);
-        return fragment;
+    public InvoiceDetailOptionsF() {
     }
 
     @Nullable
@@ -59,60 +54,52 @@ public class InvoiceDetailOptionsDialog extends DialogFragment {
         initListeners();
     }
 
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        final Dialog dialog = super.onCreateDialog(savedInstanceState);
-        dialog.getWindow().getAttributes().windowAnimations = R.anim.slide_in;
-        return dialog;
-    }
-
     private void initElems() {
         invoiceRepository = new InvoiceRepository(getActivity().getApplication());
         sharedPreferences = getActivity().getSharedPreferences(getString(R.string.sharedPreferences), Context.MODE_PRIVATE);
-        listener = ActivityUtils.getListener(this);
     }
 
-    public void getDatabaseData(){
-        Integer selectedInvoiceDetailID = sharedPreferences.getInt(getString(R.string.selectedInvoiceDetailID), 0);
+    public void getDatabaseData() {
+        if (getArguments() != null) {
+            invoiceDetailID = getArguments().getInt(SELECTED_INVOICE_DETAIL);
 
-        invoiceDetailEntity = invoiceRepository.findAllInvoiceDetailBy(selectedInvoiceDetailID, null)
-                .subscribeOn(Schedulers.io()).blockingGet()
-                .stream().findFirst().orElse(null);
+            invoiceDetailEntity = invoiceRepository.findAllInvoiceDetailBy(invoiceDetailID, null)
+                    .subscribeOn(Schedulers.io()).blockingGet()
+                    .stream().findFirst().orElse(null);
+        }
     }
 
     private void initListeners() {
         if (invoiceDetailEntity != null) {
             binding.didoEdit.setOnClickListener(v -> {
-                InsertInvoiceDetailDialog insertInvoiceDetailDialog = InsertInvoiceDetailDialog.newInstance(InvoiceDetailFragment.TAG, invoiceDetailEntity);
-                insertInvoiceDetailDialog.show(getActivity().getSupportFragmentManager(), InsertInvoiceDetailDialog.TAG);
-                dismiss();
+                NavHostFragment.findNavController(this)
+                        .navigate(InvoiceDetailOptionsFDirections
+                                .actionInvoiceDetailOptionsDialogToInsertInvoiceDetailDialog
+                                        (invoiceDetailEntity.getInvoiceDetailID(), invoiceDetailEntity.getInvoiceID()));
+
             });
 
             binding.didoNotes.setOnClickListener(v -> {
-                ShowNotesDialog showNotesDialog = ShowNotesDialog.newInstance(invoiceDetailEntity);
-                showNotesDialog.show(getActivity().getSupportFragmentManager(), ShowNotesDialog.TAG);
-                dismiss();
+                NavHostFragment.findNavController(this)
+                        .navigate(InvoiceDetailOptionsFDirections.actionInvoiceDetailOptionsDialogToShowNotesDialog(invoiceDetailEntity.getInvoiceDetailID()));
             });
 
             binding.didoDelete.setOnClickListener(v -> {
                 deleteInvoiceDetailEntity();
-
             });
         } else {
             Toast.makeText(getActivity(), "Hubo un error, no se pudo cargar el detalle de factura", Toast.LENGTH_SHORT).show();
         }
     }
 
-    public void deleteInvoiceDetailEntity(){
+    public void deleteInvoiceDetailEntity() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setCancelable(true)
                 .setTitle("Borrar detalle de factura de " + invoiceDetailEntity.getConceptDescription())
                 .setMessage("¿Seguro que desea borrar el detalle de la factura?")
                 .setPositiveButton("Borrar", (dialog, which) -> {
                     invoiceRepository.deleteInvoiceDetailEntity(invoiceDetailEntity).subscribeOn(Schedulers.io()).blockingGet();
-                    listener.refreshInvoiceDetailList();
-                    dismiss();
+                    NavHostFragment.findNavController(this).popBackStack();
                 })
                 .setNegativeButton("Cancelar", ((dialog, which) -> {
                 }));
