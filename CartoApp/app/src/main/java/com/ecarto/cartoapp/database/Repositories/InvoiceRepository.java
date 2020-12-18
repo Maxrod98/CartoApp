@@ -29,8 +29,8 @@ public class InvoiceRepository {
         return invoiceDAO.insert(invoiceEntity);
     }
 
-    public Single<List<ExtendedInvoiceEntity>> findAllExtendedInvoiceBy(Integer invoiceID) {
-        return invoiceDAO.findAllExtendedInvoiceBy(invoiceID);
+    public Single<List<ExtendedInvoiceEntity>> findAllExtendedInvoiceByParams(Integer invoiceID, Integer projectID, Integer userID, String seller, String description, Integer status, Boolean deleted) {
+        return invoiceDAO.findAllExtendedInvoiceBy(invoiceID, projectID, userID, seller, description, status, deleted);
     }
 
     public Single<Integer> deleteInvoiceEntity(InvoiceEntity invoiceEntity) {

@@ -15,6 +15,15 @@ public class SellerEntity  implements Serializable {
     private String Name;
     private String Phone;
     private String Location;
+    private Integer WebID;
+
+    public Integer getWebID() {
+        return WebID;
+    }
+
+    public void setWebID(Integer webID) {
+        WebID = webID;
+    }
 
     @NonNull
     public Integer getSellerID() {

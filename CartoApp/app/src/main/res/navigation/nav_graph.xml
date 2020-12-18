@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/invoiceFragment">
+    app:startDestination="@id/loginF">
 
     <fragment
         android:id="@+id/invoiceFragment"
@@ -14,8 +14,6 @@
             android:id="@+id/action_invoiceFragment_to_invoiceDetailFragment"
             app:destination="@id/invoiceDetailFragment"
             app:enterAnim="@anim/slide_in"
-            app:exitAnim="@anim/fade_out"
-            app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/slide_out" />
         <action
             android:id="@+id/action_invoiceFragment_to_invoiceOptionsDialog"
@@ -125,6 +123,18 @@
         <argument
             android:name="SelectedInvoiceDetailID"
             app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginF"
+        android:name="com.ecarto.cartoapp.ui.LoginF"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginF_to_invoiceFragment"
+            app:destination="@id/invoiceFragment"
+            app:launchSingleTop="false"
+            app:popUpTo="@id/loginF"
+            app:popUpToInclusive="true" />
     </fragment>
 
 

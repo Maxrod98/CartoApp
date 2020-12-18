@@ -14,6 +14,15 @@ public class ProjectEntity  implements Serializable {
     public Integer ProjectID;
     public String Name;
     public long StartDate;
+    private Integer WebID;
+
+    public Integer getWebID() {
+        return WebID;
+    }
+
+    public void setWebID(Integer webID) {
+        WebID = webID;
+    }
 
     @NonNull
     public Integer getProjectID() {

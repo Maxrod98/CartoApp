@@ -24,6 +24,15 @@ public class FileEntity implements Serializable {
     private String PathToFile;
     private String TypeOfFile;
     private String OriginalName;
+    private Integer WebID;
+
+    public Integer getWebID() {
+        return WebID;
+    }
+
+    public void setWebID(Integer webID) {
+        WebID = webID;
+    }
 
     public String getOriginalName() {
         return OriginalName;

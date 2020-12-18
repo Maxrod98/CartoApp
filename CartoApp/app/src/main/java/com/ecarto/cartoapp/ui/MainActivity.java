@@ -36,6 +36,8 @@ public class MainActivity extends BaseActivity implements AddFileF.Listener {
     FileRepository fileRepository;
 
     //Tod: think about a web copy where everything is saved daily so that we dont have to worry about migrations
+    //more details on this: use WebID whenever you upload or
+    //haz una cola de comandos
     //TODO: add file view fragment
     //TODO: make list of folders
     //TODO: remove top bar from activity so that everything is handled by the fragments

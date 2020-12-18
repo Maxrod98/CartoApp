@@ -18,13 +18,11 @@ import com.ecarto.cartoapp.R;
 import com.ecarto.cartoapp.database.Entities.ExtendedInvoiceEntity;
 import com.ecarto.cartoapp.database.Repositories.InvoiceRepository;
 import com.ecarto.cartoapp.databinding.FragmentInvoiceBinding;
-import com.ecarto.cartoapp.utils.Selector;
 import com.ecarto.cartoapp.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import io.reactivex.schedulers.Schedulers;
 
@@ -35,6 +33,7 @@ public class InvoiceF extends Fragment implements InvoiceA.Listener {
     InvoiceRepository invoiceRepository;
     SharedPreferences sharedPreferences;
     List<ExtendedInvoiceEntity> invoiceEntities;
+    Integer currentProjectID = 1;
 
     public InvoiceF() {
     }
@@ -48,13 +47,6 @@ public class InvoiceF extends Fragment implements InvoiceA.Listener {
         initListeners();
 
         return binding.getRoot();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-
     }
 
     @Override
@@ -74,7 +66,7 @@ public class InvoiceF extends Fragment implements InvoiceA.Listener {
     }
 
     private List<ExtendedInvoiceEntity> getAllInvoiceEntities() {
-        return invoiceRepository.findAllExtendedInvoiceBy(null).subscribeOn(Schedulers.io()).blockingGet();
+        return invoiceRepository.findAllExtendedInvoiceByParams(null, currentProjectID, null, null, null, null, null).subscribeOn(Schedulers.io()).blockingGet();
     }
 
     private void setRecyclerView(List<ExtendedInvoiceEntity> adapterList) {
@@ -131,7 +123,7 @@ public class InvoiceF extends Fragment implements InvoiceA.Listener {
         for (ExtendedInvoiceEntity item : list) {
             boolean flag = true;
             for (String searchItem : filterStrArray){
-                if (!item.toString().contains(searchItem)) flag = false;
+                if (!item.toString().toLowerCase().contains(searchItem.toLowerCase())) flag = false;
             }
             if (flag){
                 filteredList.add(item);

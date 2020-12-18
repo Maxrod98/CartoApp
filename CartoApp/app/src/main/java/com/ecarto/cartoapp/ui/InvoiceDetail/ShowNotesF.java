@@ -47,9 +47,7 @@ public class ShowNotesF extends Fragment {
 
         if (getArguments() != null){
             invoiceDetailID = getArguments().getInt(SelectedInvoiceDetailID);
-            notesDetailEntity = invoiceRepository.findAllInvoiceDetailBy(invoiceDetailID, null)
-                    .subscribeOn(Schedulers.io()).blockingGet()
-                    .stream().findFirst().orElse(null);
+            notesDetailEntity = getNotesDetailEntity();
 
             binding.etShowNotes.setText(notesDetailEntity.getNotes());
         } else {
@@ -59,9 +57,12 @@ public class ShowNotesF extends Fragment {
 
     private void initListeners(){
         binding.imgCloseNotes.setOnClickListener((v)->{
-            if (notesDetailEntity.getNotes().compareTo(binding.etShowNotes.getText().toString())!= 0){
-                Snackbar.make(binding.getRoot(), "Las notas no fueron guardadas", Snackbar.LENGTH_LONG).show();
+            if (notesDetailEntity.getNotes() != null){
+                if (notesDetailEntity.getNotes().compareTo(binding.etShowNotes.getText().toString())!= 0){
+                    Snackbar.make(binding.getRoot(), "Las notas no fueron guardadas", Snackbar.LENGTH_LONG).show();
+                }
             }
+
             NavHostFragment.findNavController(this).popBackStack();
         });
 
@@ -71,8 +72,15 @@ public class ShowNotesF extends Fragment {
         });
     }
 
+    private InvoiceDetailEntity getNotesDetailEntity(){
+        return invoiceRepository.findAllInvoiceDetailBy(invoiceDetailID, null)
+                .subscribeOn(Schedulers.io()).blockingGet()
+                .stream().findFirst().orElse(null);
+    }
+
     public void saveNotes(){
         if (notesDetailEntity != null) {
+            notesDetailEntity = getNotesDetailEntity(); //update like this to avoid incidents with upload queue, which may be asynchronous
             notesDetailEntity.setNotes(binding.etShowNotes.getText().toString());
             invoiceRepository.insert(notesDetailEntity).subscribeOn(Schedulers.io()).blockingGet();
         } else {

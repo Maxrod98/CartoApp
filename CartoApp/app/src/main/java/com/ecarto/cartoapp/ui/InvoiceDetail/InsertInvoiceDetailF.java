@@ -75,9 +75,7 @@ public class InsertInvoiceDetailF extends Fragment {
             invoiceID = getArguments().getInt(SelectedInvoiceID);
 
             if (invoiceDetailID != 0) {
-                InvoiceDetailEntity invoiceDetailEntity = invoiceRepository.findAllExtendedInvoiceDetailBy(invoiceDetailID, null)
-                        .subscribeOn(Schedulers.io()).blockingGet()
-                        .stream().findFirst().orElse(null);
+                InvoiceDetailEntity invoiceDetailEntity = getInvoiceDetailEntity();
 
                 if (invoiceDetailEntity != null) {
                     binding.lblTitle.setText("Editar detalle de factura");
@@ -101,9 +99,9 @@ public class InsertInvoiceDetailF extends Fragment {
             if (description.isEmpty() || quantity.isEmpty()) { //on error
                 Snackbar.make(binding.getRoot(), "Necesita completar los campos", Snackbar.LENGTH_LONG).show();
             } else { // if correct
-                InvoiceDetailEntity invoiceDetailEntity = new InvoiceDetailEntity();
+                InvoiceDetailEntity invoiceDetailEntity = getInvoiceDetailEntity();
                 try {
-                    invoiceDetailEntity.setConceptDescription(description);
+                    invoiceDetailEntity.setConceptDescription(description); //TODO get the data directly from database, then update
                     invoiceDetailEntity.setInvoiceID(invoiceID);
                     invoiceDetailEntity.setInvoiceDetailID(invoiceDetailID == 0 ? null : invoiceDetailID); //makes sure that a new detail entity is inserted or the detail entity is updated
                     invoiceDetailEntity.setCostOfItem(Integer.valueOf(quantity));
@@ -121,6 +119,18 @@ public class InsertInvoiceDetailF extends Fragment {
         binding.imgClose.setOnClickListener((v) -> {
             NavHostFragment.findNavController(this).popBackStack();
         });
+    }
+
+    public InvoiceDetailEntity getInvoiceDetailEntity(){
+        try {
+            InvoiceDetailEntity entity = invoiceRepository.findAllExtendedInvoiceDetailBy(invoiceDetailID, null)
+                    .subscribeOn(Schedulers.io()).blockingGet()
+                    .stream().findFirst().orElse(null);
+            return entity != null ? entity : new InvoiceDetailEntity();
+        }
+        catch (Exception e){
+            return new InvoiceDetailEntity();
+        }
     }
 
     public interface Listener {

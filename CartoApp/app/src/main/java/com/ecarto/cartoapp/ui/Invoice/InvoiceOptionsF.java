@@ -9,7 +9,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -17,8 +16,6 @@ import com.ecarto.cartoapp.database.Entities.ExtendedInvoiceEntity;
 import com.ecarto.cartoapp.database.Entities.InvoiceEntity;
 import com.ecarto.cartoapp.database.Repositories.InvoiceRepository;
 import com.ecarto.cartoapp.databinding.DialogInvoiceOptionsBinding;
-import com.ecarto.cartoapp.utils.ActivityUtils;
-import com.ecarto.cartoapp.utils.NAVIGATION;
 import com.ecarto.cartoapp.utils.StringUtils;
 
 import io.reactivex.schedulers.Schedulers;
@@ -59,7 +56,7 @@ public class InvoiceOptionsF extends Fragment {
         if (getArguments() != null ){
             invoiceID = getArguments().getInt(SELECTED_INVOICE);
 
-            invoiceEntity = invoiceRepository.findAllExtendedInvoiceBy(invoiceID)
+            invoiceEntity = invoiceRepository.findAllExtendedInvoiceByParams(invoiceID, null, null, null, null, null, null)
                     .subscribeOn(Schedulers.io()).blockingGet().stream().findFirst().orElse(null);
 
             binding.txtDescription.setText(invoiceEntity.getDescription());

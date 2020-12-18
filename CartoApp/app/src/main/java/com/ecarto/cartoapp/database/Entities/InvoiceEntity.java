@@ -14,12 +14,30 @@ public class InvoiceEntity implements Serializable {
     @NonNull
     private Integer InvoiceID;
     private Integer ProjectID; //foreign key
-    private Integer UserID; //foreign
+    private String UserID; //foreign
     private String Seller;
     private long Date;
     private String Latitude;
     private String Longitude;
     private String Description;
+    private Integer Status;
+    private Integer WebID;
+
+    public Integer getWebID() {
+        return WebID;
+    }
+
+    public void setWebID(Integer webID) {
+        WebID = webID;
+    }
+
+    public Integer getStatus() {
+        return Status;
+    }
+
+    public void setStatus(Integer status) {
+        Status = status;
+    }
 
     public Integer getInvoiceStatus() {
         return InvoiceStatus;
@@ -40,11 +58,11 @@ public class InvoiceEntity implements Serializable {
         this.InvoiceID = invoiceID;
     }
 
-    public Integer getUserID() {
+    public String getUserID() {
         return UserID;
     }
 
-    public void setUserID(Integer userID) {
+    public void setUserID(String userID) {
         UserID = userID;
     }
 

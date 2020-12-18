@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.ecarto.cartoapp.R;
+import com.ecarto.cartoapp.database.Entities.ExtendedInvoiceEntity;
 import com.ecarto.cartoapp.database.Entities.InvoiceEntity;
 import com.ecarto.cartoapp.database.Repositories.InvoiceRepository;
 import com.ecarto.cartoapp.databinding.DialogInsertInvoiceEntityBinding;
@@ -66,11 +67,9 @@ public class InsertInvoiceF extends Fragment {
         if (invoiceID == 0) {
             binding.etDateInvoice.setText(day + "/" + (month + 1) + "/" + year_);
         } else {
-            InvoiceEntity invoiceEntity = invoiceRepository.findAllExtendedInvoiceBy(invoiceID)
-                    .subscribeOn(Schedulers.io()).blockingGet()
-                    .stream().findFirst().orElse(null);
+            InvoiceEntity invoiceEntity = getExtendedInvoiceEntity();
 
-            if (invoiceEntity == null) {
+            if (invoiceEntity.getInvoiceID() == null) {
                 Toast.makeText(getContext(), "Hubo un error all tratar de cargar la factura", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -82,6 +81,7 @@ public class InsertInvoiceF extends Fragment {
         }
 
     }
+
 
     private void initListeners() {
         binding.btnAddInvoice.setOnClickListener((p) -> {
@@ -112,18 +112,27 @@ public class InsertInvoiceF extends Fragment {
 
 
     public void createAndSendEntity() {
-        InvoiceEntity entity = new InvoiceEntity();
-        if (invoiceID == 0) invoiceID = null;
+        InvoiceEntity entity = getExtendedInvoiceEntity();
 
         entity.setDate(StringUtils.formatDateFromString(binding.etDateInvoice.getText().toString()));
         entity.setSeller(binding.etSeller.getText().toString());
         entity.setDescription(binding.etDescription.getText().toString());
         entity.setProjectID(1);
-        entity.setInvoiceID(invoiceID);
+        entity.setUserID("test");
         invoiceRepository.insert(entity).subscribeOn(Schedulers.io()).blockingGet();
 
-        Snackbar.make(binding.getRoot(), invoiceID == null ? "Factura agregada correctamente." : "Factura editada correctamente.", Snackbar.LENGTH_SHORT).show();
         NavHostFragment.findNavController(this).popBackStack();
+    }
+
+    private ExtendedInvoiceEntity getExtendedInvoiceEntity(){
+        try {
+            ExtendedInvoiceEntity entity = invoiceRepository.findAllExtendedInvoiceByParams(invoiceID, null, null, null, null, null, null)
+                    .subscribeOn(Schedulers.io()).blockingGet()
+                    .stream().findFirst().orElse(null);
+            return entity != null ? entity : new ExtendedInvoiceEntity();
+        } catch (Exception e){ //if there is no entity send a new one
+            return new ExtendedInvoiceEntity();
+        }
     }
 
 }
