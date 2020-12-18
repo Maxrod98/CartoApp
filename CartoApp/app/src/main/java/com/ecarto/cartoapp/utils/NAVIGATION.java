@@ -1,7 +1,7 @@
 package com.ecarto.cartoapp.utils;
 
 public abstract class NAVIGATION {
-    public final static int INVOICE_LISTING = 1;
+    //public final static int INVOICE_LISTING = 1;
     public final static int INVOICE_DETAIL_LISTING = 2;
     public final static int INSERT_INVOICE = 3;
     public final static int INSERT_INVOICE_DETAIL = 4;

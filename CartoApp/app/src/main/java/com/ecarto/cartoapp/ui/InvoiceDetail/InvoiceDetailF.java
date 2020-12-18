@@ -29,12 +29,10 @@ import java.util.List;
 
 import io.reactivex.schedulers.Schedulers;
 
-public class InvoiceDetailF extends Fragment
-        implements InvoiceDetailA.Listener, InsertInvoiceDetailF.Listener, InvoiceDetailOptionsF.Listener {
+public class InvoiceDetailF extends Fragment implements InvoiceDetailA.Listener {
 
     public static final String TAG = "INVOICE_DETAIL_FRAGMENT_TAG";
     private static final String SELECTED_INVOICE_ID = "SelectedInvoiceID";
-    static Integer CURRENT_SELECTION = Selector.NONE_SELECTED;
 
     InvoiceDetailFragmentBinding binding;
     private InvoiceRepository invoiceRepository;
@@ -61,7 +59,6 @@ public class InvoiceDetailF extends Fragment
     }
 
     private void initElems() {
-        MainActivity.navigation = NAVIGATION.INVOICE_DETAIL_LISTING;
         sharedPreferences =  getActivity().getSharedPreferences(getString(R.string.sharedPreferences), Activity.MODE_PRIVATE);
         invoiceRepository = new InvoiceRepository(getActivity().getApplication());
     }
@@ -101,32 +98,10 @@ public class InvoiceDetailF extends Fragment
         });
     }
 
-    //COMMUNICATION
     @Override
-    public void invoiceDetailWasJustAdded() {
-        getDatabaseData();
-    }
-
-    @Override
-    public Integer getCurrentSelection() {
-        return CURRENT_SELECTION;
-    }
-
-    @Override
-    public void setCurrentSelection(Integer position) {
-        CURRENT_SELECTION = position;
-    }
-
-    @Override
-    public void goToInvoiceDetailOptionsDialog(InvoiceDetailEntity invoiceDetailEntity) {
+    public void onInvoiceDetailClick(InvoiceDetailEntity invoiceDetailEntity) {
         NavHostFragment.findNavController(this)
                 .navigate(InvoiceDetailFDirections.actionInvoiceDetailFragmentToInvoiceDetailOptionsDialog(invoiceDetailEntity.getInvoiceDetailID()));
-    }
-
-    @Override
-    public void refreshInvoiceDetailList() {
-        ActivityUtils.showSnackbar(binding.getRoot() , "Borrado correctamente", R.color.green);
-        getDatabaseData();
     }
 
     public interface Listener {

@@ -23,7 +23,7 @@ import java.util.concurrent.Executors;
         InvoiceDetailEntity.class,
         FileEntity.class
 
-}, version = 2, exportSchema = false)
+}, version = 1, exportSchema = false)
 
 @TypeConverters({})
 public abstract class DatabaseClass extends RoomDatabase {

@@ -11,10 +11,7 @@ import com.ecarto.cartoapp.database.Repositories.FileRepository;
 import com.ecarto.cartoapp.database.Repositories.InvoiceRepository;
 import com.ecarto.cartoapp.databinding.ActivityMainBinding;
 import com.ecarto.cartoapp.ui.ShareFiles.AddFileF;
-import com.ecarto.cartoapp.ui.InvoiceDetail.InvoiceDetailF;
-import com.ecarto.cartoapp.ui.Invoice.InvoiceF;
 import com.ecarto.cartoapp.utils.FileUtils;
-import com.ecarto.cartoapp.utils.NAVIGATION;
 
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,11 +23,9 @@ import java.util.List;
 
 import io.reactivex.schedulers.Schedulers;
 
-public class MainActivity extends BaseActivity implements
-        InvoiceF.Listener, InvoiceDetailF.Listener, AddFileF.Listener {
+public class MainActivity extends BaseActivity implements AddFileF.Listener {
 
     public static String TAG = "MAIN_ACTIVITY";
-    public static Integer navigation = NAVIGATION.INVOICE_LISTING;
     public static String PDFS_FOLDER_NAME = "carto_files";
     public static String PDFS_FOLDER_PATH;
 
@@ -42,10 +37,10 @@ public class MainActivity extends BaseActivity implements
 
     //Tod: think about a web copy where everything is saved daily so that we dont have to worry about migrations
     //TODO: add file view fragment
-    //TODO: use bigdecimals instead of doubles for latitude and longitude
     //TODO: make list of folders
+    //TODO: remove top bar from activity so that everything is handled by the fragments
     //TODO: communication between files fragment
-    //TODO: SafeArgs plugin
+    //TODO: validate numbers entered, not entering anything crashes and it should just pop an error message
 
     //ACTIVITY DEFAULT METHODS
     @Override
@@ -58,17 +53,14 @@ public class MainActivity extends BaseActivity implements
         invoiceRepository = new InvoiceRepository(getApplicationContext());
         fileRepository = new FileRepository(getApplicationContext());
 
+
         //receiving data from share button
         handleShareIntent();
-        setSupportActionBar(binding.toolbar);
-
-        //setNavigation(false);
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        setNavigation(false);
     }
 
     @Override
@@ -118,23 +110,9 @@ public class MainActivity extends BaseActivity implements
     }
 
     private void popUpFileFragment() {
-        navigation = NAVIGATION.INVOICE_LISTING;
         navigateToLowerFragment(AddFileF.newInstance(null), false, "Test");
     }
 
-    public void setNavigation(boolean addToBackstack) {
-        switch (navigation) {
-            case (NAVIGATION.INVOICE_LISTING):
-                getSupportActionBar().setTitle("Listado de Facturas");
-                //navigateTo(InvoiceFragment.newInstance(null), addToBackstack, InvoiceFragment.TAG);
-                break;
-
-            case (NAVIGATION.INVOICE_DETAIL_LISTING):
-                getSupportActionBar().setTitle("Detalle");
-                //navigateTo(InvoiceDetailFragment.newInstance(null), addToBackstack, InvoiceDetailFragment.TAG);
-                break;
-        }
-    }
 
     void handleSendText(Intent intent) {
         String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
@@ -183,16 +161,6 @@ public class MainActivity extends BaseActivity implements
         }
     }
 
-    //COMMUNICATION METHODS
-    @Override
-    public void goToInvoiceDetails() {
-        navigation = NAVIGATION.INVOICE_DETAIL_LISTING;
-        setNavigation(true);
-
-
-
-
-    }
 
     @Override
     public void addFilesToInvoiceDetail(List<FileEntity> fileEntities) {

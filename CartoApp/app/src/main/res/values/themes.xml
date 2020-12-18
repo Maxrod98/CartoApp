@@ -24,6 +24,11 @@
         <item name = "android:textSize"> 22dp</item>
     </style>
 
+    <style name = "Icon">
+        <item name = "android:layout_height" >48dp </item>
+        <item name = "android:layout_width"> 48dp</item>
+    </style>
+
     <style name = "ListTextLabel">
         <item name = "android:textSize"> 14dp</item>
     </style>

@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ecarto.cartoapp.R;
@@ -18,9 +17,9 @@ import com.ecarto.cartoapp.utils.StringUtils;
 
 import java.util.List;
 
-public class InvoiceA extends RecyclerView.Adapter<InvoiceA.InvoiceViewHolder> implements Selector.Listener {
-    public static final Integer MAX_SIZE_SELLER = 20;
-    public static final Integer MAX_SIZE_DESCRIPTION = 20;
+public class InvoiceA extends RecyclerView.Adapter<InvoiceA.InvoiceViewHolder> {
+    public static final Integer MAX_SIZE_SELLER = 30;
+    public static final Integer MAX_SIZE_DESCRIPTION = 30;
 
     List<ExtendedInvoiceEntity> elements;
     InvoiceA.Listener listener;
@@ -30,7 +29,7 @@ public class InvoiceA extends RecyclerView.Adapter<InvoiceA.InvoiceViewHolder> i
         elements = invoiceEntityList;
         if (context instanceof InvoiceA.Listener) {
             listener = (InvoiceA.Listener) context;
-            selector = new Selector(this);
+            selector = new Selector((Fragment) listener);
         } else {
             throw new RuntimeException("Necesitas implementar el listener del Selector");
         }
@@ -47,50 +46,28 @@ public class InvoiceA extends RecyclerView.Adapter<InvoiceA.InvoiceViewHolder> i
 
     @Override
     public void onBindViewHolder(@NonNull InvoiceA.InvoiceViewHolder holder, int position) {
-        //setting data
         holder.vSelectionBar.setVisibility(selector.isSelected(position) ? View.VISIBLE : View.INVISIBLE);
         holder.txtDate.setText(StringUtils.formatDateFromLong(elements.get(position).getDate()));
         holder.txtDescription.setText(StringUtils.validateLength(elements.get(position).getDescription(), MAX_SIZE_DESCRIPTION));
         holder.txtSeller.setText(StringUtils.validateLength(elements.get(position).getSeller(), MAX_SIZE_SELLER));
-
         holder.txtTotalCost.setText(StringUtils.formatMoney(elements.get(position).getTotalCost()));
 
         holder.txtSeller.getRootView().setOnClickListener((v) -> {
             selector.onItemClickSelection(position);
             notifyDataSetChanged();
-
-            NavHostFragment.findNavController((Fragment) listener)
-                    .navigate(InvoiceFDirections.actionInvoiceFragmentToInvoiceDetailFragment(elements.get(position).getInvoiceID()));
+            listener.onInvoiceSelectedClick(elements.get(position));
         });
 
         holder.txtSeller.getRootView().setOnLongClickListener((v -> {
             selector.onItemClickSelection(position);
             notifyDataSetChanged();
-
-            NavHostFragment.findNavController((Fragment) listener)
-                    .navigate(InvoiceFDirections.actionInvoiceFragmentToInvoiceOptionsDialog(elements.get(position).getInvoiceID()));
-
+            listener.onInvoiceLongClick(elements.get(position));
             return false;
         }));
     }
 
     @Override
     public int getItemCount() {
-        return elements.size();
-    }
-
-    @Override
-    public void setSelectedPosition(Integer position) {
-        listener.setCurrentSelection(position);
-    }
-
-    @Override
-    public Integer getSelectedPosition() {
-        return listener.getCurrentSelection();
-    }
-
-    @Override
-    public Integer getNumElems() {
         return elements.size();
     }
 
@@ -113,8 +90,9 @@ public class InvoiceA extends RecyclerView.Adapter<InvoiceA.InvoiceViewHolder> i
     }
 
     public interface Listener {
-        Integer getCurrentSelection();
-        void setCurrentSelection(Integer position);
+        //selector
+        void onInvoiceSelectedClick(ExtendedInvoiceEntity extendedInvoiceEntity);
+        void onInvoiceLongClick(ExtendedInvoiceEntity extendedInvoiceEntity);
     }
 }
 

@@ -5,6 +5,8 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class StringUtils {
     public static DecimalFormat decimalFormat;
@@ -46,5 +48,13 @@ public class StringUtils {
         return result_date;
     }
 
+    public static String formateDateToMonth(Long date){
+        Date dat = new Date(date);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(dat);
+
+        Locale current = Locale.getDefault();
+        return cal.getDisplayName(Calendar.MONTH, Calendar.LONG , current);
+    }
 
 }

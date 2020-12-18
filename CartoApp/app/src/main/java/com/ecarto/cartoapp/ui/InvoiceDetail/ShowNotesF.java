@@ -1,6 +1,5 @@
 package com.ecarto.cartoapp.ui.InvoiceDetail;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +18,7 @@ import com.ecarto.cartoapp.databinding.DialogShowNotesBinding;
 import io.reactivex.schedulers.Schedulers;
 
 public class ShowNotesF extends Fragment {
-    public static String NOTES = "SelectedInvoiceDetailID";
+    public static String SelectedInvoiceDetailID = "SelectedInvoiceDetailID";
     public static String TAG = "DIALOG_FRAGMENT_TAG";
 
     DialogShowNotesBinding binding;
@@ -28,54 +27,25 @@ public class ShowNotesF extends Fragment {
     Integer invoiceDetailID;
     //TODO: agregar boton de guardado
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DialogShowNotesBinding.inflate(inflater, container, false);
-
         initElems();
         initListeners();
-
         return binding.getRoot();
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-
-
-    @Override
     public void onStart() {
         super.onStart();
-
-    }
-
-    private void initListeners(){
-        binding.imgCloseNotes.setOnClickListener((v)->{
-            saveNotes();
-        });
     }
 
     private void initElems() {
         invoiceRepository = new InvoiceRepository(getActivity().getApplication());
 
         if (getArguments() != null){
-            invoiceDetailID = getArguments().getInt(NOTES);
-
+            invoiceDetailID = getArguments().getInt(SelectedInvoiceDetailID);
             notesDetailEntity = invoiceRepository.findAllInvoiceDetailBy(invoiceDetailID, null)
                     .subscribeOn(Schedulers.io()).blockingGet()
                     .stream().findFirst().orElse(null);
@@ -84,6 +54,12 @@ public class ShowNotesF extends Fragment {
         } else {
             Toast.makeText(getContext(), "Hubo un error al guardar las notas", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void initListeners(){
+        binding.imgCloseNotes.setOnClickListener((v)->{
+            NavHostFragment.findNavController(this).popBackStack();
+        });
     }
 
     public void saveNotes(){

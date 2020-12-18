@@ -3,8 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="400dp"
-    tools:context=".ui.InvoiceDetail.ShowNotesF">
+    android:layout_height="match_parent"
+    tools:context=".ui.InvoiceDetail.ShowNotesF"
+    android:background="@color/light_grey">
 
     <EditText
         android:id="@+id/etShowNotes"
@@ -15,7 +16,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imgCloseNotes">
+        app:layout_constraintTop_toBottomOf="@+id/imgCloseNotes"
+        android:background="@color/white">
 
 
     </EditText>
@@ -34,10 +36,13 @@
         android:id="@+id/tvNotesTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/ListTextValue"
         android:text="Notas"
         app:layout_constraintBottom_toTopOf="@+id/etShowNotes"
         app:layout_constraintEnd_toStartOf="@+id/imgCloseNotes"
+        app:layout_constraintHorizontal_bias="0.573"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imgCloseNotes" />
+        app:layout_constraintTop_toTopOf="@+id/imgCloseNotes"
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

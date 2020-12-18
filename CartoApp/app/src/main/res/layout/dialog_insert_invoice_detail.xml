@@ -4,85 +4,106 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/margin_vertical">
+    android:padding="@dimen/margin_vertical"
+    tools:context=".ui.InvoiceDetail.InsertInvoiceDetailF"
+    android:background="@color/light_grey">
 
-    <Button
-        android:id="@+id/btnAddInvoiceDetail"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/title_insert_detail"
+        android:background="@drawable/rounded_corner"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <!-- -->
-
-    <TextView
-        android:id="@+id/lblTitle"
-        style="@style/ListTextValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="48dp"
-        android:text="@string/title_insert_detail"
-        app:layout_constraintBottom_toTopOf="@+id/txtQuantity_insert_detail"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/txtQuantity_insert_detail"
-        style="@style/ListTextValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Cantidad"
-        app:layout_constraintBottom_toTopOf="@+id/etQuantity_insert_detail"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.472"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <!-- -->
-
-    <!-- -->
-
-    <!-- -->
-
-    <EditText
-        android:id="@+id/etQuantity_insert_detail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="number"
-        app:layout_constraintBottom_toTopOf="@+id/txtProduct_insert_detail"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/txtProduct_insert_detail"
-        style="@style/ListTextValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/productDescription_detail_item"
-        app:layout_constraintBottom_toTopOf="@+id/etProduct_insert_detail"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <EditText
-        android:id="@+id/etProduct_insert_detail"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:ems="10"
-        android:inputType="textPersonName|textMultiLine"
-        app:layout_constraintBottom_toTopOf="@+id/btnAddInvoiceDetail"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:maxLines="4"/>
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingBottom="15dp">
 
-    <ImageView
-        android:id="@+id/imgClose"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/lblTitle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel"
-        app:tint="@color/black" />
+        <Button
+            android:id="@+id/btnAddInvoiceDetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="26dp"
+            android:text="@string/title_insert_detail"
+            app:layout_constraintTop_toBottomOf="@+id/etProduct_insert_detail"
+            tools:layout_editor_absoluteX="0dp"
+            android:backgroundTint="@color/teal_700"
+            android:layout_marginHorizontal="15dp" />
+
+        <View
+            android:id="@+id/separator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/teal_700"
+            app:layout_constraintTop_toBottomOf="@+id/imgClose" />
+
+        <TextView
+            android:id="@+id/lblTitle"
+            style="@style/ListTextValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_insert_detail"
+            app:layout_constraintBottom_toBottomOf="@+id/separator"
+            app:layout_constraintEnd_toEndOf="@+id/imgClose"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txtQuantity_insert_detail"
+            style="@style/ListTextValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:text="Cantidad"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lblTitle" />
+
+        <EditText
+            android:id="@+id/etQuantity_insert_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="number"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginHorizontal="15dp"
+            app:layout_constraintTop_toBottomOf="@+id/txtQuantity_insert_detail" />
+
+        <TextView
+            android:id="@+id/txtProduct_insert_detail"
+            style="@style/ListTextValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/productDescription_detail_item"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etQuantity_insert_detail" />
+
+        <EditText
+            android:id="@+id/etProduct_insert_detail"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:ems="10"
+            android:inputType="textPersonName|textMultiLine"
+            android:maxLines="4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginHorizontal="15dp"
+            app:layout_constraintTop_toBottomOf="@+id/txtProduct_insert_detail" />
+
+        <ImageView
+            android:id="@+id/imgClose"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@android:drawable/ic_menu_close_clear_cancel"
+            app:tint="@color/black" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.ecarto.cartoapp.utils.StringUtils;
+
 import java.io.Serializable;
 
 @Entity
@@ -15,8 +17,8 @@ public class InvoiceEntity implements Serializable {
     private Integer UserID; //foreign
     private String Seller;
     private long Date;
-    private long Latitude;
-    private long Longitude;
+    private String Latitude;
+    private String Longitude;
     private String Description;
 
     public Integer getInvoiceStatus() {
@@ -70,22 +72,6 @@ public class InvoiceEntity implements Serializable {
         this.Date = date;
     }
 
-    public long getLatitude() {
-        return Latitude;
-    }
-
-    public void setLatitude(long latitude) {
-        this.Latitude = latitude;
-    }
-
-    public long getLongitude() {
-        return Longitude;
-    }
-
-    public void setLongitude(long longitude) {
-        this.Longitude = longitude;
-    }
-
     public Integer getProjectID() {
         return ProjectID;
     }
@@ -94,11 +80,26 @@ public class InvoiceEntity implements Serializable {
         ProjectID = projectID;
     }
 
+    public String getLatitude() {
+        return Latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        Latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return Longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        Longitude = longitude;
+    }
+
     @Override
     public String toString() {
-        return "{" +
-                "'" + Seller + '\'' +
-                ",='" + Description + '\'' +
-                '}';
+        return Seller + ' ' + Description + ' ' + StringUtils.formatDateFromLong(getDate()) + " " + StringUtils.formateDateToMonth(getDate());
     }
+
+
 }

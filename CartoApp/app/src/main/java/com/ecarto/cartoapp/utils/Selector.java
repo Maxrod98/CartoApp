@@ -1,40 +1,27 @@
 package com.ecarto.cartoapp.utils;
 
+import androidx.fragment.app.Fragment;
+
 public class Selector {
     public static Integer NONE_SELECTED = -1;
     public static Integer LAST_SELECTED = -2;
 
-    public Integer getSelectedItem() {
-        return selectedItem;
-    }
-    public void setSelectedItem(Integer selectedItem) {
-        this.selectedItem = selectedItem;
-    }
-
     Integer selectedItem = NONE_SELECTED;
-    Selector.Listener listener = null;
+    Fragment fragment = null;
 
-    public Selector(Object context) {
-        if (context instanceof Selector.Listener) {
-            listener = (Selector.Listener) context;
-            selectedItem = listener.getSelectedPosition();
-
-            if (selectedItem != null) {
-                if (selectedItem == LAST_SELECTED) {
-                    makeSelected(listener.getNumElems() - 1);
-                }
-            }
+    public Selector(Fragment context) {
+        if (context instanceof Fragment) {
+            fragment =  context;
         } else {
-            throw new RuntimeException("Adapter's context is not using the Listener interface");
+            throw new RuntimeException("Selector's context is not a fragment");
         }
-
     }
 
     public void onItemClickSelection(Integer position) {
         if (selectedItem == NONE_SELECTED) {
             makeSelected(position);
         } else if (selectedItem == LAST_SELECTED) {
-            makeSelected(listener.getNumElems());
+            //makeSelected(listener.getNumElems());
         } else {
             makeSelected(position);
         }
@@ -42,7 +29,6 @@ public class Selector {
 
     public void makeSelected(Integer position) {
         selectedItem = position;
-        listener.setSelectedPosition(position);
     }
 
     public void makeDeselected(Integer position) {
@@ -53,9 +39,4 @@ public class Selector {
         return selectedItem == position;
     }
 
-    public interface Listener {
-        void setSelectedPosition(Integer position);
-        Integer getSelectedPosition();
-        Integer getNumElems();
-    }
 }

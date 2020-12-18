@@ -5,87 +5,115 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/margin_vertical"
-    tools:context=".ui.Invoice.InsertInvoiceF">
+    tools:context=".ui.Invoice.InsertInvoiceF"
+    android:background="@color/light_grey">
 
-    <Button
-        android:id="@+id/btnAddInvoice"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/invoice_fragment_add_invoice"
+        android:padding="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/rounded_corner"
+        android:layout_margin="@dimen/margin_vertical"
+        >
 
-    <TextView
-        android:id="@+id/add_invoice_lblDescription"
-        style="@style/ListTextValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/lblInvoiceDescription"
-        app:layout_constraintBottom_toTopOf="@+id/etDescription"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <Button
+            android:id="@+id/btnAddInvoice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/invoice_fragment_add_invoice"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:backgroundTint="@color/teal_700"/>
 
-    <EditText
-        android:id="@+id/etDescription"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/add_invoice_lblSeller"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <TextView
+            android:id="@+id/add_invoice_lblDescription"
+            style="@style/ListTextValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/lblInvoiceDescription"
+            app:layout_constraintBottom_toTopOf="@+id/etDescription"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    <EditText
-        android:id="@+id/etSeller"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/btnAddInvoice"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <EditText
+            android:id="@+id/etDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:background="@color/white"
+            android:ems="10"
+            android:inputType="textPersonName"
+            app:layout_constraintBottom_toTopOf="@+id/add_invoice_lblSeller"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.466"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/add_invoice_lblSeller"
-        style="@style/ListTextValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/lblSeller"
-        app:layout_constraintBottom_toTopOf="@+id/etSeller"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <EditText
+            android:id="@+id/etSeller"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:background="@color/white"
+            android:ems="10"
+            android:inputType="textPersonName"
+            app:layout_constraintBottom_toTopOf="@+id/btnAddInvoice"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.466"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageView
-        android:id="@+id/imgClose"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/etDateInvoice"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel"
-        app:tint="@color/black" />
+        <TextView
+            android:id="@+id/add_invoice_lblSeller"
+            style="@style/ListTextValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/lblSeller"
+            app:layout_constraintBottom_toTopOf="@+id/etSeller"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    <EditText
-        android:id="@+id/etDateInvoice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:textAlignment="center"
-        android:inputType="date"
-        app:layout_constraintBottom_toTopOf="@+id/add_invoice_lblDescription"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <ImageView
+            android:id="@+id/imgClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/etDateInvoice"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@android:drawable/ic_menu_close_clear_cancel"
+            app:tint="@color/black" />
 
-    <TextView
-        android:id="@+id/txtDateInvoice"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:text="Fecha:"
-        style="@style/ListTextValue"
-        app:layout_constraintBottom_toTopOf="@+id/etDateInvoice"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <EditText
+            android:id="@+id/etDateInvoice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:background="@color/white"
+            android:ems="10"
+            android:inputType="date"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toTopOf="@+id/add_invoice_lblDescription"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/txtDateInvoice"
+            style="@style/ListTextValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:text="Fecha:"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toTopOf="@+id/etDateInvoice"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

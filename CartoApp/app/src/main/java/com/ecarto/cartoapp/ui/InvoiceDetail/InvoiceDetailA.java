@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ecarto.cartoapp.R;
@@ -18,17 +19,17 @@ import com.ecarto.cartoapp.utils.StringUtils;
 
 import java.util.List;
 
-public class InvoiceDetailA extends RecyclerView.Adapter<InvoiceDetailA.InvoiceDetailViewHolder> implements Selector.Listener{
+public class InvoiceDetailA extends RecyclerView.Adapter<InvoiceDetailA.InvoiceDetailViewHolder> {
     private List<ExtendedInvoiceDetailEntity> elements;
     private Listener listener;
     Selector selector;
 
     public InvoiceDetailA(List<ExtendedInvoiceDetailEntity> elements, Object context) {
         this.elements = elements;
-        if (context instanceof InvoiceDetailA.Listener){
+        if (context instanceof InvoiceDetailA.Listener) {
             this.listener = (InvoiceDetailA.Listener) context;
         }
-        selector = new Selector(this);
+        selector = new Selector((Fragment) listener);
     }
 
     @NonNull
@@ -44,37 +45,20 @@ public class InvoiceDetailA extends RecyclerView.Adapter<InvoiceDetailA.InvoiceD
     public void onBindViewHolder(@NonNull InvoiceDetailViewHolder holder, int position) {
         holder.txtProduct.setText(elements.get(position).getConceptDescription());
         holder.txtQuantity.setText(StringUtils.formatMoney(elements.get(position).getCostOfItem()));
-
         boolean hasFiles = elements.get(position).getNumFiles() > 0;
-        if (!hasFiles){
-            holder.imgFileAttached.setAlpha(0.3f);
-        }
+        holder.imgFileAttached.setAlpha(!hasFiles ? 0.3f : 1.0f);
+
         holder.invoiceDetailItem.setOnClickListener((v) -> {
             selector.onItemClickSelection(position);
-            listener.goToInvoiceDetailOptionsDialog(elements.get(position));
+            listener.onInvoiceDetailClick(elements.get(position));
             notifyDataSetChanged();
         });
 
-        holder.invoiceDetailItemSelector.setVisibility(selector.isSelected(position)? View.VISIBLE: View.INVISIBLE);
+        holder.invoiceDetailItemSelector.setVisibility(selector.isSelected(position) ? View.VISIBLE : View.INVISIBLE);
     }
 
     @Override
     public int getItemCount() {
-        return elements.size();
-    }
-
-    @Override
-    public void setSelectedPosition(Integer position) {
-        listener.setCurrentSelection(position);
-    }
-
-    @Override
-    public Integer getSelectedPosition() {
-        return listener.getCurrentSelection();
-    }
-
-    @Override
-    public Integer getNumElems() {
         return elements.size();
     }
 
@@ -95,9 +79,7 @@ public class InvoiceDetailA extends RecyclerView.Adapter<InvoiceDetailA.InvoiceD
         }
     }
 
-    public interface Listener{
-        Integer getCurrentSelection();
-        void setCurrentSelection(Integer integer);
-        void goToInvoiceDetailOptionsDialog(InvoiceDetailEntity invoiceDetailEntity);
+    public interface Listener {
+        void onInvoiceDetailClick(InvoiceDetailEntity invoiceDetailEntity);
     }
 }

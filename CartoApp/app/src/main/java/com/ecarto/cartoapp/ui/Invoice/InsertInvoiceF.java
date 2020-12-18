@@ -27,10 +27,9 @@ import io.reactivex.schedulers.Schedulers;
 
 public class InsertInvoiceF extends Fragment {
     public static final String TAG = "INSERT_INVOICE_DIALOG_TAG";
-    public static final String EDITED_INVOICE = "SelectedInvoiceID";
+    public static final String SelectedInvoiceID = "SelectedInvoiceID";
 
     DialogInsertInvoiceEntityBinding binding;
-    InsertInvoiceF.Listener listener;
     SharedPreferences sharedPreferences;
     InvoiceRepository invoiceRepository;
     Integer invoiceID;
@@ -41,7 +40,6 @@ public class InsertInvoiceF extends Fragment {
 
     public InsertInvoiceF() {
     }
-
 
     @Nullable
     @Override
@@ -55,39 +53,17 @@ public class InsertInvoiceF extends Fragment {
     }
 
 
-    private void initListeners() {
-        binding.btnAddInvoice.setOnClickListener((p) -> {
-            createAndSendEntity();
-        });
-        binding.imgClose.setOnClickListener((v) -> {
-            //TODO: remove
-        });
 
-        binding.etDateInvoice.setOnFocusChangeListener((v, hasFocus) -> {
-            if (hasFocus) {
-                DatePickerDialog picker;
-                // date picker dialog
-                picker = new DatePickerDialog(getActivity(),
-                        (view, year, monthOfYear, dayOfMonth) -> {
-                            String date = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
-                            binding.etDateInvoice.setText(date);
-                        }, year_, month, day);
-                picker.show();
-            }
-        });
-    }
 
     private void initElems() {
         invoiceRepository = new InvoiceRepository(getActivity().getApplication());
         sharedPreferences = this.getActivity().getSharedPreferences(getString(R.string.sharedPreferences), Activity.MODE_PRIVATE);
-        invoiceID = getArguments().getInt(EDITED_INVOICE);
-        //listener = ActivityUtils.getListener(this);
+        invoiceID = getArguments().getInt(SelectedInvoiceID);
 
         final Calendar calendar = Calendar.getInstance();
         day = calendar.get(Calendar.DAY_OF_MONTH);
         month = calendar.get(Calendar.MONTH);
         year_ = calendar.get(Calendar.YEAR);
-
 
         if (invoiceID == 0) {
             binding.etDateInvoice.setText(day + "/" + (month + 1) + "/" + year_);
@@ -109,6 +85,28 @@ public class InsertInvoiceF extends Fragment {
 
     }
 
+    private void initListeners() {
+        binding.btnAddInvoice.setOnClickListener((p) -> {
+            createAndSendEntity();
+        });
+        binding.imgClose.setOnClickListener((v) -> {
+            NavHostFragment.findNavController(this).popBackStack();
+        });
+
+        binding.etDateInvoice.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                DatePickerDialog picker;
+                // date picker dialog
+                picker = new DatePickerDialog(getActivity(),
+                        (view, year, monthOfYear, dayOfMonth) -> {
+                            String date = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
+                            binding.etDateInvoice.setText(date);
+                        }, year_, month, day);
+                picker.show();
+            }
+        });
+    }
+
 
     public void createAndSendEntity() {
         InvoiceEntity entity = new InvoiceEntity();
@@ -125,10 +123,4 @@ public class InsertInvoiceF extends Fragment {
         NavHostFragment.findNavController(this).popBackStack();
     }
 
-
-    public interface Listener {
-
-
-        void invoiceEntityWasEdited();
-    }
 }

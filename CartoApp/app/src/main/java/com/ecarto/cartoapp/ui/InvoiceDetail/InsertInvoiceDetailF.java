@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.ecarto.cartoapp.R;
@@ -19,35 +20,24 @@ import com.ecarto.cartoapp.database.Entities.InvoiceDetailEntity;
 import com.ecarto.cartoapp.database.Repositories.InvoiceRepository;
 import com.ecarto.cartoapp.databinding.DialogInsertInvoiceDetailBinding;
 import com.ecarto.cartoapp.utils.NAVIGATION;
+import com.google.android.material.snackbar.Snackbar;
 
 import io.reactivex.schedulers.Schedulers;
 
-public class InsertInvoiceDetailF extends DialogFragment {
-    private static final String EDIT_CURRENT = "SelectedInvoiceDetailID";
+public class InsertInvoiceDetailF extends Fragment {
     public static final String TAG = "INSERT_INVOICE_DETAIL_DIALOG_TAG";
-    private static final String INVOICE_ID = "SelectedInvoiceID";
+    private static final String SelectedInvoiceDetailID = "SelectedInvoiceDetailID";
+    public static final String SelectedInvoiceID = "SelectedInvoiceID";
 
     DialogInsertInvoiceDetailBinding binding;
     InsertInvoiceDetailF.Listener listener;
     SharedPreferences sharedPreferences;
     InvoiceRepository invoiceRepository;
-    InvoiceDetailEntity invoiceDetailEntity;
+
     Integer invoiceDetailID;
     Integer invoiceID;
 
-    public static final String CURRENT_INVOICE_ENTITY = "CURRENT_INVOICE_ENTITY";
-
     public InsertInvoiceDetailF() {
-    }
-
-
-    public static InsertInvoiceDetailF newInstance(String parent_tag, InvoiceDetailEntity invoiceDetailEntity) {
-        Bundle args = new Bundle();
-        args.putSerializable(EDIT_CURRENT, invoiceDetailEntity);
-        args.putString(NAVIGATION.TAG_PARENT, parent_tag);
-        InsertInvoiceDetailF fragment = new InsertInvoiceDetailF();
-        fragment.setArguments(args);
-        return fragment;
     }
 
     @Override
@@ -81,10 +71,11 @@ public class InsertInvoiceDetailF extends DialogFragment {
         //listener = ActivityUtils.<Listener>getListener(this);
 
         if (getArguments() != null) {
-            invoiceDetailID = getArguments().getInt(EDIT_CURRENT);
-            invoiceID = getArguments().getInt(INVOICE_ID);
+            invoiceDetailID = getArguments().getInt(SelectedInvoiceDetailID);
+            invoiceID = getArguments().getInt(SelectedInvoiceID);
+
             if (invoiceDetailID != 0) {
-                invoiceDetailEntity = invoiceRepository.findAllExtendedInvoiceDetailBy(invoiceDetailID, null)
+                InvoiceDetailEntity invoiceDetailEntity = invoiceRepository.findAllExtendedInvoiceDetailBy(invoiceDetailID, null)
                         .subscribeOn(Schedulers.io()).blockingGet()
                         .stream().findFirst().orElse(null);
 
@@ -94,28 +85,39 @@ public class InsertInvoiceDetailF extends DialogFragment {
                     binding.etQuantityInsertDetail.setText(String.valueOf(invoiceDetailEntity.getCostOfItem()));
                     binding.etProductInsertDetail.setText(invoiceDetailEntity.getConceptDescription());
                 } else {
-                    Toast.makeText(getContext(), "Error al cargar detalle de factura", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(binding.getRoot(), "Error al cargar detalle de factura", Snackbar.LENGTH_LONG).show();
                 }
             }
         }
     }
 
     public void initListeners() {
-
         //temp variable
         binding.btnAddInvoiceDetail.setOnClickListener((p) -> {
 
-            InvoiceDetailEntity invoiceDetailEntity = new InvoiceDetailEntity();
-            invoiceDetailEntity.setInvoiceID(invoiceID);
-            invoiceDetailEntity.setCostOfItem(Integer.valueOf(binding.etQuantityInsertDetail.getText().toString()));
-            invoiceDetailEntity.setConceptDescription(binding.etProductInsertDetail.getText().toString());
-            invoiceDetailEntity.setInvoiceDetailID(invoiceDetailID == 0 ? null : invoiceDetailID); //makes sure that a new detail entity is inserted or the detail entity is updated
-            invoiceRepository.insert(invoiceDetailEntity).subscribeOn(Schedulers.io()).blockingGet();
+            String description = binding.etProductInsertDetail.getText().toString();
+            String quantity = binding.etQuantityInsertDetail.getText().toString();
 
-            NavHostFragment.findNavController(this).popBackStack();
+            if (description.isEmpty() || quantity.isEmpty()) { //on error
+                Snackbar.make(binding.getRoot(), "Necesita completar los campos", Snackbar.LENGTH_LONG).show();
+            } else { // if correct
+                InvoiceDetailEntity invoiceDetailEntity = new InvoiceDetailEntity();
+                try {
+                    invoiceDetailEntity.setConceptDescription(description);
+                    invoiceDetailEntity.setInvoiceID(invoiceID);
+                    invoiceDetailEntity.setInvoiceDetailID(invoiceDetailID == 0 ? null : invoiceDetailID); //makes sure that a new detail entity is inserted or the detail entity is updated
+                    invoiceDetailEntity.setCostOfItem(Integer.valueOf(quantity));
+                    invoiceRepository.insert(invoiceDetailEntity).subscribeOn(Schedulers.io()).blockingGet();
+                    NavHostFragment.findNavController(this).popBackStack();
+                } catch (Exception e) {
+                    Snackbar.make(binding.getRoot(), "Error al cargar la cantidad, cheque que introduzca el numero correcto.", Snackbar.LENGTH_LONG).show();
+                }
+            }
         });
 
-
+        binding.imgClose.setOnClickListener((v) -> {
+            NavHostFragment.findNavController(this).popBackStack();
+        });
     }
 
     public interface Listener {

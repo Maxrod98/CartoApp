@@ -73,9 +73,8 @@ public class InvoiceDetailOptionsF extends Fragment {
         if (invoiceDetailEntity != null) {
             binding.didoEdit.setOnClickListener(v -> {
                 NavHostFragment.findNavController(this)
-                        .navigate(InvoiceDetailOptionsFDirections
-                                .actionInvoiceDetailOptionsDialogToInsertInvoiceDetailDialog
-                                        (invoiceDetailEntity.getInvoiceDetailID(), invoiceDetailEntity.getInvoiceID()));
+                        .navigate(InvoiceDetailOptionsFDirections.actionInvoiceDetailOptionsDialogToInsertInvoiceDetailDialog
+                                        (invoiceDetailEntity.getInvoiceDetailID(), invoiceDetailEntity.getInvoiceID()) );
 
             });
 
@@ -109,7 +108,6 @@ public class InvoiceDetailOptionsF extends Fragment {
     }
 
     public interface Listener {
-        void refreshInvoiceDetailList();
     }
 
 }

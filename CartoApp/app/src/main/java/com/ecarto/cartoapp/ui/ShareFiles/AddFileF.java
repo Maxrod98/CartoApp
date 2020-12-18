@@ -87,6 +87,7 @@ public class AddFileF extends Fragment implements  AddFileA.Listener{
         });
 
         binding.fafClose.setOnClickListener((v) -> {
+            //TODO: maybe do navhost too?
             FragmentManager manager = getActivity().getSupportFragmentManager();
             FragmentTransaction trans = manager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in, R.anim.slide_out)

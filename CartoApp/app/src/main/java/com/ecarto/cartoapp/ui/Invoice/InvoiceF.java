@@ -18,26 +18,21 @@ import com.ecarto.cartoapp.R;
 import com.ecarto.cartoapp.database.Entities.ExtendedInvoiceEntity;
 import com.ecarto.cartoapp.database.Repositories.InvoiceRepository;
 import com.ecarto.cartoapp.databinding.FragmentInvoiceBinding;
-import com.ecarto.cartoapp.ui.MainActivity;
-import com.ecarto.cartoapp.utils.NAVIGATION;
-import com.ecarto.cartoapp.utils.Selector;
 import com.ecarto.cartoapp.utils.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import io.reactivex.schedulers.Schedulers;
 
-public class InvoiceF extends Fragment
-        implements InvoiceA.Listener, InsertInvoiceF.Listener, InvoiceOptionsF.Listener {
+public class InvoiceF extends Fragment implements InvoiceA.Listener {
     public static final String TAG = "INVOICE_FRAGMENT_TAG";
-    static Integer CURRENT_SELECTION = Selector.NONE_SELECTED;
 
     FragmentInvoiceBinding binding;
     InvoiceRepository invoiceRepository;
-    InvoiceF.Listener listener;
     SharedPreferences sharedPreferences;
-    InvoiceA invoiceAdapter;
     List<ExtendedInvoiceEntity> invoiceEntities;
 
     public InvoiceF() {
@@ -46,6 +41,7 @@ public class InvoiceF extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentInvoiceBinding.inflate(inflater, container, false);
+
         return binding.getRoot();
     }
 
@@ -67,33 +63,24 @@ public class InvoiceF extends Fragment
     private void initElems() {
         invoiceRepository = new InvoiceRepository(getActivity().getApplication());
         sharedPreferences = getActivity().getSharedPreferences(getString(R.string.sharedPreferences), Activity.MODE_PRIVATE);
-        //listener = ActivityUtils.getListener(this);
-        MainActivity.navigation = NAVIGATION.INVOICE_LISTING;
-    }
-
-    private List<ExtendedInvoiceEntity> getAllInvoiceEntities(){
-        return invoiceRepository.findAllExtendedInvoiceBy(null).subscribeOn(Schedulers.io()).blockingGet();
     }
 
     private void getDatabaseData() {
         invoiceEntities = getAllInvoiceEntities();
         setRecyclerView(invoiceEntities);
+    }
 
+    private List<ExtendedInvoiceEntity> getAllInvoiceEntities() {
+        return invoiceRepository.findAllExtendedInvoiceBy(null).subscribeOn(Schedulers.io()).blockingGet();
     }
 
     private void setRecyclerView(List<ExtendedInvoiceEntity> adapterList) {
-        invoiceAdapter = new InvoiceA(adapterList, this);
-
         binding.txtTotal.setText(StringUtils.formatMoney(sumAllInvoices(adapterList)));
+        binding.txtNoInvoices.setVisibility(adapterList.isEmpty() ? View.VISIBLE : View.INVISIBLE);
 
-        if (adapterList.isEmpty()) {
-            binding.txtNoInvoices.setVisibility(View.VISIBLE);
-        } else {
-            binding.txtNoInvoices.setVisibility(View.INVISIBLE);
-        }
-
-        binding.invoiceListing.setAdapter(invoiceAdapter);
-        binding.invoiceListing.setHasFixedSize(true);
+        InvoiceA invoiceAdapter = new InvoiceA(adapterList, this);
+        binding.invoiceRecyclerView.setAdapter(invoiceAdapter);
+        binding.invoiceRecyclerView.setHasFixedSize(true);
     }
 
     private void initListeners() {
@@ -107,38 +94,40 @@ public class InvoiceF extends Fragment
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!binding.etSearchBar.getText().toString().isEmpty()) {
                     filterInvoices();
-                    CURRENT_SELECTION = Selector.NONE_SELECTED;
                 } else {
                     setRecyclerView(getAllInvoiceEntities());
                 }
             }
+
             @Override
             public void afterTextChanged(Editable s) {
             }
         });
     }
 
-    public Integer sumAllInvoices(List<ExtendedInvoiceEntity> extendedInvoiceEntities){
+    public Integer sumAllInvoices(List<ExtendedInvoiceEntity> extendedInvoiceEntities) {
         Integer sum = 0;
 
-        for (ExtendedInvoiceEntity item : extendedInvoiceEntities){
+        for (ExtendedInvoiceEntity item : extendedInvoiceEntities) {
             if (item.getTotalCost() == null) item.setTotalCost(0);
             sum += item.getTotalCost();
         }
         return sum;
     }
 
-    public void filterInvoices(){
-        String filterStr = binding.etSearchBar.getText().toString();
+    public void filterInvoices() {
+        List<String> filterStrArray = Arrays.asList(binding.etSearchBar.getText().toString().split(" "));
         List<ExtendedInvoiceEntity> list = getAllInvoiceEntities();
         List<ExtendedInvoiceEntity> filteredList = new ArrayList<>();
 
-        for (ExtendedInvoiceEntity item : list){
-            if (item.toString().toLowerCase().contains(filterStr.toLowerCase())){
+        for (ExtendedInvoiceEntity item : list) {
+            List<String> matches = filterStrArray.stream().filter((x) -> item.toString().contains(x)).collect(Collectors.toList());
+            if (matches.size() == filteredList.size()) {
                 filteredList.add(item);
             }
         }
@@ -147,29 +136,16 @@ public class InvoiceF extends Fragment
     }
 
     @Override
-    public Integer getCurrentSelection() {
-        return CURRENT_SELECTION;
+    public void onInvoiceSelectedClick(ExtendedInvoiceEntity extendedInvoiceEntity) {
+        NavHostFragment.findNavController(this)
+                .navigate(InvoiceFDirections.actionInvoiceFragmentToInvoiceDetailFragment(extendedInvoiceEntity.getInvoiceID()));
     }
 
     @Override
-    public void setCurrentSelection(Integer position) {
-        CURRENT_SELECTION = position;
+    public void onInvoiceLongClick(ExtendedInvoiceEntity extendedInvoiceEntity) {
+        NavHostFragment.findNavController(this)
+                .navigate(InvoiceFDirections.actionInvoiceFragmentToInvoiceOptionsDialog(extendedInvoiceEntity.getInvoiceID()));
+
     }
 
-
-    @Override
-    public void invoiceEntityWasEdited() {
-        getDatabaseData();
-    }
-
-    @Override
-    public void updateList() {
-        CURRENT_SELECTION = Selector.NONE_SELECTED;
-        getDatabaseData();
-    }
-
-
-    public interface Listener {
-        void goToInvoiceDetails();
-    }
 }

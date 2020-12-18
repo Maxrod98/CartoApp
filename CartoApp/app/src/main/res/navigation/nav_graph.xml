@@ -41,7 +41,11 @@
             app:destination="@id/insertInvoiceDetailDialog" />
         <action
             android:id="@+id/action_invoiceDetailFragment_to_invoiceDetailOptionsDialog"
-            app:destination="@id/invoiceDetailOptionsDialog" />
+            app:destination="@id/invoiceDetailOptionsDialog"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@android:anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/invoiceOptionsDialog"
@@ -54,6 +58,10 @@
         <action
             android:id="@+id/action_invoiceOptionsDialog_to_insertInvoiceDialog2"
             app:destination="@id/insertInvoiceDialog2"
+            app:enterAnim="@anim/nav_default_pop_enter_anim"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fragment_fade_enter"
+            app:popExitAnim="@anim/fragment_fade_exit"
             app:popUpTo="@id/invoiceFragment" />
     </fragment>
     <fragment
@@ -73,8 +81,7 @@
         <argument
             android:name="SelectedInvoiceDetailID"
             app:argType="integer" />
-        <argument
-            android:name="SelectedInvoiceID"
+        <argument android:name="SelectedInvoiceID"
             app:argType="integer" />
     </fragment>
     <fragment

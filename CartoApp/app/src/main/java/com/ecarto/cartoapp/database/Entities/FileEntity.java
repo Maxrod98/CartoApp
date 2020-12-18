@@ -33,9 +33,6 @@ public class FileEntity implements Serializable {
         OriginalName = originalName;
     }
 
-
-
-
     @NonNull
     public Integer getFileID() {
         return FileID;
@@ -44,7 +41,6 @@ public class FileEntity implements Serializable {
     public void setFileID(@NonNull Integer fileID) {
         this.FileID = fileID;
     }
-
 
     public String getPathToFile() {
         return PathToFile;
