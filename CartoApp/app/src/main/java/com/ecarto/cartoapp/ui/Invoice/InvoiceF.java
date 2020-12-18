@@ -18,6 +18,7 @@ import com.ecarto.cartoapp.R;
 import com.ecarto.cartoapp.database.Entities.ExtendedInvoiceEntity;
 import com.ecarto.cartoapp.database.Repositories.InvoiceRepository;
 import com.ecarto.cartoapp.databinding.FragmentInvoiceBinding;
+import com.ecarto.cartoapp.utils.Selector;
 import com.ecarto.cartoapp.utils.StringUtils;
 
 import java.util.ArrayList;
@@ -42,6 +43,10 @@ public class InvoiceF extends Fragment implements InvoiceA.Listener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentInvoiceBinding.inflate(inflater, container, false);
 
+        initElems();
+        getDatabaseData();
+        initListeners();
+
         return binding.getRoot();
     }
 
@@ -49,9 +54,7 @@ public class InvoiceF extends Fragment implements InvoiceA.Listener {
     public void onStart() {
         super.onStart();
 
-        initElems();
-        getDatabaseData();
-        initListeners();
+
     }
 
     @Override
@@ -126,8 +129,11 @@ public class InvoiceF extends Fragment implements InvoiceA.Listener {
         List<ExtendedInvoiceEntity> filteredList = new ArrayList<>();
 
         for (ExtendedInvoiceEntity item : list) {
-            List<String> matches = filterStrArray.stream().filter((x) -> item.toString().contains(x)).collect(Collectors.toList());
-            if (matches.size() == filteredList.size()) {
+            boolean flag = true;
+            for (String searchItem : filterStrArray){
+                if (!item.toString().contains(searchItem)) flag = false;
+            }
+            if (flag){
                 filteredList.add(item);
             }
         }

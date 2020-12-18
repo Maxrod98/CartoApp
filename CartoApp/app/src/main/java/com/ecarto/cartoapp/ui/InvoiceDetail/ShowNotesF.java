@@ -14,6 +14,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.ecarto.cartoapp.database.Entities.InvoiceDetailEntity;
 import com.ecarto.cartoapp.database.Repositories.InvoiceRepository;
 import com.ecarto.cartoapp.databinding.DialogShowNotesBinding;
+import com.google.android.material.snackbar.Snackbar;
 
 import io.reactivex.schedulers.Schedulers;
 
@@ -58,7 +59,15 @@ public class ShowNotesF extends Fragment {
 
     private void initListeners(){
         binding.imgCloseNotes.setOnClickListener((v)->{
+            if (notesDetailEntity.getNotes().compareTo(binding.etShowNotes.getText().toString())!= 0){
+                Snackbar.make(binding.getRoot(), "Las notas no fueron guardadas", Snackbar.LENGTH_LONG).show();
+            }
             NavHostFragment.findNavController(this).popBackStack();
+        });
+
+        binding.btnSaveNotes.setOnClickListener((v) -> {
+            Snackbar.make(binding.getRoot(), "Notas guardadas correctamente", Snackbar.LENGTH_LONG).show();
+            saveNotes();
         });
     }
 
@@ -74,6 +83,5 @@ public class ShowNotesF extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        saveNotes();
     }
 }

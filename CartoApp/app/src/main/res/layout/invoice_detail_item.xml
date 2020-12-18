@@ -39,7 +39,7 @@
         android:layout_height="wrap_content"
         android:elevation="3dp"
         android:text="Cemento"
-        app:layout_constraintEnd_toStartOf="@+id/imgFileAttached"
+        app:layout_constraintEnd_toStartOf="@+id/imgNotesAttached"
         app:layout_constraintStart_toStartOf="@+id/lblProduct"
         app:layout_constraintTop_toBottomOf="@+id/lblProduct" />
 
@@ -65,5 +65,13 @@
         app:layout_constraintTop_toTopOf="parent">
 
     </View>
+
+    <ImageView
+        android:id="@+id/imgNotesAttached"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        app:layout_constraintEnd_toStartOf="@+id/imgFileAttached"
+        app:layout_constraintTop_toTopOf="@+id/imgFileAttached"
+        app:srcCompat="@drawable/notes" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

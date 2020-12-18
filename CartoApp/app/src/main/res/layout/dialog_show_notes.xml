@@ -4,45 +4,80 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.InvoiceDetail.ShowNotesF"
-    android:background="@color/light_grey">
+    android:background="@color/light_grey"
+    tools:context=".ui.InvoiceDetail.ShowNotesF">
 
-    <EditText
-        android:id="@+id/etShowNotes"
-        android:layout_width="300dp"
-        android:layout_height="400dp"
-        android:layout_margin="@dimen/margin_vertical"
-        android:inputType="textPersonName|textMultiLine"
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imgCloseNotes"
-        android:background="@color/white">
-
-
-    </EditText>
-
-    <ImageView
-        android:layout_margin="@dimen/margin_horizontal"
-        android:id="@+id/imgCloseNotes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:tint="@color/teal_700"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+        android:background="@drawable/rounded_corner"
+        android:layout_margin="15dp">
 
-    <TextView
-        android:id="@+id/tvNotesTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/ListTextValue"
-        android:text="Notas"
-        app:layout_constraintBottom_toTopOf="@+id/etShowNotes"
-        app:layout_constraintEnd_toStartOf="@+id/imgCloseNotes"
-        app:layout_constraintHorizontal_bias="0.573"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imgCloseNotes"
-        app:layout_constraintVertical_bias="1.0" />
+
+        <EditText
+            android:id="@+id/etShowNotes"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="36dp"
+            android:background="@drawable/rounded_corner"
+            android:inputType="textPersonName|textMultiLine"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/separator"
+            android:layout_margin="15dp"
+            >
+
+        </EditText>
+
+        <ImageView
+            android:id="@+id/imgCloseNotes"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@android:drawable/ic_menu_close_clear_cancel"
+            app:tint="@color/teal_700" />
+
+        <TextView
+            android:id="@+id/tvNotesTitle"
+            style="@style/ListTextValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Notas"
+            app:layout_constraintBottom_toTopOf="@+id/separator"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/separator"
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:background="@color/teal_700"
+            app:layout_constraintBottom_toBottomOf="@+id/imgCloseNotes"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/btnSaveNotes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Guardar notas"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etShowNotes"
+            android:backgroundTint="@color/teal_700"
+            android:layout_marginHorizontal="15dp"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

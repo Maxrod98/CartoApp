@@ -26,7 +26,11 @@
             app:popExitAnim="@android:anim/slide_out_right" />
         <action
             android:id="@+id/action_invoiceFragment_to_insertInvoiceDialog2"
-            app:destination="@id/insertInvoiceDialog2" />
+            app:destination="@id/insertInvoiceDialog2"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/invoiceDetailFragment"
@@ -38,7 +42,11 @@
             app:argType="integer" />
         <action
             android:id="@+id/action_invoiceDetailFragment_to_insertInvoiceDetailDialog"
-            app:destination="@id/insertInvoiceDetailDialog" />
+            app:destination="@id/insertInvoiceDetailDialog"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
         <action
             android:id="@+id/action_invoiceDetailFragment_to_invoiceDetailOptionsDialog"
             app:destination="@id/invoiceDetailOptionsDialog"
@@ -92,11 +100,19 @@
         <action
             android:id="@+id/action_invoiceDetailOptionsDialog_to_showNotesDialog"
             app:destination="@id/showNotesDialog"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
             app:popUpTo="@id/invoiceDetailFragment"
             app:popUpToInclusive="false" />
         <action
             android:id="@+id/action_invoiceDetailOptionsDialog_to_insertInvoiceDetailDialog"
             app:destination="@id/insertInvoiceDetailDialog"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
             app:popUpTo="@id/invoiceDetailFragment" />
         <argument android:name="SelectedInvoiceDetailID"
             app:argType="integer" />

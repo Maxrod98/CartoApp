@@ -47,6 +47,7 @@ public class InvoiceDetailA extends RecyclerView.Adapter<InvoiceDetailA.InvoiceD
         holder.txtQuantity.setText(StringUtils.formatMoney(elements.get(position).getCostOfItem()));
         boolean hasFiles = elements.get(position).getNumFiles() > 0;
         holder.imgFileAttached.setAlpha(!hasFiles ? 0.3f : 1.0f);
+        holder.imgNotesAttached.setAlpha(elements.get(position).getNotes() == null || elements.get(position).getNotes().isEmpty() ? 0.3f : 1.0f);
 
         holder.invoiceDetailItem.setOnClickListener((v) -> {
             selector.onItemClickSelection(position);
@@ -68,6 +69,7 @@ public class InvoiceDetailA extends RecyclerView.Adapter<InvoiceDetailA.InvoiceD
         public ImageView imgFileAttached;
         public ConstraintLayout invoiceDetailItem;
         public View invoiceDetailItemSelector;
+        public ImageView imgNotesAttached;
 
         public InvoiceDetailViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -76,6 +78,7 @@ public class InvoiceDetailA extends RecyclerView.Adapter<InvoiceDetailA.InvoiceD
             imgFileAttached = itemView.findViewById(R.id.imgFileAttached);
             invoiceDetailItem = itemView.findViewById(R.id.invoice_detail_item);
             invoiceDetailItemSelector = itemView.findViewById(R.id.invoice_detail_item_selector);
+            imgNotesAttached = itemView.findViewById(R.id.imgNotesAttached);
         }
     }
 

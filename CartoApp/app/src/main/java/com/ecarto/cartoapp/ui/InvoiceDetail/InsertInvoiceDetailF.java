@@ -108,6 +108,9 @@ public class InsertInvoiceDetailF extends Fragment {
                     invoiceDetailEntity.setInvoiceDetailID(invoiceDetailID == 0 ? null : invoiceDetailID); //makes sure that a new detail entity is inserted or the detail entity is updated
                     invoiceDetailEntity.setCostOfItem(Integer.valueOf(quantity));
                     invoiceRepository.insert(invoiceDetailEntity).subscribeOn(Schedulers.io()).blockingGet();
+
+                    if (invoiceDetailID != 0) //adding snack bars to adding products may be tedious for the user
+                        Snackbar.make(binding.getRoot(),"Articulo editado correctamente.", Snackbar.LENGTH_SHORT).show();
                     NavHostFragment.findNavController(this).popBackStack();
                 } catch (Exception e) {
                     Snackbar.make(binding.getRoot(), "Error al cargar la cantidad, cheque que introduzca el numero correcto.", Snackbar.LENGTH_LONG).show();

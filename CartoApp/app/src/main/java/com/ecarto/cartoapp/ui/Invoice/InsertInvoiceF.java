@@ -19,6 +19,7 @@ import com.ecarto.cartoapp.database.Entities.InvoiceEntity;
 import com.ecarto.cartoapp.database.Repositories.InvoiceRepository;
 import com.ecarto.cartoapp.databinding.DialogInsertInvoiceEntityBinding;
 import com.ecarto.cartoapp.utils.StringUtils;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Calendar;
 
@@ -52,9 +53,6 @@ public class InsertInvoiceF extends Fragment {
         return binding.getRoot();
     }
 
-
-
-
     private void initElems() {
         invoiceRepository = new InvoiceRepository(getActivity().getApplication());
         sharedPreferences = this.getActivity().getSharedPreferences(getString(R.string.sharedPreferences), Activity.MODE_PRIVATE);
@@ -87,7 +85,12 @@ public class InsertInvoiceF extends Fragment {
 
     private void initListeners() {
         binding.btnAddInvoice.setOnClickListener((p) -> {
-            createAndSendEntity();
+            if (binding.etSeller.getText().toString().isEmpty() || binding.etDescription.getText().toString().isEmpty()){
+                Snackbar.make(binding.getRoot(), "No ha cargado todos los cambios", Snackbar.LENGTH_LONG).show();
+            } else {
+                createAndSendEntity();
+            }
+
         });
         binding.imgClose.setOnClickListener((v) -> {
             NavHostFragment.findNavController(this).popBackStack();
@@ -110,7 +113,6 @@ public class InsertInvoiceF extends Fragment {
 
     public void createAndSendEntity() {
         InvoiceEntity entity = new InvoiceEntity();
-
         if (invoiceID == 0) invoiceID = null;
 
         entity.setDate(StringUtils.formatDateFromString(binding.etDateInvoice.getText().toString()));
@@ -120,6 +122,7 @@ public class InsertInvoiceF extends Fragment {
         entity.setInvoiceID(invoiceID);
         invoiceRepository.insert(entity).subscribeOn(Schedulers.io()).blockingGet();
 
+        Snackbar.make(binding.getRoot(), invoiceID == null ? "Factura agregada correctamente." : "Factura editada correctamente.", Snackbar.LENGTH_SHORT).show();
         NavHostFragment.findNavController(this).popBackStack();
     }
 
