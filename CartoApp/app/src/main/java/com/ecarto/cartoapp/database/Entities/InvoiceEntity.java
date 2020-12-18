@@ -98,7 +98,7 @@ public class InvoiceEntity implements Serializable {
 
     @Override
     public String toString() {
-        return Seller + ' ' + Description + ' ' + StringUtils.formatDateFromLong(getDate()) + " " + StringUtils.formateDateToMonth(getDate());
+        return Seller + ' ' + Description + ' ' + StringUtils.formatDateFromLong(getDate()) + " " + StringUtils.formateDateToMonthAndWhetherIsToday(getDate());
     }
 
 

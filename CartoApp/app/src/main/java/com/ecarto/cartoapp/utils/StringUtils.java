@@ -48,10 +48,12 @@ public class StringUtils {
         return result_date;
     }
 
-    public static String formateDateToMonth(Long date){
+    public static String formateDateToMonthAndWhetherIsToday(Long date){
         Date dat = new Date(date);
         Calendar cal = Calendar.getInstance();
         cal.setTime(dat);
+
+        //TODO: add "hoy" tag
 
         Locale current = Locale.getDefault();
         return cal.getDisplayName(Calendar.MONTH, Calendar.LONG , current);

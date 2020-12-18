@@ -24,6 +24,15 @@ public class InvoiceDetailEntity implements Serializable {
     private Integer CostOfItem;
     private String ConceptDescription;
     private String Notes;
+    private Integer Status;
+
+    public Integer getStatus() {
+        return Status;
+    }
+
+    public void setStatus(Integer status) {
+        Status = status;
+    }
 
     public String getNotes() {
         return Notes;

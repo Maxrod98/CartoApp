@@ -15,6 +15,6 @@ public class ExtendedInvoiceEntity extends InvoiceEntity {
 
     @Override
     public String toString() {
-        return getSeller() + ' ' + getDescription() + ' ' + StringUtils.formatDateFromLong(getDate()) + " " + StringUtils.formateDateToMonth(getDate());
+        return getSeller() + ' ' + getDescription() + ' ' + StringUtils.formatDateFromLong(getDate()) + " " + StringUtils.formateDateToMonthAndWhetherIsToday(getDate());
     }
 }
