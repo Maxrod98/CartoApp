@@ -53,10 +53,38 @@ public class StringUtils {
         Calendar cal = Calendar.getInstance();
         cal.setTime(dat);
 
-        //TODO: add "hoy" tag
+        Calendar calToday = Calendar.getInstance();
+        String timeStampStr = "";
+        if ((cal.get(Calendar.DAY_OF_MONTH) == calToday.get(Calendar.DAY_OF_MONTH))  //if the same day
+                && (cal.get(Calendar.MONTH) == calToday.get(Calendar.MONTH))
+                && (cal.get(Calendar.YEAR) == calToday.get(Calendar.YEAR))){
+            timeStampStr += " hoy ";
+        }
+
+        if ((cal.get(Calendar.WEEK_OF_MONTH) == calToday.get(Calendar.WEEK_OF_MONTH))  //if the same day
+                && (cal.get(Calendar.MONTH) == calToday.get(Calendar.MONTH))
+                && (cal.get(Calendar.YEAR) == calToday.get(Calendar.YEAR))){
+            timeStampStr += " semana ";
+        }
+
 
         Locale current = Locale.getDefault();
-        return cal.getDisplayName(Calendar.MONTH, Calendar.LONG , current);
+        return cal.getDisplayName(Calendar.MONTH, Calendar.LONG , current) + timeStampStr;
+    }
+
+    public static Long getUniqueID(){
+        Calendar c = Calendar.getInstance();
+        c.setTime(Calendar.getInstance().getTime());
+        return c.getTimeInMillis();
+    }
+
+    public static String getTodaysDateAsString(){
+        final Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        int month = calendar.get(Calendar.MONTH);
+        int year_ = calendar.get(Calendar.YEAR);
+
+        return day + "/" + (month + 1) + "/" + year_;
     }
 
 }

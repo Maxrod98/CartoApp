@@ -4,6 +4,8 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
+import com.ecarto.cartoapp.utils.StringUtils;
+
 import java.io.Serializable;
 
 import io.reactivex.annotations.NonNull;
@@ -19,19 +21,23 @@ import static androidx.room.ForeignKey.CASCADE;
 public class FileEntity implements Serializable {
     @PrimaryKey
     @NonNull
-    private Integer FileID;
-    private Integer InvoiceDetailID; //foreign key
+    private Long FileID;
+    private Long InvoiceDetailID; //foreign key
     private String PathToFile;
     private String TypeOfFile;
     private String OriginalName;
-    private Integer WebID;
+    private Integer Status;
 
-    public Integer getWebID() {
-        return WebID;
+    public FileEntity(){
+        setFileID(StringUtils.getUniqueID());
     }
 
-    public void setWebID(Integer webID) {
-        WebID = webID;
+    public Integer getStatus() {
+        return Status;
+    }
+
+    public void setStatus(Integer status) {
+        Status = status;
     }
 
     public String getOriginalName() {
@@ -43,11 +49,11 @@ public class FileEntity implements Serializable {
     }
 
     @NonNull
-    public Integer getFileID() {
+    public Long getFileID() {
         return FileID;
     }
 
-    public void setFileID(@NonNull Integer fileID) {
+    public void setFileID(@NonNull Long fileID) {
         this.FileID = fileID;
     }
 
@@ -67,11 +73,11 @@ public class FileEntity implements Serializable {
         TypeOfFile = typeOfFile;
     }
 
-    public Integer getInvoiceDetailID() {
+    public Long getInvoiceDetailID() {
         return InvoiceDetailID;
     }
 
-    public void setInvoiceDetailID(Integer invoiceDetailID) {
+    public void setInvoiceDetailID(Long invoiceDetailID) {
         InvoiceDetailID = invoiceDetailID;
     }
 }

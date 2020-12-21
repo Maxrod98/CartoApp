@@ -28,12 +28,20 @@ public class FileRepository {
         return fileDAO.insert(fileEntity);
     }
 
+    public Single<Integer> updateFileEntity(FileEntity fileEntity){
+        return fileDAO.updateFileEntity(fileEntity);
+    }
+
     public Single<FileEntity> findFileEntityByFileID(Integer fileID){
         return fileDAO.findFileEntityByFileID(fileID);
     }
 
     public Single<List<FileEntity>> findAllFreedFileEntitiesBy(){
         return fileDAO.findAllFreedFileEntitiesBy();
+    }
+
+    public Single<List<FileEntity>> findAllFileEntitiesByParams(Long fileID, Long invoiceDetailID, String pathToFile, String typeOfFile, String originalName, Integer status){
+        return fileDAO.findAllFileEntitiesByParams(fileID, invoiceDetailID, pathToFile, typeOfFile, originalName, status);
     }
 
     public Single<FileEntity> findLastFileEntity(){

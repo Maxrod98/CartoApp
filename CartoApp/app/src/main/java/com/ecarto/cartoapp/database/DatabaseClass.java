@@ -11,9 +11,11 @@ import com.ecarto.cartoapp.R;
 import com.ecarto.cartoapp.database.DAOs.FileDAO;
 import com.ecarto.cartoapp.database.DAOs.InvoiceDAO;
 import com.ecarto.cartoapp.database.DAOs.InvoiceDetailDAO;
+import com.ecarto.cartoapp.database.DAOs.ProjectDAO;
 import com.ecarto.cartoapp.database.Entities.FileEntity;
 import com.ecarto.cartoapp.database.Entities.InvoiceDetailEntity;
 import com.ecarto.cartoapp.database.Entities.InvoiceEntity;
+import com.ecarto.cartoapp.database.Entities.ProjectEntity;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -21,7 +23,8 @@ import java.util.concurrent.Executors;
 @Database(entities = {
         InvoiceEntity.class,
         InvoiceDetailEntity.class,
-        FileEntity.class
+        FileEntity.class,
+        ProjectEntity.class
 
 }, version = 1, exportSchema = false)
 
@@ -30,6 +33,7 @@ public abstract class DatabaseClass extends RoomDatabase {
     public abstract InvoiceDAO invoiceDAO();
     public abstract InvoiceDetailDAO invoiceDetailDAO();
     public abstract FileDAO fileDAO();
+    public abstract ProjectDAO projectDAO();
 
     private static volatile DatabaseClass INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;

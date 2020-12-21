@@ -1,4 +1,4 @@
-package com.ecarto.cartoapp.ui.ShareFiles;
+package com.ecarto.cartoapp.ui.Files;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,12 +10,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.ecarto.cartoapp.R;
+import com.ecarto.cartoapp.ViewModels.FilesTransferViewModel;
 import com.ecarto.cartoapp.database.Entities.FileEntity;
 import com.ecarto.cartoapp.database.Repositories.FileRepository;
 import com.ecarto.cartoapp.databinding.FragmentAddFilesBinding;
-import com.ecarto.cartoapp.utils.ActivityUtils;
 import com.ecarto.cartoapp.utils.NAVIGATION;
 
 import java.util.List;
@@ -27,8 +28,9 @@ public class AddFileF extends Fragment implements  AddFileA.Listener{
 
     FragmentAddFilesBinding binding;
     FileRepository fileRepository;
-    AddFileF.Listener listener;
     List<FileEntity> fileEntityList;
+
+    FilesTransferViewModel filesSelectedViewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -62,9 +64,16 @@ public class AddFileF extends Fragment implements  AddFileA.Listener{
         initListeners();
     }
 
+    @Override
+    public void onDestroy() {
+        fileEntityList = fileRepository.findAllFreedFileEntitiesBy().subscribeOn(Schedulers.io()).blockingGet();
+        fileRepository.deleteFiles(fileEntityList);
+        super.onDestroy();
+    }
+
     private void initElems() {
-        listener = ActivityUtils.getListener(this);
         fileRepository = new FileRepository(getActivity().getApplicationContext());
+        filesSelectedViewModel = new ViewModelProvider(requireActivity()).get( FilesTransferViewModel.class);
     }
 
     private void getDatabaseData() {
@@ -78,26 +87,28 @@ public class AddFileF extends Fragment implements  AddFileA.Listener{
     }
 
     private void initListeners() {
-        binding.fafAddFileToInvoiceDetail.setOnClickListener((v)-> {
-            if (fileEntityList != null){
-                if (!fileEntityList.isEmpty()){
-                    listener.addFilesToInvoiceDetail(fileEntityList);
-                }
-            }
-        });
-
         binding.fafClose.setOnClickListener((v) -> {
             //TODO: maybe do navhost too?
+                FragmentManager manager = getActivity().getSupportFragmentManager();
+                FragmentTransaction trans = manager.beginTransaction()
+                        .setCustomAnimations(R.anim.slide_in, R.anim.slide_out)
+                        .remove(this);
+                trans.commit();
+
+        });
+
+        binding.fafAddFileToInvoiceDetail.setOnClickListener((v -> {
+            filesSelectedViewModel.setFilesSelected(fileEntityList);
             FragmentManager manager = getActivity().getSupportFragmentManager();
             FragmentTransaction trans = manager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in, R.anim.slide_out)
                     .remove(this);
             trans.commit();
-        });
+        }));
     }
 
     @Override
-    public void updateSelectedFiles(List<FileEntity> fileEntities) {
+    public void onCheckedBoxSelected(List<FileEntity> fileEntities) {
         fileEntityList = fileEntities;
     }
 

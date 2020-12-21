@@ -11,19 +11,21 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.ecarto.cartoapp.R;
+import com.ecarto.cartoapp.ViewModels.FilesTransferViewModel;
 import com.ecarto.cartoapp.database.Entities.ExtendedInvoiceDetailEntity;
+import com.ecarto.cartoapp.database.Entities.FileEntity;
 import com.ecarto.cartoapp.database.Entities.InvoiceDetailEntity;
+import com.ecarto.cartoapp.database.Repositories.FileRepository;
 import com.ecarto.cartoapp.database.Repositories.InvoiceRepository;
 import com.ecarto.cartoapp.databinding.InvoiceDetailFragmentBinding;
-import com.ecarto.cartoapp.ui.MainActivity;
-import com.ecarto.cartoapp.utils.ActivityUtils;
-import com.ecarto.cartoapp.utils.NAVIGATION;
 import com.ecarto.cartoapp.utils.Selector;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
@@ -37,7 +39,12 @@ public class InvoiceDetailF extends Fragment implements InvoiceDetailA.Listener 
     InvoiceDetailFragmentBinding binding;
     private InvoiceRepository invoiceRepository;
     SharedPreferences sharedPreferences;
-    Integer invoiceEntityID;
+    FilesTransferViewModel filesSelectedViewModel;
+    FileRepository fileRepository;
+
+    boolean invoiceExists;
+    Long invoiceEntityID;
+    List<ExtendedInvoiceDetailEntity> invoiceDetailEntityList;
 
     public InvoiceDetailF() {
     }
@@ -59,15 +66,18 @@ public class InvoiceDetailF extends Fragment implements InvoiceDetailA.Listener 
     }
 
     private void initElems() {
-        sharedPreferences =  getActivity().getSharedPreferences(getString(R.string.sharedPreferences), Activity.MODE_PRIVATE);
+        sharedPreferences = getActivity().getSharedPreferences(getString(R.string.sharedPreferences), Activity.MODE_PRIVATE);
         invoiceRepository = new InvoiceRepository(getActivity().getApplication());
+        fileRepository = new FileRepository(getActivity().getApplication());
     }
 
-    private void getDatabaseData(){
-        invoiceEntityID = getArguments().getInt(SELECTED_INVOICE_ID);
+    private void getDatabaseData() {
+        invoiceEntityID = getArguments().getLong(SELECTED_INVOICE_ID);
 
-        if (invoiceEntityID != 0){
-            List<ExtendedInvoiceDetailEntity> invoiceDetailEntityList = invoiceRepository
+        invoiceExists = invoiceEntityID != 0;
+
+        if (invoiceExists) {
+            invoiceDetailEntityList = invoiceRepository
                     .findAllExtendedInvoiceDetailBy(null, invoiceEntityID)
                     .subscribeOn(Schedulers.io()).blockingGet();
 
@@ -80,7 +90,7 @@ public class InvoiceDetailF extends Fragment implements InvoiceDetailA.Listener 
     private void setRecyclerView(List<ExtendedInvoiceDetailEntity> adapterList) {
         InvoiceDetailA invoiceAdapter = new InvoiceDetailA(adapterList, this);
 
-        if (adapterList.isEmpty()){
+        if (adapterList.isEmpty()) {
             binding.txtNoInvoicesDetail.setVisibility(View.VISIBLE);
         } else {
             binding.txtNoInvoicesDetail.setVisibility(View.INVISIBLE);
@@ -96,6 +106,27 @@ public class InvoiceDetailF extends Fragment implements InvoiceDetailA.Listener 
             NavDirections action = InvoiceDetailFDirections.actionInvoiceDetailFragmentToInsertInvoiceDetailDialog(0, invoiceEntityID);
             navCo.navigate(action);
         });
+
+        filesSelectedViewModel = new ViewModelProvider(requireActivity()).get(FilesTransferViewModel.class);
+        filesSelectedViewModel.getFilesSelected().observe(getViewLifecycleOwner(), fileEntities -> {
+            if (fileEntities == null) return;
+
+            Integer selectedPos = getArguments().getInt(Selector.SELECTED_POSITION, Selector.NONE_SELECTED);
+            if (fileEntities.isEmpty()) {
+                Snackbar.make(binding.getRoot(), "No ha seleccionado un archivo", Snackbar.LENGTH_LONG).show();
+            } else if (selectedPos == Selector.NONE_SELECTED || selectedPos >= invoiceDetailEntityList.size()) {
+                Snackbar.make(binding.getRoot(), "Seleccione un detalle de factura primero", Snackbar.LENGTH_LONG).show();
+            } else { //add it to the files
+                for (FileEntity file : fileEntities) {
+                    file.setInvoiceDetailID(invoiceDetailEntityList.get(selectedPos).getInvoiceDetailID());
+                    fileRepository.insertFileEntity(file).subscribeOn(Schedulers.io()).blockingGet();
+                }
+                getDatabaseData();
+            }
+
+            filesSelectedViewModel.setFilesSelected(null);
+        });
+
     }
 
     @Override

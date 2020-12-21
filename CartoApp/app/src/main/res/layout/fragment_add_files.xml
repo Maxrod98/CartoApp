@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".ui.ShareFiles.AddFileF">
+    tools:context=".ui.Files.AddFileF">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/addFileRecyclerView"

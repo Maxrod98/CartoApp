@@ -36,4 +36,5 @@
     <string name="menu_slideshow">Slideshow</string>
     <string name="isLoggedIn">isLoggedIn</string>
     <string name="lastDayLogin">lastDayLogin</string>
+    <string name="selectedProjectID">SelectedProjectID</string>
 </resources>

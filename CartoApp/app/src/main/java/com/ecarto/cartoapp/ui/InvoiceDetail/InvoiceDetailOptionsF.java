@@ -22,6 +22,7 @@ import com.ecarto.cartoapp.database.Repositories.InvoiceRepository;
 import com.ecarto.cartoapp.databinding.DialogInvoiceDetailOptionsBinding;
 import com.ecarto.cartoapp.utils.ActivityUtils;
 import com.ecarto.cartoapp.utils.NAVIGATION;
+import com.ecarto.cartoapp.utils.StringUtils;
 
 import io.reactivex.schedulers.Schedulers;
 
@@ -34,7 +35,8 @@ public class InvoiceDetailOptionsF extends Fragment {
     InvoiceRepository invoiceRepository;
     SharedPreferences sharedPreferences;
     Listener listener = null;
-    Integer invoiceDetailID;
+
+    Long invoiceDetailID;
 
     public InvoiceDetailOptionsF() {
     }
@@ -61,7 +63,7 @@ public class InvoiceDetailOptionsF extends Fragment {
 
     public void getDatabaseData() {
         if (getArguments() != null) {
-            invoiceDetailID = getArguments().getInt(SELECTED_INVOICE_DETAIL);
+            invoiceDetailID = getArguments().getLong(SELECTED_INVOICE_DETAIL);
 
             invoiceDetailEntity = invoiceRepository.findAllInvoiceDetailBy(invoiceDetailID, null)
                     .subscribeOn(Schedulers.io()).blockingGet()
@@ -81,6 +83,10 @@ public class InvoiceDetailOptionsF extends Fragment {
             binding.didoNotes.setOnClickListener(v -> {
                 NavHostFragment.findNavController(this)
                         .navigate(InvoiceDetailOptionsFDirections.actionInvoiceDetailOptionsDialogToShowNotesDialog(invoiceDetailEntity.getInvoiceDetailID()));
+            });
+
+            binding.didoFiles.setOnClickListener((v) -> {
+                NavHostFragment.findNavController(this).navigate(InvoiceDetailOptionsFDirections.actionInvoiceDetailOptionsDialogToFilesF(invoiceDetailID));
             });
 
             binding.didoDelete.setOnClickListener(v -> {

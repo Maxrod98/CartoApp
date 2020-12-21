@@ -1,4 +1,4 @@
-package com.ecarto.cartoapp.ui.ShareFiles;
+package com.ecarto.cartoapp.ui.Files;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,9 +43,13 @@ public class AddFileA extends RecyclerView.Adapter<AddFileA.AddFileViewHolder> {
     public void onBindViewHolder(@NonNull AddFileA.AddFileViewHolder holder, int position) {
         holder.fileName.setText(elements.get(position).getOriginalName());
 
-        holder.checkBox.setOnCheckedChangeListener((v, v2) -> {
-            fileEntitySet.add(elements.get(position)); // to avoid repeats
-            listener.updateSelectedFiles(new ArrayList<>(fileEntitySet));
+        holder.checkBox.setOnCheckedChangeListener((v, isChecked) -> {
+            if (isChecked){
+                fileEntitySet.add(elements.get(position));
+            } else {
+                fileEntitySet.remove(elements.get(position));
+            }
+            listener.onCheckedBoxSelected(new ArrayList<>(fileEntitySet));
         });
     }
 
@@ -66,6 +70,6 @@ public class AddFileA extends RecyclerView.Adapter<AddFileA.AddFileViewHolder> {
     }
 
     public interface Listener {
-        void updateSelectedFiles(List<FileEntity> fileEntities);
+        void onCheckedBoxSelected(List<FileEntity> fileEntities);
     }
 }

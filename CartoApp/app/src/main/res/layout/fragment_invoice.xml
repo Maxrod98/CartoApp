@@ -24,7 +24,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/invoiceHeader"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
@@ -33,27 +34,25 @@
             android:id="@+id/lblDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
             android:text="Total"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintBottom_toBottomOf="@+id/txtTotal"
+            app:layout_constraintStart_toStartOf="@+id/lblProject"
+            app:layout_constraintTop_toTopOf="@+id/txtTotal" />
 
         <TextView
             android:id="@+id/lblSearch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginBottom="8dp"
             android:text="Busqueda:"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/etSearchBar"
+            app:layout_constraintStart_toStartOf="@+id/lblProject"
             app:layout_constraintTop_toTopOf="@+id/etSearchBar" />
 
         <EditText
             android:id="@+id/etSearchBar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="15dp"
             android:ems="10"
             android:inputType="textPersonName"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -64,13 +63,32 @@
             android:id="@+id/txtTotal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
             android:text="$100"
             android:textColor="@color/teal_700"
             android:textSize="30sp"
+            app:layout_constraintBottom_toTopOf="@+id/etSearchBar"
+            app:layout_constraintEnd_toEndOf="@+id/etSearchBar"
+            app:layout_constraintStart_toStartOf="@+id/etSearchBar" />
+
+        <Spinner
+            android:id="@+id/spProject"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="15dp"
+            app:layout_constraintBottom_toTopOf="@+id/txtTotal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/lblDate"
-            app:layout_constraintTop_toTopOf="@+id/lblDate" />
+            app:layout_constraintStart_toEndOf="@+id/lblProject" />
+
+        <TextView
+            android:id="@+id/lblProject"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="Proyecto: "
+            app:layout_constraintBottom_toTopOf="@+id/txtTotal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/spProject"
+            app:layout_constraintVertical_bias="0.2" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

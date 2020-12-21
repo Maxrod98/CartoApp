@@ -12,8 +12,8 @@ import java.io.Serializable;
 public class InvoiceEntity implements Serializable {
     @PrimaryKey
     @NonNull
-    private Integer InvoiceID;
-    private Integer ProjectID; //foreign key
+    private Long InvoiceID;
+    private Long ProjectID; //foreign key
     private String UserID; //foreign
     private String Seller;
     private long Date;
@@ -21,14 +21,18 @@ public class InvoiceEntity implements Serializable {
     private String Longitude;
     private String Description;
     private Integer Status;
-    private Integer WebID;
+    private short Version;
 
-    public Integer getWebID() {
-        return WebID;
+    public InvoiceEntity(){
+        setInvoiceID(StringUtils.getUniqueID());
     }
 
-    public void setWebID(Integer webID) {
-        WebID = webID;
+    public short getVersion() {
+        return Version;
+    }
+
+    public void setVersion(short version) {
+        Version = version;
     }
 
     public Integer getStatus() {
@@ -50,11 +54,11 @@ public class InvoiceEntity implements Serializable {
     private Integer InvoiceStatus;
 
     @NonNull
-    public Integer getInvoiceID() {
+    public Long getInvoiceID() {
         return InvoiceID;
     }
 
-    public void setInvoiceID(@NonNull Integer invoiceID) {
+    public void setInvoiceID(@NonNull Long invoiceID) {
         this.InvoiceID = invoiceID;
     }
 
@@ -90,11 +94,11 @@ public class InvoiceEntity implements Serializable {
         this.Date = date;
     }
 
-    public Integer getProjectID() {
+    public Long getProjectID() {
         return ProjectID;
     }
 
-    public void setProjectID(Integer projectID) {
+    public void setProjectID(Long projectID) {
         ProjectID = projectID;
     }
 
@@ -118,6 +122,4 @@ public class InvoiceEntity implements Serializable {
     public String toString() {
         return Seller + ' ' + Description + ' ' + StringUtils.formatDateFromLong(getDate()) + " " + StringUtils.formateDateToMonthAndWhetherIsToday(getDate());
     }
-
-
 }

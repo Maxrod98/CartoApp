@@ -25,7 +25,7 @@ public class ShowNotesF extends Fragment {
     DialogShowNotesBinding binding;
     InvoiceRepository invoiceRepository;
     InvoiceDetailEntity notesDetailEntity;
-    Integer invoiceDetailID;
+    Long invoiceDetailID;
     //TODO: agregar boton de guardado
 
     @Nullable
@@ -46,9 +46,8 @@ public class ShowNotesF extends Fragment {
         invoiceRepository = new InvoiceRepository(getActivity().getApplication());
 
         if (getArguments() != null){
-            invoiceDetailID = getArguments().getInt(SelectedInvoiceDetailID);
+            invoiceDetailID = getArguments().getLong(SelectedInvoiceDetailID);
             notesDetailEntity = getNotesDetailEntity();
-
             binding.etShowNotes.setText(notesDetailEntity.getNotes());
         } else {
             Toast.makeText(getContext(), "Hubo un error al guardar las notas", Toast.LENGTH_SHORT).show();
@@ -82,7 +81,7 @@ public class ShowNotesF extends Fragment {
         if (notesDetailEntity != null) {
             notesDetailEntity = getNotesDetailEntity(); //update like this to avoid incidents with upload queue, which may be asynchronous
             notesDetailEntity.setNotes(binding.etShowNotes.getText().toString());
-            invoiceRepository.insert(notesDetailEntity).subscribeOn(Schedulers.io()).blockingGet();
+            invoiceRepository.updateInvoiceDetailEntity(notesDetailEntity).subscribeOn(Schedulers.io()).blockingGet(); //TODO: fileEntities being deleted when note is edited
         } else {
             Toast.makeText(getContext(), "Hubo un error al guardar las notas", Toast.LENGTH_SHORT).show();
         }

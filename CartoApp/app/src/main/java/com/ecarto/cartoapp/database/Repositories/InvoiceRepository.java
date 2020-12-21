@@ -25,11 +25,11 @@ public class InvoiceRepository {
         invoiceDetailDAO = db.invoiceDetailDAO();
     }
 
-    public Single<Long> insert(InvoiceEntity invoiceEntity) {
+    public Single<Long> insertInvoiceDetailEntity(InvoiceEntity invoiceEntity) {
         return invoiceDAO.insert(invoiceEntity);
     }
 
-    public Single<List<ExtendedInvoiceEntity>> findAllExtendedInvoiceByParams(Integer invoiceID, Integer projectID, Integer userID, String seller, String description, Integer status, Boolean deleted) {
+    public Single<List<ExtendedInvoiceEntity>> findAllExtendedInvoiceByParams(Long invoiceID, Long projectID, String userID, String seller, String description, Integer status, Boolean deleted) {
         return invoiceDAO.findAllExtendedInvoiceBy(invoiceID, projectID, userID, seller, description, status, deleted);
     }
 
@@ -43,15 +43,23 @@ public class InvoiceRepository {
 
     //InvoiceDetailEntity
 
-    public Single<Long> insert(InvoiceDetailEntity invoiceDetailEntity) {
+    public Single<Long> insertInvoiceDetailEntity(InvoiceDetailEntity invoiceDetailEntity) {
         return invoiceDetailDAO.insert(invoiceDetailEntity);
     }
 
-    public Single<List<InvoiceDetailEntity>> findAllInvoiceDetailBy(Integer invoiceDetailID, Integer invoiceID) {
+    public Single<Integer> updateInvoiceDetailEntity(InvoiceDetailEntity invoiceDetailEntity){
+        return invoiceDetailDAO.update(invoiceDetailEntity);
+    }
+
+    public Single<Integer> updateInvoiceEntity(InvoiceEntity invoiceEntity){
+        return invoiceDetailDAO.updateInvoiceEntity(invoiceEntity);
+    }
+
+    public Single<List<InvoiceDetailEntity>> findAllInvoiceDetailBy(Long invoiceDetailID, Long invoiceID) {
         return invoiceDetailDAO.findAllInvoiceDetailBy(invoiceDetailID, invoiceID);
     }
 
-    public Single<List<ExtendedInvoiceDetailEntity>> findAllExtendedInvoiceDetailBy(Integer invoiceDetailID, Integer invoiceID) {
+    public Single<List<ExtendedInvoiceDetailEntity>> findAllExtendedInvoiceDetailBy(Long invoiceDetailID, Long invoiceID) {
         return invoiceDetailDAO.findAllExtendedInvoiceDetailBy(invoiceDetailID, invoiceID);
     }
     //YOU ALWAYS FORGET THAT THIS IS A SINGLE

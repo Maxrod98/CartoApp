@@ -1,28 +1,38 @@
 package com.ecarto.cartoapp.ui.Invoice;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.ContentProvider;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.ecarto.cartoapp.R;
 import com.ecarto.cartoapp.database.Entities.ExtendedInvoiceEntity;
+import com.ecarto.cartoapp.database.Entities.ProjectEntity;
 import com.ecarto.cartoapp.database.Repositories.InvoiceRepository;
+import com.ecarto.cartoapp.database.Repositories.ProjectRepository;
 import com.ecarto.cartoapp.databinding.FragmentInvoiceBinding;
 import com.ecarto.cartoapp.utils.StringUtils;
+import com.google.android.material.snackbar.Snackbar;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import io.reactivex.schedulers.Schedulers;
 
@@ -33,7 +43,7 @@ public class InvoiceF extends Fragment implements InvoiceA.Listener {
     InvoiceRepository invoiceRepository;
     SharedPreferences sharedPreferences;
     List<ExtendedInvoiceEntity> invoiceEntities;
-    Integer currentProjectID = 1;
+    ProjectRepository projectRepository;
 
     public InvoiceF() {
     }
@@ -41,12 +51,52 @@ public class InvoiceF extends Fragment implements InvoiceA.Listener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentInvoiceBinding.inflate(inflater, container, false);
+        projectRepository = new ProjectRepository(getActivity().getApplication());
 
         initElems();
+        setProjectsSpinner();
         getDatabaseData();
         initListeners();
 
         return binding.getRoot();
+    }
+
+
+
+    private void setProjectsSpinner() {
+        List<ProjectEntity> projects = projectRepository
+                .findAllProjectByParams(null, null, null)
+                .subscribeOn(Schedulers.io()).blockingGet();
+
+        List<String> projectNames = projects
+                .stream().map((projectEntity -> projectEntity.getName()))
+                .collect(Collectors.toList());
+
+        int selectedProjectIndex = projects.stream()
+                .map(project -> project.getProjectID())
+                .collect(Collectors.toList())
+                .indexOf(sharedPreferences.getLong(getString(R.string.selectedProjectID), 0));
+
+        projectNames.add("--Crear nuevo projecto--");
+        ArrayAdapter<String> adapter = new ArrayAdapter(getActivity(), R.layout.support_simple_spinner_dropdown_item, projectNames);
+        binding.spProject.setAdapter(adapter);
+        binding.spProject.setSelection(selectedProjectIndex);
+        binding.spProject.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == projectNames.size() - 1) { //add project
+                    NavHostFragment.findNavController(InvoiceF.this).navigate(InvoiceFDirections.actionInvoiceFragmentToAddProjectF());
+                    setProjectsSpinner();
+                } else { //select existing project
+                    sharedPreferences.edit().putLong(getString(R.string.selectedProjectID), projects.get(position).getProjectID()).commit();
+                    getDatabaseData();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
     }
 
     @Override
@@ -58,6 +108,7 @@ public class InvoiceF extends Fragment implements InvoiceA.Listener {
     private void initElems() {
         invoiceRepository = new InvoiceRepository(getActivity().getApplication());
         sharedPreferences = getActivity().getSharedPreferences(getString(R.string.sharedPreferences), Activity.MODE_PRIVATE);
+
     }
 
     private void getDatabaseData() {
@@ -66,7 +117,10 @@ public class InvoiceF extends Fragment implements InvoiceA.Listener {
     }
 
     private List<ExtendedInvoiceEntity> getAllInvoiceEntities() {
-        return invoiceRepository.findAllExtendedInvoiceByParams(null, currentProjectID, null, null, null, null, null).subscribeOn(Schedulers.io()).blockingGet();
+        return invoiceRepository
+                .findAllExtendedInvoiceByParams(null, sharedPreferences.getLong(getString(R.string.selectedProjectID), 0),
+                        null, null, null, null, null)
+                .subscribeOn(Schedulers.io()).blockingGet();
     }
 
     private void setRecyclerView(List<ExtendedInvoiceEntity> adapterList) {
@@ -80,9 +134,12 @@ public class InvoiceF extends Fragment implements InvoiceA.Listener {
 
     private void initListeners() {
         binding.tbAddInvoice.setOnClickListener((v) -> {
-            NavController navCo = NavHostFragment.findNavController(this);
-            NavDirections action = InvoiceFDirections.actionInvoiceFragmentToInsertInvoiceDialog2(0);
-            navCo.navigate(action);
+            if (sharedPreferences.getLong(getString(R.string.selectedProjectID), -1) == -1) {
+                Snackbar.make(binding.getRoot(), "Debe de crear un proyecto primero", Snackbar.LENGTH_SHORT).show();
+            } else {
+                NavHostFragment.findNavController(this)
+                        .navigate(InvoiceFDirections.actionInvoiceFragmentToInsertInvoiceDialog2(0));
+            }
         });
 
         binding.etSearchBar.addTextChangedListener(new TextWatcher() {
@@ -122,14 +179,13 @@ public class InvoiceF extends Fragment implements InvoiceA.Listener {
 
         for (ExtendedInvoiceEntity item : list) {
             boolean flag = true;
-            for (String searchItem : filterStrArray){
+            for (String searchItem : filterStrArray) {
                 if (!item.toString().toLowerCase().contains(searchItem.toLowerCase())) flag = false;
             }
-            if (flag){
+            if (flag) {
                 filteredList.add(item);
             }
         }
-
         setRecyclerView(filteredList);
     }
 

@@ -10,8 +10,9 @@ import com.ecarto.cartoapp.database.Entities.FileEntity;
 import com.ecarto.cartoapp.database.Repositories.FileRepository;
 import com.ecarto.cartoapp.database.Repositories.InvoiceRepository;
 import com.ecarto.cartoapp.databinding.ActivityMainBinding;
-import com.ecarto.cartoapp.ui.ShareFiles.AddFileF;
+import com.ecarto.cartoapp.ui.Files.AddFileF;
 import com.ecarto.cartoapp.utils.FileUtils;
+import com.ecarto.cartoapp.utils.StringUtils;
 
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,11 +20,10 @@ import android.widget.TextView;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 import io.reactivex.schedulers.Schedulers;
 
-public class MainActivity extends BaseActivity implements AddFileF.Listener {
+public class MainActivity extends BaseActivity {
 
     public static String TAG = "MAIN_ACTIVITY";
     public static String PDFS_FOLDER_NAME = "carto_files";
@@ -36,13 +36,7 @@ public class MainActivity extends BaseActivity implements AddFileF.Listener {
     FileRepository fileRepository;
 
     //Tod: think about a web copy where everything is saved daily so that we dont have to worry about migrations
-    //more details on this: use WebID whenever you upload or
-    //haz una cola de comandos
-    //TODO: add file view fragment
-    //TODO: make list of folders
-    //TODO: remove top bar from activity so that everything is handled by the fragments
-    //TODO: communication between files fragment
-    //TODO: validate numbers entered, not entering anything crashes and it should just pop an error message
+    //TODO: when the user types in the search bar and navigates to an invoice,when he/she comes back the num of elements there should be the same to avoid confusion
 
     //ACTIVITY DEFAULT METHODS
     @Override
@@ -54,7 +48,6 @@ public class MainActivity extends BaseActivity implements AddFileF.Listener {
 
         invoiceRepository = new InvoiceRepository(getApplicationContext());
         fileRepository = new FileRepository(getApplicationContext());
-
 
         //receiving data from share button
         handleShareIntent();
@@ -74,7 +67,6 @@ public class MainActivity extends BaseActivity implements AddFileF.Listener {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
@@ -139,21 +131,14 @@ public class MainActivity extends BaseActivity implements AddFileF.Listener {
 
     void insertFileEntity(Uri imageUri) {
         if (imageUri != null) {
-
-            Integer newFileID;
-            try {
-                FileEntity fileEntity = fileRepository.findLastFileEntity().subscribeOn(Schedulers.io()).blockingGet();
-                newFileID = fileEntity.getFileID() + 1;
-            } catch (Exception e) {
-                newFileID = 1;
-            }
-
+            Long newFileID = StringUtils.getUniqueID();
             String originalName = FileUtils.getFileDetailFromUri(this, imageUri);
             String fileType = originalName.substring(originalName.lastIndexOf(".") + 1, originalName.length());
-            String nameOfNewFile = String.valueOf(newFileID) + "_file";
+            String nameOfNewFile = newFileID + "_file";
             String newFileLocation = PDFS_FOLDER_PATH + File.separator + nameOfNewFile + "." + fileType;
 
             FileEntity fileEntity = new FileEntity();
+            fileEntity.setFileID(newFileID);
             fileEntity.setTypeOfFile(fileType);
             fileEntity.setPathToFile(newFileLocation);
             fileEntity.setOriginalName(originalName);
@@ -161,11 +146,5 @@ public class MainActivity extends BaseActivity implements AddFileF.Listener {
 
             FileUtils.copyFileFromUri(this, imageUri, newFileLocation);
         }
-    }
-
-
-    @Override
-    public void addFilesToInvoiceDetail(List<FileEntity> fileEntities) {
-        Integer asda = 2;
     }
 }

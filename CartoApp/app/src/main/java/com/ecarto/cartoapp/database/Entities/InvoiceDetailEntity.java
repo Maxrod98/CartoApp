@@ -4,6 +4,8 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
+import com.ecarto.cartoapp.utils.StringUtils;
+
 import java.io.Serializable;
 
 import io.reactivex.annotations.NonNull;
@@ -19,11 +21,33 @@ import static androidx.room.ForeignKey.CASCADE;
 public class InvoiceDetailEntity implements Serializable {
     @PrimaryKey
     @NonNull
-    private Integer InvoiceDetailID;
-    private Integer InvoiceID; //foreign key
+    private Long InvoiceDetailID;
+    private Long InvoiceID; //foreign key
     private Integer CostOfItem;
     private String ConceptDescription;
     private String Notes;
+    private Integer Status;
+    private short Version;
+
+    public InvoiceDetailEntity(){
+        setInvoiceDetailID(StringUtils.getUniqueID());
+    }
+
+    public short getVersion() {
+        return Version;
+    }
+
+    public void setVersion(short version) {
+        Version = version;
+    }
+
+    public Integer getStatus() {
+        return Status;
+    }
+
+    public void setStatus(Integer status) {
+        Status = status;
+    }
 
     public String getNotes() {
         return Notes;
@@ -34,19 +58,19 @@ public class InvoiceDetailEntity implements Serializable {
     }
 
     @NonNull
-    public Integer getInvoiceDetailID() {
+    public Long getInvoiceDetailID() {
         return InvoiceDetailID;
     }
 
-    public void setInvoiceDetailID(@NonNull Integer invoiceDetailID) {
+    public void setInvoiceDetailID(@NonNull Long invoiceDetailID) {
         this.InvoiceDetailID = invoiceDetailID;
     }
 
-    public Integer getInvoiceID() {
+    public Long getInvoiceID() {
         return InvoiceID;
     }
 
-    public void setInvoiceID(Integer invoiceID) {
+    public void setInvoiceID(Long invoiceID) {
         InvoiceID = invoiceID;
     }
 

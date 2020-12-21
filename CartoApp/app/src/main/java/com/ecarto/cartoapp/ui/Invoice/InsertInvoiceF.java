@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,8 +33,9 @@ public class InsertInvoiceF extends Fragment {
     DialogInsertInvoiceEntityBinding binding;
     SharedPreferences sharedPreferences;
     InvoiceRepository invoiceRepository;
-    Integer invoiceID;
 
+    Long invoiceID;
+    boolean invoiceExists;
     Integer day;
     Integer month;
     Integer year_;
@@ -57,38 +57,31 @@ public class InsertInvoiceF extends Fragment {
     private void initElems() {
         invoiceRepository = new InvoiceRepository(getActivity().getApplication());
         sharedPreferences = this.getActivity().getSharedPreferences(getString(R.string.sharedPreferences), Activity.MODE_PRIVATE);
-        invoiceID = getArguments().getInt(SelectedInvoiceID);
+        invoiceID = getArguments().getLong(SelectedInvoiceID);
 
         final Calendar calendar = Calendar.getInstance();
         day = calendar.get(Calendar.DAY_OF_MONTH);
         month = calendar.get(Calendar.MONTH);
         year_ = calendar.get(Calendar.YEAR);
+        invoiceExists = invoiceID != 0;
 
-        if (invoiceID == 0) {
-            binding.etDateInvoice.setText(day + "/" + (month + 1) + "/" + year_);
-        } else {
+        if (invoiceExists) { //create new invoice
             InvoiceEntity invoiceEntity = getExtendedInvoiceEntity();
-
-            if (invoiceEntity.getInvoiceID() == null) {
-                Toast.makeText(getContext(), "Hubo un error all tratar de cargar la factura", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
             binding.etDateInvoice.setText(StringUtils.formatDateFromLong(invoiceEntity.getDate()));
             binding.etDescription.setText(invoiceEntity.getDescription());
             binding.etSeller.setText(invoiceEntity.getSeller());
             binding.btnAddInvoice.setText("MODIFICAR FACTURA");
+        } else { //load an existing invoice
+            binding.etDateInvoice.setText(day + "/" + (month + 1) + "/" + year_);
         }
-
     }
-
 
     private void initListeners() {
         binding.btnAddInvoice.setOnClickListener((p) -> {
-            if (binding.etSeller.getText().toString().isEmpty() || binding.etDescription.getText().toString().isEmpty()){
+            if (binding.etSeller.getText().toString().isEmpty() || binding.etDescription.getText().toString().isEmpty()) {
                 Snackbar.make(binding.getRoot(), "No ha cargado todos los cambios", Snackbar.LENGTH_LONG).show();
             } else {
-                createAndSendEntity();
+                createOrModifyEntity();
             }
 
         });
@@ -111,28 +104,30 @@ public class InsertInvoiceF extends Fragment {
     }
 
 
-    public void createAndSendEntity() {
+    public void createOrModifyEntity() {
         InvoiceEntity entity = getExtendedInvoiceEntity();
-
         entity.setDate(StringUtils.formatDateFromString(binding.etDateInvoice.getText().toString()));
         entity.setSeller(binding.etSeller.getText().toString());
         entity.setDescription(binding.etDescription.getText().toString());
-        entity.setProjectID(1);
+        entity.setProjectID(sharedPreferences.getLong(getString(R.string.selectedProjectID), 1));
         entity.setUserID("test");
-        invoiceRepository.insert(entity).subscribeOn(Schedulers.io()).blockingGet();
+
+        if (invoiceExists)
+            invoiceRepository.updateInvoiceEntity(entity).subscribeOn(Schedulers.io()).blockingGet();
+        else
+            invoiceRepository.insertInvoiceDetailEntity(entity).subscribeOn(Schedulers.io()).blockingGet();
 
         NavHostFragment.findNavController(this).popBackStack();
     }
 
-    private ExtendedInvoiceEntity getExtendedInvoiceEntity(){
+    private ExtendedInvoiceEntity getExtendedInvoiceEntity() {
         try {
             ExtendedInvoiceEntity entity = invoiceRepository.findAllExtendedInvoiceByParams(invoiceID, null, null, null, null, null, null)
                     .subscribeOn(Schedulers.io()).blockingGet()
                     .stream().findFirst().orElse(null);
             return entity != null ? entity : new ExtendedInvoiceEntity();
-        } catch (Exception e){ //if there is no entity send a new one
+        } catch (Exception e) { //if there is no entity send a new one
             return new ExtendedInvoiceEntity();
         }
     }
-
 }

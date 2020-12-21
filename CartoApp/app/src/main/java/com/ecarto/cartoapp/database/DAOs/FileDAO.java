@@ -5,6 +5,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.ecarto.cartoapp.database.Entities.FileEntity;
 
@@ -32,4 +33,16 @@ public interface FileDAO  {
             "ORDER BY FileID DESC " +
             "LIMIT 1")
     Single<FileEntity> findLastFileEntity();
+
+    @Query("SELECT * FROM FileEntity " +
+            "WHERE (:fileID is null or :fileID = FileID) AND" +
+            "(:invoiceDetailID is null or :invoiceDetailID = InvoiceDetailID) AND" +
+            "(:pathToFile is null or PathToFile LIKE :pathToFile) AND" +
+            "(:typeOfFile is null or TypeOfFile LIKE TypeOfFile) AND" +
+            "(:originalName is null or OriginalName LIKE :originalName) AND" +
+            "(:status is null or :status = Status)")
+    Single<List<FileEntity>> findAllFileEntitiesByParams(Long fileID, Long invoiceDetailID, String pathToFile, String typeOfFile, String originalName, Integer status);
+
+    @Update
+    Single<Integer> updateFileEntity(FileEntity fileEntity);
 }

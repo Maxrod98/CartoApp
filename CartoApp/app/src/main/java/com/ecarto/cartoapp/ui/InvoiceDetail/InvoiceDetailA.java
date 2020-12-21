@@ -46,12 +46,18 @@ public class InvoiceDetailA extends RecyclerView.Adapter<InvoiceDetailA.InvoiceD
         holder.txtProduct.setText(elements.get(position).getConceptDescription());
         holder.txtQuantity.setText(StringUtils.formatMoney(elements.get(position).getCostOfItem()));
         boolean hasFiles = elements.get(position).getNumFiles() > 0;
-        holder.imgFileAttached.setAlpha(!hasFiles ? 0.3f : 1.0f);
-        holder.imgNotesAttached.setAlpha(elements.get(position).getNotes() == null || elements.get(position).getNotes().isEmpty() ? 0.3f : 1.0f);
+        holder.imgFileAttached.setAlpha(!hasFiles ? 0.0f : 1.0f);
+        holder.imgNotesAttached.setAlpha(elements.get(position).getNotes() == null || elements.get(position).getNotes().isEmpty() ? 0.0f : 1.0f);
 
-        holder.invoiceDetailItem.setOnClickListener((v) -> {
+        holder.invoiceDetailItem.setOnLongClickListener((v) -> {
             selector.onItemClickSelection(position);
             listener.onInvoiceDetailClick(elements.get(position));
+            notifyDataSetChanged();
+            return false;
+        });
+
+        holder.invoiceDetailItem.setOnClickListener((v)-> {
+            selector.onItemClickSelection(position);
             notifyDataSetChanged();
         });
 

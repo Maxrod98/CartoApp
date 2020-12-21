@@ -36,5 +36,5 @@ public interface InvoiceDAO {
             "(:deleted is null or (InvoiceEntity.Status = 4) = :deleted)" + //check enums InvoiceStatus
             "GROUP BY InvoiceEntity.InvoiceID" +
             " ORDER BY Date DESC")
-    Single<List<ExtendedInvoiceEntity>> findAllExtendedInvoiceBy (Integer invoiceID, Integer projectID, Integer userID, String seller, String description, Integer status, Boolean deleted);
+    Single<List<ExtendedInvoiceEntity>> findAllExtendedInvoiceBy (Long invoiceID, Long projectID, String userID, String seller, String description, Integer status, Boolean deleted);
 }

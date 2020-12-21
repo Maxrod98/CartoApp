@@ -26,9 +26,10 @@ public class InvoiceOptionsF extends Fragment {
 
     DialogInvoiceOptionsBinding binding;
     Listener listener = null;
-    Integer invoiceID;
     InvoiceRepository invoiceRepository;
+
     ExtendedInvoiceEntity invoiceEntity;
+    Long invoiceID;
 
     public InvoiceOptionsF(){
     }
@@ -54,7 +55,7 @@ public class InvoiceOptionsF extends Fragment {
         invoiceRepository = new InvoiceRepository(getActivity().getApplication());
 
         if (getArguments() != null ){
-            invoiceID = getArguments().getInt(SELECTED_INVOICE);
+            invoiceID = getArguments().getLong(SELECTED_INVOICE);
 
             invoiceEntity = invoiceRepository.findAllExtendedInvoiceByParams(invoiceID, null, null, null, null, null, null)
                     .subscribeOn(Schedulers.io()).blockingGet().stream().findFirst().orElse(null);
