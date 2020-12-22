@@ -41,7 +41,6 @@ public class FilesA extends RecyclerView.Adapter<FilesA.FileViewHolder> {
         holder.imgOpenFile.getRootView().setOnClickListener((v) -> {
             listener.onItemSelected(elements.get(position));
         });
-
     }
 
     @Override

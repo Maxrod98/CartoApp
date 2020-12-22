@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ecarto.cartoapp" >
+    package="com.ecarto.cartoapp">
 
     <application
         android:allowBackup="true"
@@ -8,7 +8,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.CartoApp" >
+        android:theme="@style/Theme.CartoApp">
         <activity
             android:name=".ui.MainActivity"
             android:label="@string/app_name"
@@ -25,22 +25,16 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:mimeType="image/*" >
-                </data>
-                <data android:mimeType="application/pdf" >
-                </data>
+                <data android:mimeType="image/*"></data>
+                <data android:mimeType="application/pdf"></data>
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.SEND_MULTIPLE" >
-                </action>
+                <action android:name="android.intent.action.SEND_MULTIPLE"></action>
 
-                <category android:name="android.intent.category.DEFAULT" >
-                </category>
+                <category android:name="android.intent.category.DEFAULT"></category>
 
-                <data android:mimeType="image/*" >
-                </data>
-                <data android:mimeType="application/pdf" >
-                </data>
+                <data android:mimeType="image/*"></data>
+                <data android:mimeType="application/pdf"></data>
             </intent-filter>
         </activity>
 

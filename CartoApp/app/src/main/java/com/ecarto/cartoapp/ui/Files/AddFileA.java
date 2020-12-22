@@ -22,7 +22,6 @@ public class AddFileA extends RecyclerView.Adapter<AddFileA.AddFileViewHolder> {
     AddFileA.Listener listener;
     Set<FileEntity> fileEntitySet;
 
-
     public AddFileA(List<FileEntity> elements, Object context) {
         this.elements = elements;
         if (context instanceof AddFileA.Listener){

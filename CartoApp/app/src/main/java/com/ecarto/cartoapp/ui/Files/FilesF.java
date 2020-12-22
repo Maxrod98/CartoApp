@@ -35,11 +35,9 @@ public class FilesF extends Fragment implements FilesA.Listener {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentFileBinding.inflate(inflater, container, false);
-
         initListeners();
         initElems();
         getDatabaseData();
-
         return binding.getRoot();
     }
 
