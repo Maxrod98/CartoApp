@@ -28,18 +28,9 @@ public class AddFileF extends Fragment implements  AddFileA.Listener{
 
     FragmentAddFilesBinding binding;
     FileRepository fileRepository;
-    List<FileEntity> fileEntityList;
-
     FilesTransferViewModel filesSelectedViewModel;
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    public AddFileF(){
-
-    }
+    List<FileEntity> fileEntityList;
 
     public static AddFileF newInstance(String tagParent) {
         Bundle args = new Bundle();
@@ -110,9 +101,5 @@ public class AddFileF extends Fragment implements  AddFileA.Listener{
     @Override
     public void onCheckedBoxSelected(List<FileEntity> fileEntities) {
         fileEntityList = fileEntities;
-    }
-
-    public interface Listener {
-        void addFilesToInvoiceDetail(List<FileEntity> fileEntities);
     }
 }

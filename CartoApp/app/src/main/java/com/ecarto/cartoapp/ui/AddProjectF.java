@@ -37,21 +37,17 @@ public class AddProjectF extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentAddProjectBinding.inflate(inflater, container, false);
-
         initElems();
         initListeners();
-
         return binding.getRoot();
     }
 
     private void initElems() {
         projectRepository = new ProjectRepository(getActivity().getApplication());
-
         final Calendar calendar = Calendar.getInstance();
         day = calendar.get(Calendar.DAY_OF_MONTH);
         month = calendar.get(Calendar.MONTH);
         year_ = calendar.get(Calendar.YEAR);
-
         binding.etStartDate.setText(day + "/" + (month + 1) + "/" + year_);
     }
 
@@ -98,6 +94,4 @@ public class AddProjectF extends Fragment {
             NavHostFragment.findNavController(this).popBackStack();
         }
     }
-
-
 }

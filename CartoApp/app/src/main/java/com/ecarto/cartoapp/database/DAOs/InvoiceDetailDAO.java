@@ -51,4 +51,7 @@ public interface InvoiceDetailDAO {
 
     @Update
     Single<Integer> updateInvoiceEntity(InvoiceEntity invoiceEntity);
+
+
+
 }

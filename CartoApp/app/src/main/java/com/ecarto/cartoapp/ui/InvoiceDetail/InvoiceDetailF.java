@@ -37,7 +37,7 @@ public class InvoiceDetailF extends Fragment implements InvoiceDetailA.Listener 
     private static final String SELECTED_INVOICE_ID = "SelectedInvoiceID";
 
     InvoiceDetailFragmentBinding binding;
-    private InvoiceRepository invoiceRepository;
+    InvoiceRepository invoiceRepository;
     SharedPreferences sharedPreferences;
     FilesTransferViewModel filesSelectedViewModel;
     FileRepository fileRepository;
@@ -45,9 +45,6 @@ public class InvoiceDetailF extends Fragment implements InvoiceDetailA.Listener 
     boolean invoiceExists;
     Long invoiceEntityID;
     List<ExtendedInvoiceDetailEntity> invoiceDetailEntityList;
-
-    public InvoiceDetailF() {
-    }
 
     @Nullable
     @Override
@@ -59,7 +56,6 @@ public class InvoiceDetailF extends Fragment implements InvoiceDetailA.Listener 
     @Override
     public void onStart() {
         super.onStart();
-
         initElems();
         getDatabaseData();
         initListeners();
@@ -75,7 +71,6 @@ public class InvoiceDetailF extends Fragment implements InvoiceDetailA.Listener 
         invoiceEntityID = getArguments().getLong(SELECTED_INVOICE_ID);
 
         invoiceExists = invoiceEntityID != 0;
-
         if (invoiceExists) {
             invoiceDetailEntityList = invoiceRepository
                     .findAllExtendedInvoiceDetailBy(null, invoiceEntityID)
@@ -102,9 +97,8 @@ public class InvoiceDetailF extends Fragment implements InvoiceDetailA.Listener 
 
     private void initListeners() {
         binding.tbAddInvoice.setOnClickListener((v) -> {
-            NavController navCo = NavHostFragment.findNavController(this);
-            NavDirections action = InvoiceDetailFDirections.actionInvoiceDetailFragmentToInsertInvoiceDetailDialog(0, invoiceEntityID);
-            navCo.navigate(action);
+            NavHostFragment.findNavController(this)
+                    .navigate(InvoiceDetailFDirections.actionInvoiceDetailFragmentToInsertInvoiceDetailDialog(0, invoiceEntityID));
         });
 
         filesSelectedViewModel = new ViewModelProvider(requireActivity()).get(FilesTransferViewModel.class);
@@ -126,7 +120,6 @@ public class InvoiceDetailF extends Fragment implements InvoiceDetailA.Listener 
 
             filesSelectedViewModel.setFilesSelected(null);
         });
-
     }
 
     @Override
@@ -136,6 +129,5 @@ public class InvoiceDetailF extends Fragment implements InvoiceDetailA.Listener 
     }
 
     public interface Listener {
-
     }
 }

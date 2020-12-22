@@ -26,7 +26,6 @@ public class ShowNotesF extends Fragment {
     InvoiceRepository invoiceRepository;
     InvoiceDetailEntity notesDetailEntity;
     Long invoiceDetailID;
-    //TODO: agregar boton de guardado
 
     @Nullable
     @Override
@@ -35,11 +34,6 @@ public class ShowNotesF extends Fragment {
         initElems();
         initListeners();
         return binding.getRoot();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
     }
 
     private void initElems() {
@@ -61,7 +55,6 @@ public class ShowNotesF extends Fragment {
                     Snackbar.make(binding.getRoot(), "Las notas no fueron guardadas", Snackbar.LENGTH_LONG).show();
                 }
             }
-
             NavHostFragment.findNavController(this).popBackStack();
         });
 
@@ -81,14 +74,9 @@ public class ShowNotesF extends Fragment {
         if (notesDetailEntity != null) {
             notesDetailEntity = getNotesDetailEntity(); //update like this to avoid incidents with upload queue, which may be asynchronous
             notesDetailEntity.setNotes(binding.etShowNotes.getText().toString());
-            invoiceRepository.updateInvoiceDetailEntity(notesDetailEntity).subscribeOn(Schedulers.io()).blockingGet(); //TODO: fileEntities being deleted when note is edited
+            invoiceRepository.updateInvoiceDetailEntity(notesDetailEntity).subscribeOn(Schedulers.io()).blockingGet();
         } else {
             Toast.makeText(getContext(), "Hubo un error al guardar las notas", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
     }
 }

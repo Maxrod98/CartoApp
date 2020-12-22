@@ -38,14 +38,12 @@ public class InvoiceOptionsF extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DialogInvoiceOptionsBinding.inflate(inflater, container, false);
-
         return binding.getRoot();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
         initElems();
         initListeners();
     }

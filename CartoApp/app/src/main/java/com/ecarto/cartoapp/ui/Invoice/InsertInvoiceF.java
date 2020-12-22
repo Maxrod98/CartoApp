@@ -40,17 +40,12 @@ public class InsertInvoiceF extends Fragment {
     Integer month;
     Integer year_;
 
-    public InsertInvoiceF() {
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = DialogInsertInvoiceEntityBinding.inflate(inflater, container, false);
-
         initElems();
         initListeners();
-
         return binding.getRoot();
     }
 
@@ -83,8 +78,8 @@ public class InsertInvoiceF extends Fragment {
             } else {
                 createOrModifyEntity();
             }
-
         });
+
         binding.imgClose.setOnClickListener((v) -> {
             NavHostFragment.findNavController(this).popBackStack();
         });

@@ -24,22 +24,20 @@ public class LoginF extends Fragment {
     FragmentLoginBinding binding;
     SharedPreferences sharedPreferences;
     Integer todayNum;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentLoginBinding.inflate(inflater, container, false);
-
         sharedPreferences = getActivity().getSharedPreferences(getString(R.string.sharedPreferences), Activity.MODE_PRIVATE);
 
         setTodayNum();
-
         Integer lastDayLogin = sharedPreferences.getInt(getResources().getString(R.string.lastDayLogin), -1);
         if (lastDayLogin == todayNum && lastDayLogin != -1){
             goToInvoiceFragment();
         }
 
         initListeners();
-
         return binding.getRoot();
     }
 
@@ -61,9 +59,6 @@ public class LoginF extends Fragment {
                 goToInvoiceFragment();
                 sharedPreferences.edit().putInt(getResources().getString(R.string.lastDayLogin), todayNum).commit();
             }
-
-
         });
     }
-
 }

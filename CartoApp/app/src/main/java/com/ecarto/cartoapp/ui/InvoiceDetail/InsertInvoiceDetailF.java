@@ -36,19 +36,6 @@ public class InsertInvoiceDetailF extends Fragment {
     Long invoiceDetailID;
     Long invoiceID;
 
-    public InsertInvoiceDetailF() {
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -59,7 +46,6 @@ public class InsertInvoiceDetailF extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-
         initElems();
         initListeners();
     }
@@ -67,28 +53,23 @@ public class InsertInvoiceDetailF extends Fragment {
     private void initElems() {
         sharedPreferences = getActivity().getSharedPreferences(getString(R.string.sharedPreferences), Activity.MODE_PRIVATE);
         invoiceRepository = new InvoiceRepository(getActivity().getApplication());
-        //listener = ActivityUtils.<Listener>getListener(this);
 
         if (getArguments() != null) {
             invoiceDetailID = getArguments().getLong(SelectedInvoiceDetailID);
             invoiceID = getArguments().getLong(SelectedInvoiceID);
 
             invoiceDetailExists = invoiceDetailID != 0;
-
             if (invoiceDetailExists) {
                 InvoiceDetailEntity invoiceDetailEntity = getInvoiceDetailEntity();
-
                 binding.lblTitle.setText("Editar detalle de factura");
                 binding.btnAddInvoiceDetail.setText("Editar");
                 binding.etQuantityInsertDetail.setText(String.valueOf(invoiceDetailEntity.getCostOfItem()));
                 binding.etProductInsertDetail.setText(invoiceDetailEntity.getConceptDescription());
-
             }
         }
     }
 
     public void initListeners() {
-        //temp variable
         binding.btnAddInvoiceDetail.setOnClickListener((p) -> {
             createOrModifyEntity();
         });
@@ -107,7 +88,7 @@ public class InsertInvoiceDetailF extends Fragment {
         } else { // if correct
             InvoiceDetailEntity invoiceDetailEntity = getInvoiceDetailEntity();
             try {
-                invoiceDetailEntity.setConceptDescription(description); //TODO get the data directly from database, then update
+                invoiceDetailEntity.setConceptDescription(description);
                 invoiceDetailEntity.setInvoiceID(invoiceID);
                 invoiceDetailEntity.setCostOfItem(Integer.valueOf(quantity));
 

@@ -67,4 +67,8 @@ public class InvoiceRepository {
         return invoiceDetailDAO.deleteInvoiceDetail(invoiceDetailEntity);
     }
 
+    public Single<Integer> sumAllInvoiceEntitiesByParams(Long projectID){
+        return invoiceDAO.sumAllInvoiceEntitiesByParams(projectID);
+    }
+
 }

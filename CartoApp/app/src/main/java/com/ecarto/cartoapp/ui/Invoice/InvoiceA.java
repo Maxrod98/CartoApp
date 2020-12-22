@@ -55,7 +55,7 @@ public class InvoiceA extends RecyclerView.Adapter<InvoiceA.InvoiceViewHolder> {
         holder.txtSeller.getRootView().setOnClickListener((v) -> {
             selector.onItemClickSelection(position);
             notifyDataSetChanged();
-            listener.onInvoiceSelectedClick(elements.get(position));
+            listener.onInvoiceClick(elements.get(position));
         });
 
         holder.txtSeller.getRootView().setOnLongClickListener((v -> {
@@ -85,13 +85,13 @@ public class InvoiceA extends RecyclerView.Adapter<InvoiceA.InvoiceViewHolder> {
             txtDescription = itemView.findViewById(R.id.txtDescription);
             txtSeller = itemView.findViewById(R.id.txtSeller);
             txtTotalCost = itemView.findViewById(R.id.txtTotalCost);
-            vSelectionBar = itemView.findViewById(R.id.vSelectorBar);
+            vSelectionBar = itemView.findViewById(R.id.vSelectorBar_invoiceItem);
         }
     }
 
     public interface Listener {
         //selector
-        void onInvoiceSelectedClick(ExtendedInvoiceEntity extendedInvoiceEntity);
+        void onInvoiceClick(ExtendedInvoiceEntity extendedInvoiceEntity);
         void onInvoiceLongClick(ExtendedInvoiceEntity extendedInvoiceEntity);
     }
 }

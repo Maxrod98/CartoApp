@@ -34,12 +34,8 @@ public class InvoiceDetailOptionsF extends Fragment {
     InvoiceDetailEntity invoiceDetailEntity;
     InvoiceRepository invoiceRepository;
     SharedPreferences sharedPreferences;
-    Listener listener = null;
 
     Long invoiceDetailID;
-
-    public InvoiceDetailOptionsF() {
-    }
 
     @Nullable
     @Override
@@ -115,5 +111,4 @@ public class InvoiceDetailOptionsF extends Fragment {
 
     public interface Listener {
     }
-
 }

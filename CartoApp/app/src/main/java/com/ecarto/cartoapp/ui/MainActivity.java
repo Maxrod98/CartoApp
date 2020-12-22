@@ -31,14 +31,9 @@ public class MainActivity extends BaseActivity {
 
     ActivityMainBinding binding;
     SharedPreferences sharedPreferences;
-    TextView toolText;
     InvoiceRepository invoiceRepository;
     FileRepository fileRepository;
 
-    //Tod: think about a web copy where everything is saved daily so that we dont have to worry about migrations
-    //TODO: when the user types in the search bar and navigates to an invoice,when he/she comes back the num of elements there should be the same to avoid confusion
-
-    //ACTIVITY DEFAULT METHODS
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,11 +46,6 @@ public class MainActivity extends BaseActivity {
 
         //receiving data from share button
         handleShareIntent();
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
     }
 
     @Override

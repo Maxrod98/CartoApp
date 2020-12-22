@@ -25,16 +25,21 @@ public interface InvoiceDAO {
             "(:invoiceID is null or InvoiceID = :invoiceID)")
     Single<InvoiceEntity> findAllInvoiceBy(Integer invoiceID);
 
-    @Query("SELECT InvoiceEntity.*, SUM(invoiceDetail.CostOfItem) as totalCost FROM InvoiceEntity " +
+    @Query("SELECT InvoiceEntity.*, COALESCE(SUM(invoiceDetail.CostOfItem), 0) as totalCost FROM InvoiceEntity " +
             "LEFT JOIN InvoiceDetailEntity invoiceDetail ON InvoiceEntity.InvoiceID = invoiceDetail.InvoiceID " +
             "WHERE (:invoiceID is null or :invoiceID = InvoiceEntity.InvoiceID) AND " +
             "(:projectID is null or :projectID = InvoiceEntity.ProjectID) AND " +
             "(:userID is null or :userID = InvoiceEntity.UserID) AND " +
-            "(:seller  is null or InvoiceEntity.Seller LIKE :seller) AND" +
-            "(:description is null or InvoiceEntity.Description LIKE :description ) AND" +
-            "(:status is null or InvoiceEntity.Status = :status) AND" +
-            "(:deleted is null or (InvoiceEntity.Status = 4) = :deleted)" + //check enums InvoiceStatus
+            "((:seller  is null or InvoiceEntity.Seller LIKE :seller) AND (:description is null or InvoiceEntity.Description LIKE :description )) AND" +
+            "(:status is null or InvoiceEntity.Status = :status) AND " +
+            "(:deleted is null or (InvoiceEntity.Status = 4) = :deleted) " + //check enums InvoiceStatus
             "GROUP BY InvoiceEntity.InvoiceID" +
             " ORDER BY Date DESC")
-    Single<List<ExtendedInvoiceEntity>> findAllExtendedInvoiceBy (Long invoiceID, Long projectID, String userID, String seller, String description, Integer status, Boolean deleted);
+    Single<List<ExtendedInvoiceEntity>> findAllExtendedInvoiceBy
+            (Long invoiceID, Long projectID, String userID, String seller, String description, Integer status, Boolean deleted);
+
+    @Query("SELECT SUM(COALESCE(InvoiceDetailEntity.CostOfItem, 0)) FROM InvoiceEntity " +
+            "LEFT JOIN InvoiceDetailEntity ON InvoiceEntity.InvoiceID = InvoiceDetailEntity.InvoiceID " +
+            "WHERE (:projectID is null or InvoiceEntity.ProjectID = :projectID)")
+    Single<Integer> sumAllInvoiceEntitiesByParams(Long projectID);
 }
