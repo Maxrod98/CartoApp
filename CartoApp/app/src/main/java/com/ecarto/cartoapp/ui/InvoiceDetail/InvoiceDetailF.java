@@ -12,12 +12,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
-import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.ecarto.cartoapp.R;
-import com.ecarto.cartoapp.ViewModels.FilesTransferViewModel;
+import com.ecarto.cartoapp.ViewModels.MainActivityViewModel;
 import com.ecarto.cartoapp.database.Entities.ExtendedInvoiceDetailEntity;
 import com.ecarto.cartoapp.database.Entities.FileEntity;
 import com.ecarto.cartoapp.database.Entities.InvoiceDetailEntity;
@@ -39,7 +37,7 @@ public class InvoiceDetailF extends Fragment implements InvoiceDetailA.Listener 
     InvoiceDetailFragmentBinding binding;
     InvoiceRepository invoiceRepository;
     SharedPreferences sharedPreferences;
-    FilesTransferViewModel filesSelectedViewModel;
+    MainActivityViewModel filesSelectedViewModel;
     FileRepository fileRepository;
 
     boolean invoiceExists;
@@ -101,7 +99,7 @@ public class InvoiceDetailF extends Fragment implements InvoiceDetailA.Listener 
                     .navigate(InvoiceDetailFDirections.actionInvoiceDetailFragmentToInsertInvoiceDetailDialog(0, invoiceEntityID));
         });
 
-        filesSelectedViewModel = new ViewModelProvider(requireActivity()).get(FilesTransferViewModel.class);
+        filesSelectedViewModel = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
         filesSelectedViewModel.getFilesSelected().observe(getViewLifecycleOwner(), fileEntities -> {
             if (fileEntities == null) return;
 

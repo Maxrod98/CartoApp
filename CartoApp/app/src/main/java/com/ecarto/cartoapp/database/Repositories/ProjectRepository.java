@@ -26,7 +26,7 @@ public class ProjectRepository {
         return projectDAO.deleteProjectEntity(projectEntity);
     }
 
-    public Single<List<ProjectEntity>> findAllProjectByParams(Long projectID, String name, Integer status){
-        return projectDAO.findAllProjectByParams(projectID, name, status);
+    public Single<List<ProjectEntity>> findAllProjectByParams(Long projectID, String name, Integer status, Integer userID){
+        return projectDAO.findAllProjectByParams(projectID, name, status, userID);
     }
 }

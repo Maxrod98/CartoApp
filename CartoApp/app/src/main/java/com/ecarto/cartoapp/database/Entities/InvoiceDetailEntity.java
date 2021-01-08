@@ -5,6 +5,7 @@ import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 import com.ecarto.cartoapp.utils.StringUtils;
+import com.ecarto.cartoapp.web.DTOs.InvoiceDetailDTO;
 
 import java.io.Serializable;
 
@@ -28,6 +29,16 @@ public class InvoiceDetailEntity implements Serializable {
     private String Notes;
     private Integer Status;
     private short Version;
+
+    public InvoiceDetailEntity(InvoiceDetailDTO invoiceDetailDTO) {
+        setInvoiceDetailID(invoiceDetailDTO.getInvoiceDetailID());
+        setInvoiceID(invoiceDetailDTO.getInvoiceID());
+        setCostOfItem(invoiceDetailDTO.getCostOfItem());
+        setConceptDescription(invoiceDetailDTO.getConceptDescription());
+        setNotes(invoiceDetailDTO.getNotes());
+        setStatus(invoiceDetailDTO.getStatus());
+        setVersion(invoiceDetailDTO.getVersion());
+    }
 
     public InvoiceDetailEntity(){
         setInvoiceDetailID(StringUtils.getUniqueID());

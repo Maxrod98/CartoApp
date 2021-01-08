@@ -116,8 +116,9 @@
             android:layout_marginTop="4dp"
             android:ems="10"
             android:inputType="textPersonName"
-            app:layout_constraintTop_toBottomOf="@+id/lblLocation"
-            tools:layout_editor_absoluteX="15dp" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lblLocation" />
 
         <EditText
             android:id="@+id/etStartDate"
@@ -127,9 +128,10 @@
             android:layout_marginTop="4dp"
             android:ems="10"
             android:inputType="textPersonName"
-            app:layout_constraintTop_toBottomOf="@+id/textView5"
-            tools:layout_editor_absoluteX="0dp"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

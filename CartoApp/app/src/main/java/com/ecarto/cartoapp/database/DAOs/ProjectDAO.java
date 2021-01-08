@@ -25,7 +25,8 @@ public interface ProjectDAO {
     @Query("SELECT * FROM ProjectEntity WHERE" +
             "(:projectID is null or :projectID = ProjectID) AND" +
             "(:name is null or Name LIKE :name ) AND" +
-            "(:status is null or :status = Status)")
-    Single<List<ProjectEntity>> findAllProjectByParams(Long projectID, String name, Integer status);
+            "(:status is null or :status = Status) AND" +
+            "(:userID is null or :userID = UserID)")
+    Single<List<ProjectEntity>> findAllProjectByParams(Long projectID, String name, Integer status, Integer userID);
 
 }

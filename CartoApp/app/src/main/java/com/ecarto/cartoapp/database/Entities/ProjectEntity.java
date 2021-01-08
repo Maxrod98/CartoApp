@@ -4,6 +4,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import com.ecarto.cartoapp.utils.StringUtils;
+import com.ecarto.cartoapp.web.DTOs.ProjectDTO;
 
 import java.io.Serializable;
 
@@ -20,6 +21,27 @@ public class ProjectEntity  implements Serializable {
     private String Longitude;
     private String Location;
     private Integer Status;
+
+    public Integer getUserID() {
+        return UserID;
+    }
+
+    public void setUserID(Integer userID) {
+        UserID = userID;
+    }
+
+    private Integer UserID;
+
+    public ProjectEntity(ProjectDTO projectDTO){
+            setProjectID(projectDTO.getProjectID());
+            setName(projectDTO.getName());
+            setStartDate(projectDTO.getStartDate());
+            setLatitude(projectDTO.getLatitude());
+            setLongitude(projectDTO.getLongitude());
+            setLocation(projectDTO.getLocation());
+            setStatus(projectDTO.getStatus());
+            setUserID(projectDTO.getUserID());
+    }
 
 
     public ProjectEntity(){

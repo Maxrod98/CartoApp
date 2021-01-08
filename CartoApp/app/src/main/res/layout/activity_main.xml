@@ -18,7 +18,25 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+
     </androidx.fragment.app.FragmentContainerView>
+
+
+    <TextView
+        android:id="@+id/imgInstructionsFiles"
+        android:layout_width="match_parent"
+        android:layout_margin="20dp"
+        android:layout_height="wrap_content"
+        android:elevation="4dp"
+        android:textSize="20dp"
+        android:textColor="@color/black"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="Seleccione un detalle de factura y luego haga click en 'Anadir a detalle de factura'"
+        android:background="@drawable/rounded_corner"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout
         android:id="@+id/lowerFragment"
@@ -30,5 +48,7 @@
         app:layout_constraintTop_toBottomOf="@+id/mainActivityFragmentContainer">
 
     </FrameLayout>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

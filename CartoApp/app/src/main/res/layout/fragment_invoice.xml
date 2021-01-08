@@ -19,7 +19,10 @@
         app:popupTheme="@style/Theme.CartoApp.PopupOverlay"
         app:titleTextColor="@color/white"
         app:title="Pagina principal"
-        />
+        >
+
+
+    </androidx.appcompat.widget.Toolbar>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/invoiceHeader"
@@ -76,7 +79,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="15dp"
             app:layout_constraintBottom_toTopOf="@+id/txtTotal"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/imgUploadProject"
             app:layout_constraintStart_toEndOf="@+id/lblProject" />
 
         <TextView
@@ -97,6 +100,41 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="parent" />
+
+        <ImageView
+            android:id="@+id/imgUploadProject"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
+            android:elevation="10dp"
+            android:src="@android:drawable/stat_sys_upload"
+            app:layout_constraintBottom_toBottomOf="@+id/spProject"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/spProject"
+            app:tint="@color/teal_700" />
+
+        <ProgressBar
+            android:id="@+id/progressBarUploadingProject"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@+id/imgUploadProject"
+            app:layout_constraintEnd_toEndOf="@+id/imgUploadProject"
+            app:layout_constraintStart_toStartOf="@+id/imgUploadProject"
+            app:layout_constraintTop_toTopOf="@+id/imgUploadProject" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/txtProjectID"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="15dp"
+            android:backgroundTint="@color/teal_700"
+            android:drawableRight="?attr/actionModeCopyDrawable"
+            app:layout_constraintBottom_toTopOf="@+id/spProject"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -151,28 +189,26 @@
         app:layout_constraintTop_toBottomOf="@+id/invoiceHeader" />
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <include
         android:id="@+id/progressBarLoading"
+        layout="@layout/fragment_loading_screen"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/invoice_recycler_view"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/invoiceHeader"
-        android:background="@color/white"
-        android:visibility="invisible">
+        app:layout_constraintTop_toBottomOf="@+id/invoiceHeader" />
 
-        <ProgressBar
-            style="?android:attr/progressBarStyleLarge"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="visible" />
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@android:drawable/stat_sys_download"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+        app:layout_constraintDimensionRatio="h,1:1"
+        app:layout_constraintEnd_toEndOf="@+id/toolbar"
+        app:layout_constraintTop_toTopOf="@+id/toolbar"
+        android:layout_margin="10dp" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

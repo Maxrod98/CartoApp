@@ -5,6 +5,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import com.ecarto.cartoapp.utils.StringUtils;
+import com.ecarto.cartoapp.web.DTOs.InvoiceDTO;
 
 import java.io.Serializable;
 
@@ -14,7 +15,7 @@ public class InvoiceEntity implements Serializable {
     @NonNull
     private Long InvoiceID;
     private Long ProjectID; //foreign key
-    private String UserID; //foreign
+    private String UserID; //UserID = Username
     private String Seller;
     private long Date;
     private String Latitude;
@@ -23,7 +24,21 @@ public class InvoiceEntity implements Serializable {
     private Integer Status;
     private short Version;
 
-    public InvoiceEntity(){
+    public InvoiceEntity(InvoiceDTO invoiceDTO) {
+
+        setInvoiceID(invoiceDTO.getInvoiceID());
+        setProjectID(invoiceDTO.getProjectID());
+        setUserID(invoiceDTO.getUserID());
+        setSeller(invoiceDTO.getSeller());
+        setDate(invoiceDTO.getDate());
+        setLatitude(invoiceDTO.getLatitude());
+        setLongitude(invoiceDTO.getLongitude());
+        setDescription(invoiceDTO.getDescription());
+        setStatus(invoiceDTO.getStatus());
+        setVersion(invoiceDTO.getVersion());
+    }
+
+    public InvoiceEntity() {
         setInvoiceID(StringUtils.getUniqueID());
     }
 

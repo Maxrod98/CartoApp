@@ -13,22 +13,23 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.ecarto.cartoapp.R;
-import com.ecarto.cartoapp.ViewModels.FilesTransferViewModel;
+import com.ecarto.cartoapp.ViewModels.MainActivityViewModel;
 import com.ecarto.cartoapp.database.Entities.FileEntity;
 import com.ecarto.cartoapp.database.Repositories.FileRepository;
 import com.ecarto.cartoapp.databinding.FragmentAddFilesBinding;
 import com.ecarto.cartoapp.utils.NAVIGATION;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
 import io.reactivex.schedulers.Schedulers;
 
-public class AddFileF extends Fragment implements  AddFileA.Listener{
+public class AddFileF extends Fragment implements AddFileA.Listener {
     public static final String TAG = "ADD_FILE_FRAGMENT_TAG";
 
     FragmentAddFilesBinding binding;
     FileRepository fileRepository;
-    FilesTransferViewModel filesSelectedViewModel;
+    MainActivityViewModel filesSelectedViewModel;
 
     List<FileEntity> fileEntityList;
 
@@ -55,16 +56,10 @@ public class AddFileF extends Fragment implements  AddFileA.Listener{
         initListeners();
     }
 
-    @Override
-    public void onDestroy() {
-        fileEntityList = fileRepository.findAllFreedFileEntitiesBy().subscribeOn(Schedulers.io()).blockingGet();
-        fileRepository.deleteFiles(fileEntityList);
-        super.onDestroy();
-    }
-
     private void initElems() {
         fileRepository = new FileRepository(getActivity().getApplicationContext());
-        filesSelectedViewModel = new ViewModelProvider(requireActivity()).get( FilesTransferViewModel.class);
+        filesSelectedViewModel = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
+        filesSelectedViewModel.setOnFilesBeingInserted(true);
     }
 
     private void getDatabaseData() {
@@ -72,7 +67,7 @@ public class AddFileF extends Fragment implements  AddFileA.Listener{
         setRecyclerView(fileEntityList);
     }
 
-    public void setRecyclerView(List<FileEntity> fileEntities){
+    public void setRecyclerView(List<FileEntity> fileEntities) {
         AddFileA addFileAdapter = new AddFileA(fileEntities, this);
         binding.addFileRecyclerView.setAdapter(addFileAdapter);
     }
@@ -80,22 +75,37 @@ public class AddFileF extends Fragment implements  AddFileA.Listener{
     private void initListeners() {
         binding.fafClose.setOnClickListener((v) -> {
             //TODO: maybe do navhost too?
-                FragmentManager manager = getActivity().getSupportFragmentManager();
-                FragmentTransaction trans = manager.beginTransaction()
-                        .setCustomAnimations(R.anim.slide_in, R.anim.slide_out)
-                        .remove(this);
-                trans.commit();
+            FragmentManager manager = getActivity().getSupportFragmentManager();
+            FragmentTransaction trans = manager.beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in, R.anim.slide_out)
+                    .remove(this);
+            trans.commit();
 
+            filesSelectedViewModel.setOnFilesBeingInserted(false);
+            deleteFreedFiles();
         });
 
         binding.fafAddFileToInvoiceDetail.setOnClickListener((v -> {
+            if (fileEntityList.isEmpty()){
+                Snackbar.make(binding.getRoot(), "No ha seleccionado ningun archivo!", Snackbar.LENGTH_SHORT).show();
+                return;
+            }
+
+            filesSelectedViewModel.setOnFilesBeingInserted(false);
             filesSelectedViewModel.setFilesSelected(fileEntityList);
             FragmentManager manager = getActivity().getSupportFragmentManager();
             FragmentTransaction trans = manager.beginTransaction()
                     .setCustomAnimations(R.anim.slide_in, R.anim.slide_out)
                     .remove(this);
             trans.commit();
+
+            deleteFreedFiles();
         }));
+    }
+
+    void deleteFreedFiles() {
+        fileEntityList = fileRepository.findAllFreedFileEntitiesBy().subscribeOn(Schedulers.io()).blockingGet();
+        fileRepository.deleteFiles(fileEntityList);
     }
 
     @Override

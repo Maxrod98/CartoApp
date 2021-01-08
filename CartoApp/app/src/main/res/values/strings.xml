@@ -2,12 +2,7 @@
     <string name="app_name">Carto App</string>
     <string name="action_settings">Settings</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="database_name">carto_db</string>
     <string name="lblDateLabel">Fecha:</string>
@@ -24,17 +19,12 @@
     <string name="invoice_fragment_add_invoice">Agregar factura nueva</string>
     <string name="invoice_fragment_add_invoice_detail">Agregar otro articulo</string>
     <string name="selectedInvoiceDetailID">selectedInvoiceDetailID</string>
-    <string name="title_activity_test">TestActivity</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
 
     <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
     <string name="isLoggedIn">isLoggedIn</string>
     <string name="lastDayLogin">lastDayLogin</string>
     <string name="selectedProjectID">SelectedProjectID</string>
+    <string name="pdfs_folder_name">carto_files</string>
+    <string name="baseUrl">https://polar-lake-13356.herokuapp.com/</string>
+    <!--<string name="baseUrl">localhost</string> -->
 </resources>

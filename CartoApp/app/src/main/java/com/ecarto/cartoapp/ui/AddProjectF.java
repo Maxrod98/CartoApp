@@ -15,6 +15,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.ecarto.cartoapp.database.Entities.ExtendedInvoiceEntity;
 import com.ecarto.cartoapp.database.Entities.ProjectEntity;
 import com.ecarto.cartoapp.database.Repositories.ProjectRepository;
+import com.ecarto.cartoapp.database.Repositories.UserRepository;
 import com.ecarto.cartoapp.databinding.FragmentAddProjectBinding;
 import com.ecarto.cartoapp.utils.StringUtils;
 import com.google.android.material.snackbar.Snackbar;
@@ -28,6 +29,7 @@ public class AddProjectF extends Fragment {
     FragmentAddProjectBinding binding;
     SharedPreferences sharedPreferences;
     ProjectRepository projectRepository;
+    UserRepository userRepository;
 
     int day;
     int month;
@@ -44,6 +46,8 @@ public class AddProjectF extends Fragment {
 
     private void initElems() {
         projectRepository = new ProjectRepository(getActivity().getApplication());
+        userRepository = new UserRepository(getActivity().getApplication());
+
         final Calendar calendar = Calendar.getInstance();
         day = calendar.get(Calendar.DAY_OF_MONTH);
         month = calendar.get(Calendar.MONTH);
@@ -53,7 +57,7 @@ public class AddProjectF extends Fragment {
 
     private void initListeners() {
         binding.btnClose.setOnClickListener((v) -> {
-            if (projectRepository.findAllProjectByParams(null, null, null) //check if no projects are present
+            if (projectRepository.findAllProjectByParams(null, null, null, null) //check if no projects are present
                     .subscribeOn(Schedulers.io()).blockingGet().isEmpty()) {
                 Snackbar.make(binding.getRoot(), "Tiene que crear un proyecto para continuar", Snackbar.LENGTH_LONG).show();
             } else {
@@ -88,6 +92,7 @@ public class AddProjectF extends Fragment {
             project.setName(binding.etName.getText().toString());
             project.setLocation(binding.etLocation.getText().toString());
             project.setStartDate(StringUtils.formatDateFromString(binding.etLocation.getText().toString()));
+            project.setUserID(userRepository.getCurrentUser().subscribeOn(Schedulers.io()).blockingGet().getUserId());
 
             projectRepository.insertProjectEntity(project).subscribeOn(Schedulers.io()).blockingGet();
             Snackbar.make(binding.getRoot(), "Proyecto agregado correctamente", Snackbar.LENGTH_SHORT).show();

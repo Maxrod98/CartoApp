@@ -10,18 +10,19 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="15dp"
         android:background="@drawable/rounded_corner"
+        android:paddingBottom="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:paddingBottom="15dp"
-        android:layout_marginHorizontal="15dp">
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/txtPassword"
+            android:id="@+id/lblPassword"
             style="@style/ListTextValue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -32,28 +33,27 @@
             app:layout_constraintTop_toBottomOf="@+id/txtUser" />
 
         <EditText
-            android:id="@+id/lblPassword"
+            android:id="@+id/txtPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="15dp"
             android:ems="10"
             android:inputType="textPassword"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtPassword"
-            android:layout_marginHorizontal="15dp"/>
+            app:layout_constraintTop_toBottomOf="@+id/lblPassword" />
 
         <EditText
             android:id="@+id/txtUser"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="15dp"
             android:ems="10"
             android:inputType="textEmailAddress"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lblUser"
-            android:layout_marginHorizontal="15dp"
-            />
+            app:layout_constraintTop_toBottomOf="@+id/lblUser" />
 
         <TextView
             android:id="@+id/lblUser"
@@ -82,8 +82,8 @@
             android:id="@+id/view"
             android:layout_width="wrap_content"
             android:layout_height="1dp"
-            android:background="@color/teal_700"
             android:layout_marginTop="50dp"
+            android:background="@color/teal_700"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -92,15 +92,24 @@
             android:id="@+id/btnLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="15dp"
             android:layout_marginTop="44dp"
+            android:backgroundTint="@color/teal_700"
             android:text="Login"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lblPassword"
-            android:backgroundTint="@color/teal_700"
-            android:layout_marginHorizontal="15dp"/>
+            app:layout_constraintTop_toBottomOf="@+id/txtPassword" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <include
+        android:id="@+id/progressBarLoading"
+        layout="@layout/fragment_loading_screen"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
