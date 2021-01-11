@@ -24,11 +24,11 @@
             android:id="@+id/btnAddInvoice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/teal_700"
             android:text="@string/invoice_fragment_add_invoice"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:backgroundTint="@color/teal_700"/>
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/add_invoice_lblDescription"
@@ -57,10 +57,9 @@
             android:id="@+id/etSeller"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
             android:ems="10"
             android:inputType="textPersonName"
-            app:layout_constraintBottom_toTopOf="@+id/btnAddInvoice"
+            app:layout_constraintBottom_toTopOf="@+id/txtCost"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.466"
             app:layout_constraintStart_toStartOf="parent" />
@@ -107,6 +106,29 @@
             app:layout_constraintBottom_toTopOf="@+id/etDateInvoice"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/txtCost"
+            style="@style/ListTextValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Costo:"
+            app:layout_constraintBottom_toTopOf="@+id/etCostOptional"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <EditText
+            android:id="@+id/etCostOptional"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="number"
+            app:layout_constraintBottom_toTopOf="@+id/btnAddInvoice"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:hint="Opcional:"
+            android:gravity="center"/>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

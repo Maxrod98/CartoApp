@@ -5,6 +5,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.ecarto.cartoapp.database.Entities.ExtendedInvoiceEntity;
 import com.ecarto.cartoapp.database.Entities.InvoiceEntity;
@@ -29,4 +30,6 @@ public interface ProjectDAO {
             "(:userID is null or :userID = UserID)")
     Single<List<ProjectEntity>> findAllProjectByParams(Long projectID, String name, Integer status, Integer userID);
 
+    @Update
+    Single<Integer> updateProjectEntity(ProjectEntity projectEntity);
 }

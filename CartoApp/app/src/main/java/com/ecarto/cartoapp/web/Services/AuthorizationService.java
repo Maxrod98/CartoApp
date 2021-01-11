@@ -1,5 +1,6 @@
 package com.ecarto.cartoapp.web.Services;
 
+import com.ecarto.cartoapp.web.DTOs.UserRequestDTO;
 import com.ecarto.cartoapp.web.DTOs.UserResponseDTO;
 
 import retrofit2.Call;

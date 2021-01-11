@@ -26,6 +26,21 @@ public class ProjectDTO {
     public ProjectDTO(){
     }
 
+    public void forEachElement( ProjectDTO.ForEachElementListener forEachElementListener){
+        forEachElementListener.onEachProjectDTO(this);
+
+        this.getInvoiceDTOs().stream().forEach((invoice) -> {
+            if (invoice != null) {
+                forEachElementListener.onEachInvoiceDTO(invoice);
+                if (invoice.getInvoiceDetailDTOs() != null) {
+                    invoice.getInvoiceDetailDTOs().stream().forEach((invoiceDetail) -> {
+                        forEachElementListener.onEachInvoiceDetailDTO(invoiceDetail);
+                    });
+                }
+            }
+        });
+    }
+
     public ProjectDTO(ProjectEntity projectEntity, Context context){
         InvoiceRepository invoiceRepository = new InvoiceRepository(context);
 
@@ -115,5 +130,11 @@ public class ProjectDTO {
 
     public void setInvoiceDTOs(List<InvoiceDTO> invoiceDTOs) {
         InvoiceDTOs = invoiceDTOs;
+    }
+
+    public interface ForEachElementListener {
+        void onEachProjectDTO(ProjectDTO projectDTO);
+        void onEachInvoiceDTO(InvoiceDTO invoiceDTO);
+        void onEachInvoiceDetailDTO(InvoiceDetailDTO invoiceDetailDTO);
     }
 }

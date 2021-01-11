@@ -17,9 +17,7 @@ import com.ecarto.cartoapp.database.Entities.UserEntity;
 import com.ecarto.cartoapp.database.Repositories.UserRepository;
 import com.ecarto.cartoapp.databinding.FragmentLoginBinding;
 import com.ecarto.cartoapp.web.DTOs.UserResponseDTO;
-import com.ecarto.cartoapp.web.RetrofitInstance;
-import com.ecarto.cartoapp.web.Services.AuthorizationService;
-import com.ecarto.cartoapp.web.Services.UserRequestDTO;
+import com.ecarto.cartoapp.web.DTOs.UserRequestDTO;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Calendar;
@@ -28,7 +26,6 @@ import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 public class LoginF extends Fragment {
     FragmentLoginBinding binding;
@@ -73,15 +70,7 @@ public class LoginF extends Fragment {
 
             UserRequestDTO userRequestDTO = new UserRequestDTO(binding.txtUser.getText().toString(), binding.txtPassword.getText().toString());
 
-            Retrofit retrofit = RetrofitInstance.getInstance(getContext()).getRetrofit();
-
-            AuthorizationService authorizationService = retrofit.create(AuthorizationService.class);
-
-            Call<UserResponseDTO> callRequest = authorizationService.authenticate(userRequestDTO);
-
-            blockInput();
-
-            callRequest.enqueue(new Callback<UserResponseDTO>() {
+            userRepository.Authenticate(userRequestDTO, new Callback<UserResponseDTO>() {
                 @Override
                 public void onResponse(Call<UserResponseDTO> call, Response<UserResponseDTO> response) {
                     if (response.isSuccessful()) {
@@ -94,7 +83,6 @@ public class LoginF extends Fragment {
                     } else {
                         Snackbar.make(binding.getRoot(), "hubo un error", Snackbar.LENGTH_SHORT).show();
                     }
-
                     enableInput();
                 }
 
@@ -113,7 +101,7 @@ public class LoginF extends Fragment {
 
         try {
             loggedUser = userRepository.getCurrentUser().subscribeOn(Schedulers.io()).blockingGet();
-        } catch (Exception e){
+        } catch (Exception e) {
             Snackbar.make(binding.getRoot(), "Necesita acceso a internet para hacer un login inicial", Snackbar.LENGTH_SHORT).show();
             return false;
         }
@@ -132,6 +120,8 @@ public class LoginF extends Fragment {
 
     private void insertUserFromWeb(UserResponseDTO userResponseDTO) {
         UserEntity userEntity = new UserEntity(userResponseDTO.getUser());
+
+        userRepository.deleteAllUsers().subscribeOn(Schedulers.io()).blockingGet();
 
         userRepository.insertUserEntity(userEntity).subscribeOn(Schedulers.io()).blockingGet();
     }

@@ -19,6 +19,8 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.ecarto.cartoapp.R;
 import com.ecarto.cartoapp.database.Entities.ExtendedInvoiceEntity;
+import com.ecarto.cartoapp.database.Entities.InvoiceDetailEntity;
+import com.ecarto.cartoapp.database.Entities.InvoiceEntity;
 import com.ecarto.cartoapp.database.Entities.ProjectEntity;
 import com.ecarto.cartoapp.database.Repositories.InvoiceRepository;
 import com.ecarto.cartoapp.database.Repositories.ProjectRepository;
@@ -26,9 +28,9 @@ import com.ecarto.cartoapp.database.Repositories.UserRepository;
 import com.ecarto.cartoapp.databinding.FragmentInvoiceBinding;
 import com.ecarto.cartoapp.utils.Selector;
 import com.ecarto.cartoapp.utils.StringUtils;
+import com.ecarto.cartoapp.web.DTOs.InvoiceDTO;
+import com.ecarto.cartoapp.web.DTOs.InvoiceDetailDTO;
 import com.ecarto.cartoapp.web.DTOs.ProjectDTO;
-import com.ecarto.cartoapp.web.RetrofitInstance;
-import com.ecarto.cartoapp.web.Services.ProjectService;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -79,44 +81,70 @@ public class InvoiceF extends Fragment implements InvoiceA.Listener {
     }
 
     private void initListeners() {
+        //-----------------UPLOAD PROJECT
         binding.imgUploadProject.setOnClickListener((view) -> {
+            if (getSelectedProjectID() == -1) return;
+
             ProjectDTO projectDTO = null;
             try {
                 projectDTO = new ProjectDTO(
                         projectRepository.findAllProjectByParams(getSelectedProjectID(), null, null, null)
                                 .subscribeOn(Schedulers.io()).blockingGet().stream().findFirst().orElse(null), getActivity());
-            } catch (Exception e){
+                if (projectDTO.getLatitude() == null) projectDTO.setLatitude("");
+                if (projectDTO.getLongitude() == null) projectDTO.setLongitude("");
+                if (projectDTO.getStatus() == null) projectDTO.setStatus(0);
+                projectDTO.getInvoiceDTOs().stream().forEach((x) -> {
+                    if (x.getLatitude() == null) x.setLatitude("");
+                    if (x.getLongitude() == null) x.setLongitude("");
+                    if (x.getStatus() == null) x.setStatus(0);
+
+                    x.getInvoiceDetailDTOs().stream().forEach((y) -> {
+                        if (y.getNotes() == null) y.setNotes("");
+                        if (y.getStatus() == null) y.setStatus(0);
+                    });
+                });
+            } catch (Exception e) {
             }
 
             blockUploadProjectButton();
 
-            if (projectDTO != null){
-                Retrofit retrofit = RetrofitInstance.getInstance(getContext()).getRetrofit();
-                ProjectService projectService = retrofit.create(ProjectService.class);
-                Call<String> callRequest = projectService.uploadProjectDTO(projectDTO);
-
-                callRequest.enqueue(new Callback<String>() {
+            if (projectDTO != null) {
+                projectRepository.uploadProject(projectDTO, new Callback<String>() {
                     @Override
                     public void onResponse(Call<String> call, Response<String> response) {
-                        if (response.isSuccessful()){
-                            Snackbar.make(binding.getRoot(), response.body(), Snackbar.LENGTH_SHORT).show();
+                        if (response.isSuccessful()) {
+                            Snackbar.make(binding.getRoot(), "subida correctamente", Snackbar.LENGTH_SHORT).show();
                         } else {
-
+                            Snackbar.make(binding.getRoot(), "Hubo un error al subir los datos", Snackbar.LENGTH_SHORT).show();
                         }
                         freeUploadProjectButton();
                     }
+
                     @Override
                     public void onFailure(Call<String> call, Throwable t) {
-                        Snackbar.make(binding.getRoot(), "No hay conexion para subir los datos", Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(binding.getRoot(), t.getMessage(), Snackbar.LENGTH_LONG).show();
                         freeUploadProjectButton();
                     }
                 });
             }
         });
+        //------------COPY PROJECT ID
+        binding.txtProjectID.setOnClickListener((view) -> {
+            if (getSelectedProjectID() == -1) {
+                Snackbar.make(binding.getRoot(), "No hay un proyecto seleccionado!", Snackbar.LENGTH_SHORT).show();
+                return;
+            }
 
+            ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("simple text", "" + getSelectedProjectID());
+            clipboard.setPrimaryClip(clip);
+
+            Snackbar.make(binding.getRoot(), "ID del proyecto copiado", Snackbar.LENGTH_SHORT).show();
+        });
+        //--------------ADD INVOICE
         binding.tbAddInvoice.setOnClickListener((v) -> {
             if (getSelectedProjectID() == -1) {
-                Snackbar.make(binding.getRoot(), "Debe de crear un proyecto primero", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(binding.getRoot(), "Debe de crear o descargar un proyecto primero", Snackbar.LENGTH_SHORT).show();
             } else {
                 NavHostFragment.findNavController(this)
                         .navigate(InvoiceFDirections.actionInvoiceFragmentToInsertInvoiceDialog2(0));
@@ -143,31 +171,65 @@ public class InvoiceF extends Fragment implements InvoiceA.Listener {
             }
         };
         binding.etSearchBar.addTextChangedListener(textWatcher);
+
+        binding.imgUpdateFromWeb.setOnClickListener((view) -> {
+            if (getSelectedProjectID() == -1) return;
+
+            projectRepository.downloadProject(getSelectedProjectID(), new Callback<ProjectDTO>() {
+                @Override
+                public void onResponse(Call<ProjectDTO> call, Response<ProjectDTO> response) {
+                    if (response.isSuccessful()) {
+                        ProjectDTO projectDTO = response.body();
+                        projectDTO.forEachElement(new ProjectDTO.ForEachElementListener() {
+                            @Override
+                            public void onEachProjectDTO(ProjectDTO projectDTO) {
+                                if (projectRepository.updateProjectEntity(new ProjectEntity(projectDTO)).subscribeOn(Schedulers.io()).blockingGet() == 0) {
+                                    projectRepository.insertProjectEntity(new ProjectEntity(projectDTO)).subscribeOn(Schedulers.io()).blockingGet();
+                                }
+                            }
+
+                            @Override
+                            public void onEachInvoiceDTO(InvoiceDTO invoiceDTO) {
+                                if (invoiceRepository.updateInvoiceEntity(new InvoiceEntity(invoiceDTO)).subscribeOn(Schedulers.io()).blockingGet() == 0) {
+                                    invoiceRepository.insertInvoiceEntity(new InvoiceEntity(invoiceDTO)).subscribeOn(Schedulers.io()).blockingGet();
+                                }
+                            }
+
+                            @Override
+                            public void onEachInvoiceDetailDTO(InvoiceDetailDTO invoiceDetailDTO) {
+                                if (invoiceRepository.updateInvoiceDetailEntity(new InvoiceDetailEntity(invoiceDetailDTO)).subscribeOn(Schedulers.io()).blockingGet() == 0) {
+                                    invoiceRepository.insertInvoiceDetailEntity(new InvoiceDetailEntity(invoiceDetailDTO)).subscribeOn(Schedulers.io()).blockingGet();
+                                }
+                            }
+                        });
+                        Snackbar.make(binding.getRoot(), "Datos actualizados", Snackbar.LENGTH_LONG).show();
+                        loadRecyclerViewAsync(0);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ProjectDTO> call, Throwable t) {
+                    Snackbar.make(binding.getRoot(), t.getMessage(), Snackbar.LENGTH_LONG).show();
+                }
+            });
+        });
     }
 
-    private void blockUploadProjectButton(){
+    private void blockUploadProjectButton() {
         binding.imgUploadProject.setVisibility(View.INVISIBLE);
         binding.progressBarUploadingProject.setVisibility(View.VISIBLE);
         binding.imgUploadProject.setEnabled(false);
     }
 
-    private void freeUploadProjectButton(){
+    private void freeUploadProjectButton() {
         binding.imgUploadProject.setVisibility(View.VISIBLE);
         binding.progressBarUploadingProject.setVisibility(View.INVISIBLE);
         binding.imgUploadProject.setEnabled(true);
-        Snackbar.make(binding.getRoot(), "Proyectos subidos correctamente", Snackbar.LENGTH_SHORT).show();
+
     }
 
     private void setProjectsSpinner() {
 
-
-        binding.txtProjectID.setOnClickListener( (view) -> {
-            ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clip = ClipData.newPlainText("simple text", ""+ getSelectedProjectID());
-            clipboard.setPrimaryClip(clip);
-
-            Snackbar.make(binding.getRoot(), "ID del proyecto copiado", Snackbar.LENGTH_SHORT).show();
-        });
 
         List<ProjectEntity> projects = projectRepository
                 .findAllProjectByParams(null, null, null, null)
@@ -183,16 +245,24 @@ public class InvoiceF extends Fragment implements InvoiceA.Listener {
                 .indexOf(getSelectedProjectID());
 
         projectNames.add("--Crear nuevo projecto--");
-        ArrayAdapter<String> adapter = new ArrayAdapter(getActivity(), R.layout.support_simple_spinner_dropdown_item, projectNames);
-        binding.spProject.setAdapter(adapter);
+        projectNames.add("--Descargar proyecto--");
+        setSpinnerAdapter(projectNames);
         binding.spProject.setSelection(selectedProjectIndex);
         binding.spProject.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position == projectNames.size() - 1) { //add project
-                    NavHostFragment.findNavController(InvoiceF.this).navigate(InvoiceFDirections.actionInvoiceFragmentToAddProjectF());
+                if (projects.isEmpty() && projectNames.size() == 2) { //no projects present
+                    projectNames.add(0, "--Ninguno--");
+                    setSpinnerAdapter(projectNames);
+                    binding.spProject.setSelection(0);
+                    sharedPreferences.edit().putLong(getString(R.string.selectedProjectID), -1).commit();
+                } else if (position == projectNames.size() - 2) { //add project
+                    goToAddProject();
                     setProjectsSpinner();
-                } else { //select existing project
+                } else if (position == projectNames.size() - 1) { //download project
+                    goToDownloadProject();
+                    setProjectsSpinner();
+                } else if (!projects.isEmpty()) { //select existing project
                     sharedPreferences.edit().putLong(getString(R.string.selectedProjectID), projects.get(position).getProjectID()).commit();
                     loadRecyclerViewAsync(100);
                     binding.txtProjectID.setText("ID de Proyecto: " + getSelectedProjectID());
@@ -203,6 +273,19 @@ public class InvoiceF extends Fragment implements InvoiceA.Listener {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+    }
+
+    private void setSpinnerAdapter(List<String> projectNames) {
+        ArrayAdapter<String> adapter = new ArrayAdapter(getActivity(), R.layout.support_simple_spinner_dropdown_item, projectNames);
+        binding.spProject.setAdapter(adapter);
+    }
+
+    private void goToAddProject() {
+        NavHostFragment.findNavController(InvoiceF.this).navigate(InvoiceFDirections.actionInvoiceFragmentToAddProjectF());
+    }
+
+    private void goToDownloadProject() {
+        NavHostFragment.findNavController(InvoiceF.this).navigate(InvoiceFDirections.actionInvoiceFragmentToDownloadDataF());
     }
 
     private void loadRecyclerViewAsync(Integer time) {

@@ -32,6 +32,9 @@
         <action
             android:id="@+id/action_invoiceFragment_to_addProjectF"
             app:destination="@id/addProjectF" />
+        <action
+            android:id="@+id/action_invoiceFragment_to_downloadDataF"
+            app:destination="@id/downloadDataF" />
     </fragment>
     <fragment
         android:id="@+id/invoiceDetailFragment"
@@ -160,8 +163,11 @@
             android:name="SelectedInvoiceDetailID"
             app:argType="long" />
     </fragment>
-
-
+    <fragment
+        android:id="@+id/downloadDataF"
+        android:name="com.ecarto.cartoapp.ui.Invoice.DownloadDataF"
+        android:label="fragment_download_data"
+        tools:layout="@layout/fragment_download_data" />
 
 
 </navigation>

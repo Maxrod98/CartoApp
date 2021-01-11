@@ -25,7 +25,7 @@ public class InvoiceRepository {
         invoiceDetailDAO = db.invoiceDetailDAO();
     }
 
-    public Single<Long> insertInvoiceDetailEntity(InvoiceEntity invoiceEntity) {
+    public Single<Long> insertInvoiceEntity(InvoiceEntity invoiceEntity) {
         return invoiceDAO.insert(invoiceEntity);
     }
 

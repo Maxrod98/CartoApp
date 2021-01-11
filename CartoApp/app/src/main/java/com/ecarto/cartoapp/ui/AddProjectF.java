@@ -57,12 +57,7 @@ public class AddProjectF extends Fragment {
 
     private void initListeners() {
         binding.btnClose.setOnClickListener((v) -> {
-            if (projectRepository.findAllProjectByParams(null, null, null, null) //check if no projects are present
-                    .subscribeOn(Schedulers.io()).blockingGet().isEmpty()) {
-                Snackbar.make(binding.getRoot(), "Tiene que crear un proyecto para continuar", Snackbar.LENGTH_LONG).show();
-            } else {
-                NavHostFragment.findNavController(this).popBackStack();
-            }
+            NavHostFragment.findNavController(this).popBackStack();
         });
 
         binding.btnAddProject.setOnClickListener((v) -> {

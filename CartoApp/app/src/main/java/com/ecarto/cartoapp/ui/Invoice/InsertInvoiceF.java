@@ -15,6 +15,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.ecarto.cartoapp.R;
 import com.ecarto.cartoapp.database.Entities.ExtendedInvoiceEntity;
+import com.ecarto.cartoapp.database.Entities.InvoiceDetailEntity;
 import com.ecarto.cartoapp.database.Entities.InvoiceEntity;
 import com.ecarto.cartoapp.database.Repositories.InvoiceRepository;
 import com.ecarto.cartoapp.databinding.DialogInsertInvoiceEntityBinding;
@@ -66,6 +67,7 @@ public class InsertInvoiceF extends Fragment {
             binding.etDescription.setText(invoiceEntity.getDescription());
             binding.etSeller.setText(invoiceEntity.getSeller());
             binding.btnAddInvoice.setText("MODIFICAR FACTURA");
+            binding.etCostOptional.setEnabled(false);
         } else { //load an existing invoice
             binding.etDateInvoice.setText(day + "/" + (month + 1) + "/" + year_);
         }
@@ -107,10 +109,32 @@ public class InsertInvoiceF extends Fragment {
         entity.setProjectID(sharedPreferences.getLong(getString(R.string.selectedProjectID), 1));
         entity.setUserID("test");
 
-        if (invoiceExists)
+        if (invoiceExists){
             invoiceRepository.updateInvoiceEntity(entity).subscribeOn(Schedulers.io()).blockingGet();
-        else
-            invoiceRepository.insertInvoiceDetailEntity(entity).subscribeOn(Schedulers.io()).blockingGet();
+        }
+        else{
+            invoiceRepository.insertInvoiceEntity(entity).subscribeOn(Schedulers.io()).blockingGet();
+
+            String costOptional = binding.etCostOptional.getText().toString();
+            Integer cost = null;
+            if (!costOptional.isEmpty()){
+                try {
+                    cost = Integer.parseInt(costOptional);
+                } catch (Exception e){
+                    cost = 0;
+                }
+
+                if (cost != 0){
+                    InvoiceDetailEntity invoiceDetail = new InvoiceDetailEntity();
+                    invoiceDetail.setStatus(0);
+                    invoiceDetail.setNotes("");
+                    invoiceDetail.setConceptDescription(binding.etDescription.getText().toString() + " - Detalle");
+                    invoiceDetail.setCostOfItem(cost);
+                    invoiceDetail.setInvoiceID(entity.getInvoiceID());
+                    invoiceRepository.insertInvoiceDetailEntity(invoiceDetail).subscribeOn(Schedulers.io()).blockingGet();
+                }
+            }
+        }
 
         NavHostFragment.findNavController(this).popBackStack();
     }

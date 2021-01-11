@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class RetrofitInstance {
     public Retrofit retrofit;
@@ -18,17 +19,19 @@ public class RetrofitInstance {
 
     private RetrofitInstance(Context context){
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .connectTimeout(1, TimeUnit.MINUTES)
-                .readTimeout(1, TimeUnit.MINUTES)
-                .writeTimeout(1, TimeUnit.MINUTES)
+                .connectTimeout(40, TimeUnit.SECONDS)
+                .readTimeout(40, TimeUnit.SECONDS)
+                .writeTimeout(40, TimeUnit.SECONDS)
                 .build();
 
         Gson gson = new GsonBuilder()
+                .setLenient()
                 .serializeNulls()
                 .create();
 
         retrofit = new Retrofit.Builder()
                 .baseUrl(context.getString(R.string.baseUrl))
+                .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .client(okHttpClient)
                 .build();

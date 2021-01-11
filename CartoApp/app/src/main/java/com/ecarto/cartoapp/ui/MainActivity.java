@@ -51,6 +51,8 @@ public class MainActivity extends BaseActivity {
 
     //TODO: make instructions or a way to let the user know how to transfer files
     //TODO: get invoices from mails
+    //TODO: upload files too
+    //TODO: remove requirement for user to have projects to be able to use the app
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
