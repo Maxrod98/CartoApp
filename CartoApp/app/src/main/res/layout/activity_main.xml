@@ -19,10 +19,6 @@
         app:layout_constraintTop_toTopOf="parent"
         android:elevation="1dp">
 
-
-
-
-
     </androidx.fragment.app.FragmentContainerView>
 
 
