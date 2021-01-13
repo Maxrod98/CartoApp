@@ -1,7 +1,10 @@
 package com.ecarto.cartoapp.web.Services;
 
 import com.ecarto.cartoapp.web.DTOs.ProjectDTO;
+import com.ecarto.cartoapp.web.DTOs.UserDataResponseDTO;
 import com.ecarto.cartoapp.web.DTOs.UserResponseDTO;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -15,6 +18,9 @@ public interface ProjectService {
 
     @GET("downloadProject/{projectID}")
     Call<ProjectDTO> downloadProjectDTO(@Path("projectID") Long projectID);
+
+    @GET("downloadUserData/{userID}")
+    Call<ProjectDTO[]> downloadUserData(@Path("userID") Integer userID);
 }
 
 

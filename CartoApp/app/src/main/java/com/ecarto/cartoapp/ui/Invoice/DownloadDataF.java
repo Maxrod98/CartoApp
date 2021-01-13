@@ -1,12 +1,18 @@
 package com.ecarto.cartoapp.ui.Invoice;
 
+import android.animation.Animator;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -27,10 +33,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+
 public class DownloadDataF extends Fragment {
     FragmentDownloadDataBinding binding;
     ProjectRepository projectRepository;
     InvoiceRepository invoiceRepository;
+
+
+    int upLoc = 0;
 
     @Nullable
     @Override
@@ -42,7 +52,13 @@ public class DownloadDataF extends Fragment {
 
         initListeners();
 
+        testGround();
+
         return binding.getRoot();
+    }
+
+    private void testGround() {
+
     }
 
     private void initListeners() {
@@ -69,23 +85,7 @@ public class DownloadDataF extends Fragment {
                                     Snackbar.make(binding.getRoot(), "El proyecto ya esta descargado!", Snackbar.LENGTH_SHORT).show();
                                     return;
                                 }
-
-                                projectDTO.forEachElement(new ProjectDTO.ForEachElementListener() {
-                                    @Override
-                                    public void onEachProjectDTO(ProjectDTO projectDTO) {
-                                        projectRepository.insertProjectEntity(new ProjectEntity(projectDTO)).subscribeOn(Schedulers.io()).blockingGet();
-                                    }
-
-                                    @Override
-                                    public void onEachInvoiceDTO(InvoiceDTO invoiceDTO) {
-                                        invoiceRepository.insertInvoiceEntity(new InvoiceEntity(invoiceDTO)).subscribeOn(Schedulers.io()).blockingGet();
-                                    }
-
-                                    @Override
-                                    public void onEachInvoiceDetailDTO(InvoiceDetailDTO invoiceDetailDTO) {
-                                        invoiceRepository.insertInvoiceDetailEntity(new InvoiceDetailEntity(invoiceDetailDTO)).subscribeOn(Schedulers.io()).blockingGet();
-                                    }
-                                });
+                                projectRepository.saveProjectDTO(projectDTO);
                                 Snackbar.make(binding.getRoot(), "Proyecto descargado correctamente", Snackbar.LENGTH_LONG).show();
                             } else {
                                 Snackbar.make(binding.getRoot(), "No se encontro el proyecto", Snackbar.LENGTH_LONG).show();
@@ -104,4 +104,6 @@ public class DownloadDataF extends Fragment {
             NavHostFragment.findNavController(DownloadDataF.this).popBackStack();
         });
     }
+
+
 }

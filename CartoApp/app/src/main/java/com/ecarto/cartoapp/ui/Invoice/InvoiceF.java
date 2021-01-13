@@ -13,23 +13,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.ecarto.cartoapp.R;
 import com.ecarto.cartoapp.database.Entities.ExtendedInvoiceEntity;
-import com.ecarto.cartoapp.database.Entities.InvoiceDetailEntity;
-import com.ecarto.cartoapp.database.Entities.InvoiceEntity;
 import com.ecarto.cartoapp.database.Entities.ProjectEntity;
 import com.ecarto.cartoapp.database.Repositories.InvoiceRepository;
 import com.ecarto.cartoapp.database.Repositories.ProjectRepository;
 import com.ecarto.cartoapp.database.Repositories.UserRepository;
 import com.ecarto.cartoapp.databinding.FragmentInvoiceBinding;
+import com.ecarto.cartoapp.utils.MyTouchListener;
 import com.ecarto.cartoapp.utils.Selector;
 import com.ecarto.cartoapp.utils.StringUtils;
-import com.ecarto.cartoapp.web.DTOs.InvoiceDTO;
-import com.ecarto.cartoapp.web.DTOs.InvoiceDetailDTO;
 import com.ecarto.cartoapp.web.DTOs.ProjectDTO;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -44,7 +40,6 @@ import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 public class InvoiceF extends Fragment implements InvoiceA.Listener {
     public static final String TAG = "INVOICE_FRAGMENT_TAG";
@@ -55,6 +50,8 @@ public class InvoiceF extends Fragment implements InvoiceA.Listener {
     ProjectRepository projectRepository;
     UserRepository userRepository;
     TextWatcher textWatcher = null;
+
+
     private Timer timer = new Timer();
 
     @Override
@@ -62,7 +59,7 @@ public class InvoiceF extends Fragment implements InvoiceA.Listener {
         super.onResume();
         loadRecyclerViewAsync(0);
     }
-
+    //TODO: fix the download all the data from the user
     private void initElems() {
         invoiceRepository = new InvoiceRepository(getActivity().getApplication());
         projectRepository = new ProjectRepository(getActivity().getApplication());
@@ -77,7 +74,26 @@ public class InvoiceF extends Fragment implements InvoiceA.Listener {
         initListeners();
         setProjectsSpinner();
         loadRecyclerViewAsync(0);
+
+        binding.handlerView.setOnTouchListener(new MyTouchListener(binding.layout, binding.handlerView, new MyTouchListener.Listener() {
+            @Override
+            public void onOpen() {
+
+            }
+
+            @Override
+            public void onClose() {
+
+            }
+        }));
+
         return binding.getRoot();
+    }
+
+    @Override
+    public void onStart() {
+
+        super.onStart();
     }
 
     private void initListeners() {
@@ -180,28 +196,7 @@ public class InvoiceF extends Fragment implements InvoiceA.Listener {
                 public void onResponse(Call<ProjectDTO> call, Response<ProjectDTO> response) {
                     if (response.isSuccessful()) {
                         ProjectDTO projectDTO = response.body();
-                        projectDTO.forEachElement(new ProjectDTO.ForEachElementListener() {
-                            @Override
-                            public void onEachProjectDTO(ProjectDTO projectDTO) {
-                                if (projectRepository.updateProjectEntity(new ProjectEntity(projectDTO)).subscribeOn(Schedulers.io()).blockingGet() == 0) {
-                                    projectRepository.insertProjectEntity(new ProjectEntity(projectDTO)).subscribeOn(Schedulers.io()).blockingGet();
-                                }
-                            }
-
-                            @Override
-                            public void onEachInvoiceDTO(InvoiceDTO invoiceDTO) {
-                                if (invoiceRepository.updateInvoiceEntity(new InvoiceEntity(invoiceDTO)).subscribeOn(Schedulers.io()).blockingGet() == 0) {
-                                    invoiceRepository.insertInvoiceEntity(new InvoiceEntity(invoiceDTO)).subscribeOn(Schedulers.io()).blockingGet();
-                                }
-                            }
-
-                            @Override
-                            public void onEachInvoiceDetailDTO(InvoiceDetailDTO invoiceDetailDTO) {
-                                if (invoiceRepository.updateInvoiceDetailEntity(new InvoiceDetailEntity(invoiceDetailDTO)).subscribeOn(Schedulers.io()).blockingGet() == 0) {
-                                    invoiceRepository.insertInvoiceDetailEntity(new InvoiceDetailEntity(invoiceDetailDTO)).subscribeOn(Schedulers.io()).blockingGet();
-                                }
-                            }
-                        });
+                        projectRepository.saveProjectDTO(projectDTO);
                         Snackbar.make(binding.getRoot(), "Datos actualizados", Snackbar.LENGTH_LONG).show();
                         loadRecyclerViewAsync(0);
                     }
@@ -388,4 +383,5 @@ public class InvoiceF extends Fragment implements InvoiceA.Listener {
         NavHostFragment.findNavController(this)
                 .navigate(InvoiceFDirections.actionInvoiceFragmentToInvoiceOptionsDialog(extendedInvoiceEntity.getInvoiceID()));
     }
+
 }

@@ -1,6 +1,7 @@
 package com.ecarto.cartoapp.ui;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,18 +10,23 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.ecarto.cartoapp.R;
 import com.ecarto.cartoapp.database.Entities.UserEntity;
+import com.ecarto.cartoapp.database.Repositories.ProjectRepository;
 import com.ecarto.cartoapp.database.Repositories.UserRepository;
 import com.ecarto.cartoapp.databinding.FragmentLoginBinding;
+import com.ecarto.cartoapp.web.DTOs.ProjectDTO;
+import com.ecarto.cartoapp.web.DTOs.UserDataResponseDTO;
 import com.ecarto.cartoapp.web.DTOs.UserResponseDTO;
 import com.ecarto.cartoapp.web.DTOs.UserRequestDTO;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Calendar;
+import java.util.List;
 
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
@@ -31,6 +37,7 @@ public class LoginF extends Fragment {
     FragmentLoginBinding binding;
     SharedPreferences sharedPreferences;
     UserRepository userRepository;
+    ProjectRepository projectRepository;
     Integer todayNum;
 
     @Nullable
@@ -40,6 +47,8 @@ public class LoginF extends Fragment {
         sharedPreferences = getActivity().getSharedPreferences(getString(R.string.sharedPreferences), Activity.MODE_PRIVATE);
 
         userRepository = new UserRepository(getActivity().getApplicationContext());
+        projectRepository = new ProjectRepository(getActivity().getApplicationContext());
+
         setTodayNum();
         Integer lastDayLogin = sharedPreferences.getInt(getResources().getString(R.string.lastDayLogin), -1);
         if (lastDayLogin == todayNum && lastDayLogin != -1) {
@@ -56,9 +65,64 @@ public class LoginF extends Fragment {
         todayNum = c.get(Calendar.DAY_OF_MONTH);
     }
 
+    //TODO: create sliding menu on the left
+
     public void goToInvoiceFragment() {
+        /*
+        if (projectRepository.findAllProjectByParams(null, null, null, null)
+                .subscribeOn(Schedulers.io()).blockingGet().isEmpty()){
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+            builder.setCancelable(true);
+            builder.setTitle("Descargar informacion de este usuario.");
+            builder.setMessage("¿Desea descargar toda la informacion de este usuario?");
+            builder.setPositiveButton("Descargar",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            projectRepository.downloadUserData(userRepository.getCurrentUser().subscribeOn(Schedulers.io()).blockingGet().getUserId(), new Callback<ProjectDTO[]>() {
+                                @Override
+                                public void onResponse(Call<ProjectDTO[]> call, Response<ProjectDTO[]> response) {
+                                    if (response.isSuccessful()){
+                                        for (ProjectDTO projectDTO : response.body()){
+                                            projectRepository.saveProjectDTO(projectDTO);
+                                        }
+                                    } else {
+                                        //Snackbar.make(binding.getRoot(), response.message(), Snackbar.LENGTH_SHORT).show();
+                                    }
+                                    goToInvoiceFragment2();
+                                }
+
+                                @Override
+                                public void onFailure(Call<ProjectDTO[]> call, Throwable t) {
+                                    //Snackbar.make(binding.getRoot(), t.getMessage(), Snackbar.LENGTH_SHORT).show();
+                                    goToInvoiceFragment2();
+                                }
+                            });
+
+                        }
+                    });
+            builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    goToInvoiceFragment2();
+                }
+            });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+
+
+
+         */
+        goToInvoiceFragment2();
+    }
+
+    private void goToInvoiceFragment2(){
         sharedPreferences.edit().putInt(getResources().getString(R.string.lastDayLogin), todayNum).commit();
-        NavHostFragment.findNavController(this).navigate(LoginFDirections.actionLoginFToInvoiceFragment());
+        NavHostFragment.findNavController(LoginF.this).navigate(LoginFDirections.actionLoginFToInvoiceFragment());
     }
 
     private void initListeners() {

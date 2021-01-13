@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.Invoice.DownloadDataF">
+    tools:context=".ui.Invoice.DownloadDataF"
+    android:background="@color/white">
 
     <TextView
         android:id="@+id/lblDownloadProject"
@@ -52,4 +53,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

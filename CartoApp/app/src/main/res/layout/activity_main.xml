@@ -16,11 +16,25 @@
         app:layout_constraintBottom_toTopOf="@id/lowerFragment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:elevation="1dp">
+
+
+
 
 
     </androidx.fragment.app.FragmentContainerView>
 
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toTopOf="@id/lowerFragment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:elevation="0dp"
+        />
 
     <TextView
         android:id="@+id/imgInstructionsFiles"

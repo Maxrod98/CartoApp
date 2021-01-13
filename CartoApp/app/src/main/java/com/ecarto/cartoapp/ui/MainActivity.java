@@ -17,15 +17,20 @@ import com.ecarto.cartoapp.database.Repositories.ProjectRepository;
 import com.ecarto.cartoapp.database.Repositories.UserRepository;
 import com.ecarto.cartoapp.databinding.ActivityMainBinding;
 import com.ecarto.cartoapp.ui.Files.AddFileF;
+import com.ecarto.cartoapp.ui.Invoice.DownloadDataF;
 import com.ecarto.cartoapp.utils.FileUtils;
 import com.ecarto.cartoapp.utils.StringUtils;
 import com.ecarto.cartoapp.web.DTOs.ProjectDTO;
 
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.core.view.GestureDetectorCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -47,12 +52,11 @@ public class MainActivity extends BaseActivity {
     UserRepository userRepository;
     FileRepository fileRepository;
     MainActivityViewModel mainActivityViewModel;
-    ProjectDTO projectDTO;
 
-    //TODO: make instructions or a way to let the user know how to transfer files
+
     //TODO: get invoices from mails
-    //TODO: upload files too
-    //TODO: remove requirement for user to have projects to be able to use the app
+    //TODO: upload files too to webservices
+    //TODO: make the background of each 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,12 +75,8 @@ public class MainActivity extends BaseActivity {
             binding.imgInstructionsFiles.setVisibility(isInserted ? View.VISIBLE : View.INVISIBLE);
         });
 
-
-
-
         //receiving data from share button
         handleShareIntent();
-
 
 
 
@@ -102,7 +102,10 @@ public class MainActivity extends BaseActivity {
         itemTouchHelper.attachToRecyclerView(null);
         
          */
+
+
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
