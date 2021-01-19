@@ -35,6 +35,9 @@
         <action
             android:id="@+id/action_invoiceFragment_to_downloadDataF"
             app:destination="@id/downloadDataF" />
+        <action
+            android:id="@+id/action_invoiceFragment_to_mailInvoicesF"
+            app:destination="@id/mailInvoicesF" />
     </fragment>
     <fragment
         android:id="@+id/invoiceDetailFragment"
@@ -168,6 +171,11 @@
         android:name="com.ecarto.cartoapp.ui.Invoice.DownloadDataF"
         android:label="fragment_download_data"
         tools:layout="@layout/fragment_download_data" />
+    <fragment
+        android:id="@+id/mailInvoicesF"
+        android:name="com.ecarto.cartoapp.ui.MailInvoices.MailInvoicesF"
+        android:label="fragment_mail_invoices"
+        tools:layout="@layout/fragment_mail_invoices" />
 
 
 </navigation>

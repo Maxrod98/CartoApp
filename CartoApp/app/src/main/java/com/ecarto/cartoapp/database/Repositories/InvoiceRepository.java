@@ -9,20 +9,36 @@ import com.ecarto.cartoapp.database.Entities.ExtendedInvoiceDetailEntity;
 import com.ecarto.cartoapp.database.Entities.ExtendedInvoiceEntity;
 import com.ecarto.cartoapp.database.Entities.InvoiceDetailEntity;
 import com.ecarto.cartoapp.database.Entities.InvoiceEntity;
+import com.ecarto.cartoapp.web.DTOs.MailInvoiceDTO;
+import com.ecarto.cartoapp.web.DTOs.ProjectDTO;
+import com.ecarto.cartoapp.web.RetrofitInstance;
+import com.ecarto.cartoapp.web.Services.ProjectService;
 
 import java.util.List;
 
 import io.reactivex.Single;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Retrofit;
 
 public class InvoiceRepository {
     private InvoiceDAO invoiceDAO;
     private InvoiceDetailDAO invoiceDetailDAO;
+    Retrofit retrofit;
 
 
     public InvoiceRepository(Context application) {
         DatabaseClass db = DatabaseClass.getDatabase(application);
         invoiceDAO = db.invoiceDAO();
         invoiceDetailDAO = db.invoiceDetailDAO();
+        retrofit = RetrofitInstance.getInstance(application).getRetrofit();
+
+    }
+
+    public void getMailData( Callback<MailInvoiceDTO[]> callback){
+        ProjectService projectService = retrofit.create(ProjectService.class);
+        Call<MailInvoiceDTO[]> callRequest = projectService.getMailData();
+        callRequest.enqueue(callback);
     }
 
     public Single<Long> insertInvoiceEntity(InvoiceEntity invoiceEntity) {

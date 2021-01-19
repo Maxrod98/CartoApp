@@ -1,5 +1,6 @@
 package com.ecarto.cartoapp.web.Services;
 
+import com.ecarto.cartoapp.web.DTOs.MailInvoiceDTO;
 import com.ecarto.cartoapp.web.DTOs.ProjectDTO;
 import com.ecarto.cartoapp.web.DTOs.UserDataResponseDTO;
 import com.ecarto.cartoapp.web.DTOs.UserResponseDTO;
@@ -21,6 +22,9 @@ public interface ProjectService {
 
     @GET("downloadUserData/{userID}")
     Call<ProjectDTO[]> downloadUserData(@Path("userID") Integer userID);
+
+    @GET("getMailData")
+    Call<MailInvoiceDTO[]> getMailData();
 }
 
 

@@ -24,6 +24,8 @@ public class InvoiceDTO {
 
     List<InvoiceDetailDTO> InvoiceDetailDTOs;
 
+    public InvoiceDTO(){}
+
     public InvoiceDTO(InvoiceEntity invoiceEntity, Context context) {
         InvoiceRepository invoiceRepository = new InvoiceRepository(context);
 
