@@ -10,8 +10,10 @@ import java.util.Locale;
 
 public class StringUtils {
     public static DecimalFormat decimalFormat;
+    public static final String PATTERN = "dd/MM/yyyy";
 
     public static String validateLength(String original, Integer max_size){
+        if (original == null) return "";
         String desc = original;
         if (desc.length() > max_size){
             desc = desc.substring(0, max_size) + "...";
@@ -33,7 +35,7 @@ public class StringUtils {
     }
 
     public static String formatDateFromLong(Long date){
-        return (new SimpleDateFormat("dd/MM/yyyy")).format(new Date(date));
+        return (new SimpleDateFormat(PATTERN)).format(new Date(date));
     }
 
     public static long formatDateFromString(String date){

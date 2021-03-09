@@ -97,6 +97,11 @@ public class InvoiceF extends Fragment implements InvoiceA.Listener {
     }
 
     private void initListeners() {
+        //-----------------FETCH MAILS
+        binding.imgMails.setOnClickListener((view) -> {
+            NavHostFragment.findNavController(this).navigate(InvoiceFDirections.actionInvoiceFragmentToMailInvoicesF());
+        });
+
         //-----------------UPLOAD PROJECT
         binding.imgUploadProject.setOnClickListener((view) -> {
             if (getSelectedProjectID() == -1) return;

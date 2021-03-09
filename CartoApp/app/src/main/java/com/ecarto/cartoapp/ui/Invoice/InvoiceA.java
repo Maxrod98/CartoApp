@@ -18,8 +18,8 @@ import com.ecarto.cartoapp.utils.StringUtils;
 import java.util.List;
 
 public class InvoiceA extends RecyclerView.Adapter<InvoiceA.InvoiceViewHolder> {
-    public static final Integer MAX_SIZE_SELLER = 30;
-    public static final Integer MAX_SIZE_DESCRIPTION = 30;
+    public static final Integer MAX_SIZE_SELLER = 50;
+    public static final Integer MAX_SIZE_DESCRIPTION = 50;
 
     List<ExtendedInvoiceEntity> elements;
     InvoiceA.Listener listener;

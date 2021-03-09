@@ -51,7 +51,7 @@ public class LoginF extends Fragment {
 
         setTodayNum();
         Integer lastDayLogin = sharedPreferences.getInt(getResources().getString(R.string.lastDayLogin), -1);
-        if (lastDayLogin == todayNum && lastDayLogin != -1) {
+        if ( /*lastDayLogin == todayNum && */ lastDayLogin != -1) { //if not loged in before, log in
             goToInvoiceFragment();
         }
 
@@ -133,7 +133,7 @@ public class LoginF extends Fragment {
             }
 
             UserRequestDTO userRequestDTO = new UserRequestDTO(binding.txtUser.getText().toString(), binding.txtPassword.getText().toString());
-
+            blockInput();
             userRepository.Authenticate(userRequestDTO, new Callback<UserResponseDTO>() {
                 @Override
                 public void onResponse(Call<UserResponseDTO> call, Response<UserResponseDTO> response) {

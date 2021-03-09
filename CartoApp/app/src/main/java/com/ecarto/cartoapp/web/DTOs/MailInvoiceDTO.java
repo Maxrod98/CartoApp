@@ -14,7 +14,8 @@ public class MailInvoiceDTO {
         ExtendedInvoiceEntity invoiceEntity = new ExtendedInvoiceEntity();
         invoiceEntity.setTotalCost(Total);
         invoiceEntity.setDate(StringUtils.formatDateFromString(Fecha));
-        invoiceEntity.setSeller("Receptor: " + Receptor + " Folio: " + Folio);
+        invoiceEntity.setSeller( Receptor );
+        invoiceEntity.setDescription("Folio: "  + Folio);
 
         return invoiceEntity;
     }
