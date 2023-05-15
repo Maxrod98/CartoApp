@@ -42,8 +42,21 @@ public abstract class DatabaseClass extends RoomDatabase {
     private static final int NUMBER_OF_THREADS = 4;
     public static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
-    public static DatabaseClass getDatabase(final Context context) {
-        if (INSTANCE == null) {
+    public static String getDbPath(final Context context) {
+        return context.getDatabasePath(context.getString(R.string.database_name)).getPath();
+    }
+
+    public static void delete(final Context context) {
+        context.deleteDatabase(context.getString(R.string.database_name));
+        INSTANCE = null;
+    }
+
+    public static void setnull() {
+        INSTANCE = null;
+    }
+
+        public static DatabaseClass getDatabase(final Context context) {
+        if (INSTANCE == null)
             synchronized (DatabaseClass.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room
@@ -52,7 +65,6 @@ public abstract class DatabaseClass extends RoomDatabase {
                             .build();
                 }
             }
-        }
         return INSTANCE;
     }
 }

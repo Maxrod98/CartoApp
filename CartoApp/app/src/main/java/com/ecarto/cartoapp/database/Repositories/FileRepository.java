@@ -5,7 +5,7 @@ import android.content.Context;
 import com.ecarto.cartoapp.database.DAOs.FileDAO;
 import com.ecarto.cartoapp.database.DatabaseClass;
 import com.ecarto.cartoapp.database.Entities.FileEntity;
-import com.ecarto.cartoapp.utils.FileUtils;
+import com.ecarto.cartoapp.utils.FileManipUtils;
 
 import java.util.List;
 
@@ -50,7 +50,7 @@ public class FileRepository {
 
     public void deleteFiles(List<FileEntity> fileEntities){ //deletes both directory files and entities
         for (FileEntity file : fileEntities){
-            FileUtils.deleteFile(file.getPathToFile());
+            FileManipUtils.deleteFile(file.getPathToFile());
             deleteFileEntity(file).subscribeOn(Schedulers.io()).blockingGet();
         }
     }

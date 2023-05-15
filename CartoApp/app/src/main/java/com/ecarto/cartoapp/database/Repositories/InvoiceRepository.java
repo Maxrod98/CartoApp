@@ -17,6 +17,7 @@ import com.ecarto.cartoapp.web.Services.ProjectService;
 import java.util.List;
 
 import io.reactivex.Single;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
@@ -61,6 +62,16 @@ public class InvoiceRepository {
 
     public Single<Long> insertInvoiceDetailEntity(InvoiceDetailEntity invoiceDetailEntity) {
         return invoiceDetailDAO.insert(invoiceDetailEntity);
+    }
+
+    public void insertInvoiceDetailEntityPrefilled(String description, int cost, long invoiceID) {
+        InvoiceDetailEntity invoiceDetail = new InvoiceDetailEntity();
+        invoiceDetail.setStatus(0);
+        invoiceDetail.setNotes("");
+        invoiceDetail.setConceptDescription(description + " - Detalle");
+        invoiceDetail.setCostOfItem(cost);
+        invoiceDetail.setInvoiceID(invoiceID);
+        insertInvoiceDetailEntity(invoiceDetail).subscribeOn(Schedulers.io()).blockingGet();
     }
 
     public Single<Integer> updateInvoiceDetailEntity(InvoiceDetailEntity invoiceDetailEntity){

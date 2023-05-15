@@ -72,14 +72,17 @@ public class AddFileF extends Fragment implements AddFileA.Listener {
         binding.addFileRecyclerView.setAdapter(addFileAdapter);
     }
 
+    private void closeFragment() {
+        FragmentManager manager = getActivity().getSupportFragmentManager();
+        FragmentTransaction trans = manager.beginTransaction()
+                .setCustomAnimations(R.anim.slide_in, R.anim.slide_out)
+                .remove(this);
+        trans.commit();
+    }
+
     private void initListeners() {
         binding.fafClose.setOnClickListener((v) -> {
-            //TODO: maybe do navhost too?
-            FragmentManager manager = getActivity().getSupportFragmentManager();
-            FragmentTransaction trans = manager.beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in, R.anim.slide_out)
-                    .remove(this);
-            trans.commit();
+            closeFragment();
 
             filesSelectedViewModel.setOnFilesBeingInserted(false);
             deleteFreedFiles();
@@ -91,13 +94,11 @@ public class AddFileF extends Fragment implements AddFileA.Listener {
                 return;
             }
 
+            filesSelectedViewModel.setShouldCreateNewInvoiceFromFiles(binding.ckShouldCreateNew.isChecked());
             filesSelectedViewModel.setOnFilesBeingInserted(false);
             filesSelectedViewModel.setFilesSelected(fileEntityList);
-            FragmentManager manager = getActivity().getSupportFragmentManager();
-            FragmentTransaction trans = manager.beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in, R.anim.slide_out)
-                    .remove(this);
-            trans.commit();
+
+            closeFragment();
 
             deleteFreedFiles();
         }));

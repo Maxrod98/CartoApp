@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ecarto.cartoapp">
 
+
+
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
@@ -24,9 +26,8 @@
                 <action android:name="android.intent.action.SEND" />
 
                 <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="image/*"></data>
-                <data android:mimeType="application/pdf"></data>
+                <data android:mimeType="text/plain"/>
+                <data android:mimeType="application/octet-stream"/>
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SEND_MULTIPLE"></action>
@@ -36,11 +37,22 @@
                 <data android:mimeType="image/*"></data>
                 <data android:mimeType="application/pdf"></data>
             </intent-filter>
+
+            <intent-filter>
+                <action
+                    android:name="android.intent.action.PICK"/>
+                <category
+                    android:name="android.intent.category.DEFAULT"/>
+                <category
+                    android:name="android.intent.category.OPENABLE"/>
+                <data android:mimeType="text/plain"/>
+            </intent-filter>
+
         </activity>
 
         <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="com.example.cartoapp"
+            android:name="com.ecarto.cartoapp.database.MyFileProvider"
+            android:authorities="com.example.cartoapp.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -52,5 +64,4 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-
 </manifest>

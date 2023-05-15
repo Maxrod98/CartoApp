@@ -21,6 +21,16 @@ public class MainActivityViewModel extends ViewModel {
         return onFilesBeingInserted;
     }
 
+    public MutableLiveData<Boolean> shouldCreateNewInvoiceFromFiles = new MutableLiveData<>();
+
+    public MutableLiveData<Boolean> getShouldCreateNewInvoiceFromFiles() {
+        return shouldCreateNewInvoiceFromFiles;
+    }
+
+    public void setShouldCreateNewInvoiceFromFiles(boolean shouldCreateNewInvoiceFromFiles){
+        this.shouldCreateNewInvoiceFromFiles.setValue(shouldCreateNewInvoiceFromFiles);
+    }
+
     public void setFilesSelected(List<FileEntity> filesSelected) {
         this.filesSelected.setValue(filesSelected);
     }

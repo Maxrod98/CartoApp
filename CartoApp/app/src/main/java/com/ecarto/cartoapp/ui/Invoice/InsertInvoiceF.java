@@ -125,13 +125,7 @@ public class InsertInvoiceF extends Fragment {
                 }
 
                 if (cost != 0){
-                    InvoiceDetailEntity invoiceDetail = new InvoiceDetailEntity();
-                    invoiceDetail.setStatus(0);
-                    invoiceDetail.setNotes("");
-                    invoiceDetail.setConceptDescription(binding.etDescription.getText().toString() + " - Detalle");
-                    invoiceDetail.setCostOfItem(cost);
-                    invoiceDetail.setInvoiceID(entity.getInvoiceID());
-                    invoiceRepository.insertInvoiceDetailEntity(invoiceDetail).subscribeOn(Schedulers.io()).blockingGet();
+                    invoiceRepository.insertInvoiceDetailEntityPrefilled(binding.etDescription.getText().toString(), cost, entity.getInvoiceID());
                 }
             }
         }

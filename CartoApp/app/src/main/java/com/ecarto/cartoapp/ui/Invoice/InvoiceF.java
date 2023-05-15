@@ -13,11 +13,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
+
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.ecarto.cartoapp.R;
+import com.ecarto.cartoapp.ViewModels.MainActivityViewModel;
 import com.ecarto.cartoapp.database.Entities.ExtendedInvoiceEntity;
+import com.ecarto.cartoapp.database.Entities.InvoiceEntity;
 import com.ecarto.cartoapp.database.Entities.ProjectEntity;
 import com.ecarto.cartoapp.database.Repositories.InvoiceRepository;
 import com.ecarto.cartoapp.database.Repositories.ProjectRepository;
@@ -50,6 +55,7 @@ public class InvoiceF extends Fragment implements InvoiceA.Listener {
     ProjectRepository projectRepository;
     UserRepository userRepository;
     TextWatcher textWatcher = null;
+    MainActivityViewModel mainActivityViewModel;
 
 
     private Timer timer = new Timer();
@@ -65,6 +71,7 @@ public class InvoiceF extends Fragment implements InvoiceA.Listener {
         projectRepository = new ProjectRepository(getActivity().getApplication());
         userRepository = new UserRepository(getActivity().getApplication());
         sharedPreferences = getActivity().getSharedPreferences(getString(R.string.sharedPreferences), Activity.MODE_PRIVATE);
+        mainActivityViewModel = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
     }
 
     @Override
@@ -86,6 +93,8 @@ public class InvoiceF extends Fragment implements InvoiceA.Listener {
 
             }
         }));
+
+
 
         return binding.getRoot();
     }
@@ -168,7 +177,7 @@ public class InvoiceF extends Fragment implements InvoiceA.Listener {
                 Snackbar.make(binding.getRoot(), "Debe de crear o descargar un proyecto primero", Snackbar.LENGTH_SHORT).show();
             } else {
                 NavHostFragment.findNavController(this)
-                        .navigate(InvoiceFDirections.actionInvoiceFragmentToInsertInvoiceDialog2(0));
+                        .navigate(InvoiceFDirections.actionInvoiceFragmentToInsertInvoiceDialog2(0, null));
             }
         });
 
@@ -213,6 +222,17 @@ public class InvoiceF extends Fragment implements InvoiceA.Listener {
                 }
             });
         });
+
+        mainActivityViewModel.getShouldCreateNewInvoiceFromFiles().observe(requireActivity(), shouldCreateNewInvoiceFromFiles -> {
+            if (shouldCreateNewInvoiceFromFiles){
+                //Toast.makeText(getActivity(), "WORKING", Toast.LENGTH_LONG).show();
+
+                NavHostFragment.findNavController(this)
+                        .navigate(InvoiceOptionsFDirections.actionInvoiceOptionsDialogToInsertInvoiceDialog2(0, null));
+
+            }
+        });
+
     }
 
     private void blockUploadProjectButton() {

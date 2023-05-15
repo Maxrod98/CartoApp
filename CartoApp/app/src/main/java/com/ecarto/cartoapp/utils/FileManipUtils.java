@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class FileUtils {
+public class FileManipUtils {
     public static void createFolderIfNecessary(String path) {
         File folder = new File(path);
         boolean success = true;
@@ -50,6 +50,21 @@ public class FileUtils {
             e.printStackTrace();
         }
 
+    }
+
+    public static void copyFileFromUriToPath(Context context, Uri uri, String path) throws IOException {
+        InputStream inputStream = context.getContentResolver().openInputStream(uri);
+        OutputStream outputStream = new FileOutputStream(new File(path));
+
+        byte[] buffer = new byte[1024];
+        int length;
+        while ((length = inputStream.read(buffer)) > 0) {
+            outputStream.write(buffer, 0, length);
+        }
+
+        outputStream.flush();
+        outputStream.close();
+        inputStream.close();
     }
 
     public static void copyFileFromUri(Activity activity, Uri source_uri, String destination_path) {

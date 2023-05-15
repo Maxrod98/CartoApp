@@ -87,6 +87,10 @@
         <argument
             android:name="SelectedInvoiceID"
             app:argType="long" />
+        <argument
+            android:name="files"
+            app:argType="com.ecarto.cartoapp.database.Entities.FileEntityList"
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/insertInvoiceDetailDialog"

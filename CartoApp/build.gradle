@@ -3,11 +3,12 @@ buildscript {
     repositories {
         google()
         jcenter()
+        maven { url "https://chaquo.com/maven" }
     }
     dependencies {
-
+        classpath "com.chaquo.python:gradle:9.1.0"
         classpath "com.android.tools.build:gradle:4.1.1"
-
+        classpath "com.chaquo.python:gradle:6.2.1"
         //safe args plugin s
         def nav_version = "2.3.2"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"

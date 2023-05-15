@@ -23,7 +23,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Anadir a detalle de factura"
-        app:layout_constraintEnd_toStartOf="@+id/faf_close"
+        app:layout_constraintEnd_toStartOf="@+id/ckShouldCreateNew"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -38,4 +38,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
+
+    <CheckBox
+        android:id="@+id/ckShouldCreateNew"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Crear nueva factura"
+        app:layout_constraintBottom_toTopOf="@+id/addFileRecyclerView"
+        app:layout_constraintEnd_toStartOf="@+id/faf_close"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

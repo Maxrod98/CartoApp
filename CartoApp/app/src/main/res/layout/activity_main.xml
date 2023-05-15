@@ -6,6 +6,31 @@
     android:layout_height="match_parent"
     tools:context=".ui.MainActivity">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_margin="50dp"
+        android:layout_height="match_parent"
+        android:paddingTop="200dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Guardar respaldo de base de datos.">
+        </TextView>
+        <ImageView
+            android:id="@+id/imgBackup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_yellow_folder" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/mainActivityFragmentContainer"
         android:layout_width="0dp"

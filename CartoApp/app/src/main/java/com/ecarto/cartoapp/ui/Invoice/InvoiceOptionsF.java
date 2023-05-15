@@ -75,7 +75,7 @@ public class InvoiceOptionsF extends Fragment {
         }));
 
         binding.dioEdit.setOnClickListener((v) -> {
-            NavHostFragment.findNavController(this).navigate(InvoiceOptionsFDirections.actionInvoiceOptionsDialogToInsertInvoiceDialog2(invoiceID));
+            NavHostFragment.findNavController(this).navigate(InvoiceOptionsFDirections.actionInvoiceOptionsDialogToInsertInvoiceDialog2(invoiceID, null));
         });
     }
 
